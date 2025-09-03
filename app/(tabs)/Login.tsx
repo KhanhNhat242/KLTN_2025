@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import Input from '../../components/app/signup/Input'
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('')
@@ -13,17 +14,8 @@ const LoginScreen = () => {
         <Text style={styles.desTxt}>Vui lòng nhập email và mật khẩu để tiếp tục.</Text>
       </View>
       <View style={styles.inputWrapper}>
-        <Text>Email</Text>
-        <View style={styles.emailWrapper}>
-          <Image style={[styles.icon, {position: 'absolute', top: 5, left: 5}]} source={require('../../assets/images/emailIcon.png')} />
-          <TextInput style={styles.input} placeholder='abcd@gmail.com' value={email} onChangeText={setEmail} />
-        </View>
-        <Text>Mật khẩu</Text>
-        <View style={styles.pwdWrapper}>
-          <Image style={[styles.icon, {position: 'absolute', top: 5, left: 5}]} source={require('../../assets/images/pwdIcon.png')} />
-          <TextInput style={styles.input} placeholder='Nhập mật khẩu' value={passsword} onChangeText={setPassword} />
-          <Image style={[styles.icon, {position: 'absolute', top: 5, right: 5}]} source={require('../../assets/images/eyeIcon.png')} />
-        </View>
+        <Input header='Email' placeholder='abcd@gmail.com' imgsrc={require('../../assets/images/emailIcon.png')} eyeIcon={false} value={email} onchange={setEmail}/>
+        <Input header='Mật khẩu' placeholder='Nhập mật khẩu' imgsrc={require('../../assets/images/pwdIcon.png')} eyeIcon={true} value={passsword} onchange={setPassword} />
         <Text style={styles.forgotpwdTxt}>Quên mật khẩu?</Text>
       </View>
       <View style={styles.btnWrapper}>
@@ -70,7 +62,7 @@ const styles = StyleSheet.create({
   },
   inputWrapper: {
     width: '100%',
-    height: '16%',
+    height: '25%',
     justifyContent: 'space-between',
   },
   icon: {

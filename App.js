@@ -1,22 +1,24 @@
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { StyleSheet } from 'react-native'
-import HomeScreen from './app/(tabs)/index'
 import LoginScreen from './app/(tabs)/Login'
+import SignupScreen from './app/(tabs)/Signup'
+import WelcomeScreen from './app/(tabs)/Welcome'
 
 // type StackParamList = {
 //   Home: undefined;
 //   Login: undefined;
 // };
 
-const Stack = createNativeStackNavigator<StackParamList>()
+const Stack = createNativeStackNavigator()
 
 const App = () => {
   return (
     <NavigationContainer>
         <Stack.Navigator>
-            <Stack.Screen name='Home' component={HomeScreen} />
+            <Stack.Screen name='Welcome' component={WelcomeScreen} />
             <Stack.Screen name='Login' component={LoginScreen} />
+            <Stack.Screen name='Signup' component={SignupScreen} />
         </Stack.Navigator>
     </NavigationContainer>
   )
