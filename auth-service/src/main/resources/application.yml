@@ -1,0 +1,92 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: auth-service
+    
+  # Database - Postgresql
+  datasource:
+    url: ${POSTGRESQL_URL:jdbc:postgresql://localhost:5432/ride-hub}
+    username: ${POSTGRESQL_USERNAME:postgres}
+    password: ${POSTGRESQL_PASSWORD:123456}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        physical_naming_strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+        implicit_naming_strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
+
+  # Redis
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:123456}
+
+  # Kafka
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+
+#  # Flyway
+#  flyway:
+#    enabled: true
+#    locations: classpath:db/migration
+#    baseline-on-migrate: true
+#    out-of-order: true
+
+# Eureka
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka}
+
+
+# JWT
+jwt:
+  access-key: ${JWT_SIGNER_KEY}
+  refresh-key: ${JWT_REFRESH_KEY}
+  reset-key: ${JWT_RESET_KEY}
+  access-token:
+    expiry-in-minutes: ${JWT_ACCESS_TOKEN_IN_MINUTES:15}
+  refresh-token:
+    expiry-in-days: ${JWT_REFRESH_TOKEN_IN_DAYS:20}
+  reset:
+    expiry-in-minutes: ${JWT_RESET_TOKEN_IN_MINUTES:15}
+
+
+# Swagger
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+open:
+  api:
+    title: auth-service
+    version: v1.0.0
+    description: Auth Service
+    serverUrl: http://${SERVER_IP}:${server.port}
+    serverName: server dev
+    api-docs: auth-service
+
+
+auth:
+  register:
+    verification-code:
+      expiration-minutes: 5
+
+  forgot-password:
+    verification-code:
+      expiration-minutes: 10
+
+cors:
+  allowed-origins:
+    - http://localhost:3000
+    - http://localhost:5173
+    - http://localhost:3001
+    - http://localhost:5174
