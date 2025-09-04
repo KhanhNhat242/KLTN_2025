@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 
 interface Props {
-    step: number
+    step?: number
+    fwstep?: number
 }
 
-const Header = ({ step }: Props) => {
+const Header = ({ step, fwstep }: Props) => {
   const [headerTxt, setHeaderTxt] = useState<string>('')
   const [desTxt, setDesTxt] = useState<string>('')
 
@@ -26,7 +27,20 @@ const Header = ({ step }: Props) => {
       setHeaderTxt('Tạo mật khẩu')
       setDesTxt('Vui lòng tạo mật khẩu để đảm bảo an toàn cho tài khoản của bạn.')
     }
-  }, [step])
+
+    if(fwstep === 1) {
+      setHeaderTxt('Quên mật khẩu')
+      setDesTxt('Nhập địa chỉ email của bạn và chúng tôi sẽ gửi cho bạn một liên kết để đặt lại mật khẩu.”')
+    }
+    else if(fwstep === 2) {
+      setHeaderTxt('Xác nhận OTP')
+      setDesTxt('Chúng tôi đã gửi mã xác nhận gồm 6 ô chữ số vào email m*****lk@gmail.com của bạn.')
+    }
+    else if(fwstep === 3) {
+      setHeaderTxt('Tạo mật khẩu mới')
+      setDesTxt('Vui lòng tạo mật khẩu mới để đảm bảo an toàn cho tài khoản của bạn.')
+    }
+  }, [step, fwstep])
 
   return (
     <View style={styles.headerWrapper}>

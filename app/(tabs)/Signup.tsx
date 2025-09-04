@@ -1,5 +1,5 @@
+import Content from '@/components/app/signup/Content'
 import Header from '@/components/app/signup/Header'
-import Input from '@/components/app/signup/Input'
 import Step from '@/components/app/signup/Step'
 import { useRoute } from '@react-navigation/native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
@@ -16,7 +16,6 @@ type RootStrackParamList = {
 type Props = NativeStackScreenProps<RootStrackParamList, 'Signup'>
 
 const SignupScreen = () => {
-  const [email, setEmail] = useState('')
   const [stepCount, setStepCount] = useState<number>(1)
   const navigation = useNavigation()
 
@@ -25,14 +24,14 @@ const SignupScreen = () => {
 
   useEffect(() => {
     if (stepCount > 0) {
-      if (step === 1) {
-        setStepCount(1)
-      }
-      setStepCount(stepCount)
+        if (step === 1) {
+          setStepCount(1)
+        }
+        setStepCount(stepCount)
     }
     else if (stepCount === 0) {
       navigation.navigate('Welcome')
-    setStepCount(1)
+      setStepCount(1)
     }
     console.log(stepCount)
   }, [stepCount])
@@ -42,7 +41,7 @@ const SignupScreen = () => {
         <View>
           <Step step={stepCount} />
           <Header step={stepCount} />
-          <Input header='Email' placeholder='abcd@gmail.com' imgsrc={require('../../assets/images/emailIcon.png')} eyeIcon={false} value={email} onchange={setEmail}/>
+          <Content step={stepCount} />
         </View>
         <View style={styles.btnWrapper}>
           <TouchableOpacity style={styles.btnLeft} onPress={() => setStepCount(stepCount - 1)}>
@@ -71,12 +70,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     }, 
-  btn: {
-    width: '48%',
-    textAlign: 'center',
-    borderRadius: 10,
-    padding: 10,
-  },
   btnLeft: {
     width: '49%',
     padding: 15,

@@ -5,7 +5,7 @@ interface Props {
     header: string,
     placeholder: string,
     imgsrc: ImageSourcePropType,
-    eyeIcon?: boolean,
+    eyeIcon: boolean,
     value: string,
     onchange: React.Dispatch<React.SetStateAction<string>>,
 }
@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '16%',
     justifyContent: 'space-between',
+    marginBottom: 10,
   },
   icon: {
     width: 16,

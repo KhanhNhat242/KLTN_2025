@@ -1,3 +1,5 @@
+import { useNavigation } from '@react-navigation/native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import React, { useState } from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Input from '../../components/app/signup/Input'
@@ -5,6 +7,8 @@ import Input from '../../components/app/signup/Input'
 const LoginScreen = () => {
   const [email, setEmail] = useState('')
   const [passsword, setPassword] = useState('')
+
+  const navigation = useNavigation<NativeStackNavigationProp<RootStrackParamList>>()
 
   return (
     <View style={styles.wrapper}>
@@ -16,7 +20,7 @@ const LoginScreen = () => {
       <View style={styles.inputWrapper}>
         <Input header='Email' placeholder='abcd@gmail.com' imgsrc={require('../../assets/images/emailIcon.png')} eyeIcon={false} value={email} onchange={setEmail}/>
         <Input header='Mật khẩu' placeholder='Nhập mật khẩu' imgsrc={require('../../assets/images/pwdIcon.png')} eyeIcon={true} value={passsword} onchange={setPassword} />
-        <Text style={styles.forgotpwdTxt}>Quên mật khẩu?</Text>
+        <Text style={styles.forgotpwdTxt} onPress={() => navigation.navigate('ForgotPassword', { step: 1 })}>Quên mật khẩu?</Text>
       </View>
       <View style={styles.btnWrapper}>
         <TouchableOpacity style={styles.loginBtn} onPress={() => alert('login successful')}>Đăng nhập</TouchableOpacity>
@@ -28,7 +32,7 @@ const LoginScreen = () => {
       </View>
       <View style={styles.footerWrapper}>
         <Text>Bạn chưa có tài khoản?</Text>
-        <Text style={{fontWeight: 'bold', color: '#1677FF'}}> Tạo tài khoản ngay!</Text>
+        <Text style={{fontWeight: 'bold', color: '#1677FF'}} onPress={() => navigation.navigate('Signup', {step: 1})}> Tạo tài khoản ngay!</Text>
       </View>
     </View>
   )
