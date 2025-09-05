@@ -4,11 +4,17 @@ import React, { useState } from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Input from '../../components/app/signup/Input'
 
+type RootStackParamList = {
+  Signup: {
+    step: number,
+  }
+}
+
 const LoginScreen = () => {
   const [email, setEmail] = useState('')
   const [passsword, setPassword] = useState('')
 
-  const navigation = useNavigation<NativeStackNavigationProp<RootStrackParamList>>()
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
 
   return (
     <View style={styles.wrapper}>
@@ -20,10 +26,12 @@ const LoginScreen = () => {
       <View style={styles.inputWrapper}>
         <Input header='Email' placeholder='abcd@gmail.com' imgsrc={require('../../assets/images/emailIcon.png')} eyeIcon={false} value={email} onchange={setEmail}/>
         <Input header='Mật khẩu' placeholder='Nhập mật khẩu' imgsrc={require('../../assets/images/pwdIcon.png')} eyeIcon={true} value={passsword} onchange={setPassword} />
-        <Text style={styles.forgotpwdTxt} onPress={() => navigation.navigate('ForgotPassword', { step: 1 })}>Quên mật khẩu?</Text>
       </View>
+      <Text style={styles.forgotpwdTxt} onPress={() => navigation.navigate('ForgotPassword', { step: 1 })}>Quên mật khẩu?</Text>
       <View style={styles.btnWrapper}>
-        <TouchableOpacity style={styles.loginBtn} onPress={() => alert('login successful')}>Đăng nhập</TouchableOpacity>
+        <TouchableOpacity style={styles.loginBtn} onPress={() => alert('login successful')}>
+          <Text style={{textAlign: 'center', color: '#fff'}}>Đăng nhập</Text>
+        </TouchableOpacity>
         <Text style={styles.orTxt}>Hoặc</Text>
         <TouchableOpacity style={styles.ggloginBtn} onPress={() => alert('login successful')}>
           <Image style={styles.icon} source={require('../../assets/images/googleIcon.png')} />
@@ -44,9 +52,8 @@ const styles = StyleSheet.create({
   wrapper: {
     width: '100%',
     height: '100%',
-    flexDirection: 'column',
     justifyContent: 'space-between',
-    padding: 10,
+    padding: 5,
   },
   mainlogoImg: {
     width: 130,
@@ -54,7 +61,7 @@ const styles = StyleSheet.create({
   },
   headerWrapper: {
     height: '18%',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   headerTxt: {
     fontWeight: 'bold',
@@ -113,7 +120,6 @@ const styles = StyleSheet.create({
   loginBtn: {
     borderRadius: 10,
     backgroundColor: '#1677FF',
-    color: '#fff',
     textAlign: 'center',
     padding: 10,
   },

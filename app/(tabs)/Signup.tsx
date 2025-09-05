@@ -7,13 +7,13 @@ import { useNavigation } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
-type RootStrackParamList = {
+type RootStackParamList = {
   Signup: {
     step: number,
   }
 }
 
-type Props = NativeStackScreenProps<RootStrackParamList, 'Signup'>
+type Props = NativeStackScreenProps<RootStackParamList, 'Signup'>
 
 const SignupScreen = () => {
   const [stepCount, setStepCount] = useState<number>(1)

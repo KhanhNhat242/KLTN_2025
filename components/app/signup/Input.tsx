@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Image, ImageSourcePropType, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Image, ImageSourcePropType, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 
 interface Props {
     header: string,
@@ -12,18 +12,24 @@ interface Props {
 
 const Input = ({header , placeholder, imgsrc, value, onchange, eyeIcon}: Props) => {
   const [eye, setEye] = useState<'none'| 'flex'>('none')
+  const [dpwd, setDpwd] = useState<boolean>(false)
 
   useEffect(() => {
     setEye(eyeIcon ? 'flex' : 'none')
+    eyeIcon ? setDpwd(true) : setDpwd(false)
   }, [eyeIcon])
+
+  console.log(dpwd)
 
   return (
     <View style={styles.inputWrapper}>
         <Text>{header}</Text>
         <View style={styles.pwdWrapper}>
             <Image style={[styles.icon, {position: 'absolute', top: 9, left: 5}]} source={imgsrc} />
-            <TextInput style={styles.input} placeholder={placeholder} value={value} onChangeText={onchange} placeholderTextColor='#ccc'/>
-            <Image style={[styles.icon, {position: 'absolute', top: 9, right: 5, display: eye}]} source={require('../../../assets/images/eyeIcon.png')} />
+            <TextInput style={styles.input} placeholder={placeholder} value={value} onChangeText={onchange} placeholderTextColor='#ccc' secureTextEntry={dpwd} />
+            <TouchableOpacity onPress={() => setDpwd(!dpwd)}>
+              <Image style={[styles.icon, {position: 'absolute', top: 9, right: 5, display: eye}]} source={require('../../../assets/images/eyeIcon.png')}  />
+            </TouchableOpacity>
         </View>
     </View>
   )

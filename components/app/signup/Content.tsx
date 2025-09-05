@@ -34,7 +34,7 @@ const Content = ({ step, fwstep }: Props) => {
     else if(step === 3) {
         return (
             <View style={styles.infoWrapper}>
-                <Input header='Họ và tên' placeholder='Nhập họ và tên' imgsrc={require('../../../assets/images/personIcon.png')} eyeIcon={false} value={phone} onchange={setPhone} />
+                <Input header='Họ và tên' placeholder='Nhập họ và tên' imgsrc={require('../../../assets/images/personIcon.png')} eyeIcon={false} value={name} onchange={setName} />
                 <Input header='Số điện thoại' placeholder='Nhập số điện thoại' imgsrc={require('../../../assets/images/phoneIcon.png')} eyeIcon={false} value={phone} onchange={setPhone} />
             </View>
         )        
