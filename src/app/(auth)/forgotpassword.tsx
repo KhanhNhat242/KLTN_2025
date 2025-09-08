@@ -4,6 +4,7 @@ import Step from '@/components/signup/Step'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 const ForgotPasswordScreen = () => {
     const [stepCount, setStepCount] = useState<number>(1)
@@ -32,6 +33,7 @@ const ForgotPasswordScreen = () => {
     }, [stepCount])
 
     return (
+      <SafeAreaView>
         <View style={styles.wrapper}>
             <View>
                 <Step fwstep={stepCount} />
@@ -47,6 +49,7 @@ const ForgotPasswordScreen = () => {
                 </TouchableOpacity>
             </View>
         </View>
+      </SafeAreaView>
     )
 }
 

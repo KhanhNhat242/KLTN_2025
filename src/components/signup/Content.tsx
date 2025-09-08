@@ -18,12 +18,14 @@ const Content = ({ step, fwstep }: Props) => {
 
     if (step === 1 || fwstep === 1) {
         return (
-            <Input header='Email' placeholder='abcd@gmail.com' imgsrc={require('../../../assets/emailIcon.png')} eyeIcon={false} value={email} onchange={setEmail} type='email-address' /> 
+            <View style={styles.contentWrapper}>
+                <Input header='Email' placeholder='abcd@gmail.com' imgsrc={require('../../../assets/emailIcon.png')} eyeIcon={false} value={email} onchange={setEmail} type='email-address' /> 
+            </View>
         )
     }
     else if (step === 2 || fwstep === 2) {
         return (
-            <View>
+            <View style={styles.contentWrapper}>
                 <Text style={styles.otpHeader}>Nhập OTP</Text>
                 <OtpInput numberOfDigits={6} onTextChange={setOtp} />
                 <Text style={styles.desTxt}>Mã xác nhận hết hạn trong 1p</Text>
@@ -61,6 +63,10 @@ const Content = ({ step, fwstep }: Props) => {
 export default Content
 
 const styles = StyleSheet.create({
+    contentWrapper: {
+        width: '100%',
+        height: '40%',
+    },
     otpHeader: {
         marginBottom: 10,
     },
@@ -78,7 +84,7 @@ const styles = StyleSheet.create({
     },
     infoWrapper: {
         width: '100%',
-        height: '40%',
+        height: '35%',
         justifyContent: 'space-between',
     },
     pwdWrapper: {

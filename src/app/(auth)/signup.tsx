@@ -4,6 +4,7 @@ import Step from '@/components/signup/Step'
 import { useLocalSearchParams, useNavigation, useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 const SignupScreen = () => {
     const { stepParam } = useLocalSearchParams()
@@ -34,11 +35,12 @@ const SignupScreen = () => {
     }, [stepCount])
 
     return (
+      <SafeAreaView>
         <View style={styles.wrapper}>  
-            <View>
-            <Step step={stepCount} />
-            <Header step={stepCount} />
-            <Content step={stepCount} />
+            <View style={styles.contentWrapper}>
+              <Step step={stepCount} />
+              <Header step={stepCount} />
+              <Content step={stepCount} />
             </View>
             <View style={styles.btnWrapper}>
             <TouchableOpacity style={styles.btnLeft} onPress={() => setStepCount(stepCount - 1)}>
@@ -49,6 +51,7 @@ const SignupScreen = () => {
             </TouchableOpacity>
             </View>
         </View>
+      </SafeAreaView>
     )
 }
 
@@ -61,6 +64,10 @@ const styles = StyleSheet.create({
     padding: 5,
     justifyContent: 'space-between',
   },
+  contentWrapper: {
+    width: '100%', 
+    height: '50%',
+  },  
   btnWrapper: {
     width: '100%',
     display: 'flex',

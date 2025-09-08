@@ -1,16 +1,21 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import { Link } from 'expo-router'
+import { Image, StyleSheet, Text, View } from 'react-native'
+import React, { useEffect } from 'react'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { useRouter } from 'expo-router'
 
-const index = () => {
+const home = () => {
+
+  const router = useRouter()
+
+  useEffect(() => { 
+    router.push('/home')
+  })
+
   return (
-    <View>
-      <Text>index</Text>
-      <Link href='/home'></Link>
-    </View>
+    <Text>hello world</Text>
   )
 }
 
-export default index
+export default home
 
 const styles = StyleSheet.create({})

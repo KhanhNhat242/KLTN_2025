@@ -1,25 +1,29 @@
 import { Link } from "expo-router";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 
 export default function WelcomeScreen() {
 
   return (
-    <View style={styles.wrapper}>
-      <Image source={require('../../assets/mainlogo.png')} style={styles.mainlogoImg} />
-      <Text style={styles.welcomeTxt}>Welcome to RideHub!</Text>
-      <View style={styles.btnWrapper}>
-        <TouchableOpacity style={styles.btn}>
-          <Link href='/(auth)/login' style={styles.btnTxt}>Đăng nhập</Link>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.btn}>
-          <Link href={{
-            pathname: '/(auth)/signup',
-            params: { step: 1 }
-          }} style={styles.btnTxt}>Đăng ký</Link>
-        </TouchableOpacity>
-      </View> 
-    </View>
+    <SafeAreaView>
+      <View style={styles.wrapper}>
+        <Image source={require('../../assets/mainlogo.png')} style={styles.mainlogoImg} />
+        <Text style={styles.welcomeTxt}>Welcome to RideHub!</Text>
+        <View style={styles.btnWrapper}>
+          <TouchableOpacity style={styles.btn}>
+            <Link href='/(auth)/login' style={styles.btnTxt}>Đăng nhập</Link>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.btn}>
+            <Link href={{
+              pathname: '/(auth)/signup',
+              params: { step: 1 }
+            }} style={styles.btnTxt}>Đăng ký</Link>
+          </TouchableOpacity>
+        </View> 
+      </View>
+    </SafeAreaView>
+    
   )
 }
 

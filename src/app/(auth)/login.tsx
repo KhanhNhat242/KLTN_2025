@@ -1,9 +1,8 @@
-import { useNavigation } from '@react-navigation/native'
-import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import React, { useState } from 'react'
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, Text, TouchableOpacity, View } from 'react-native'
 import Input from '../../components/signup/Input'
-import { Link } from 'expo-router'
+import { Link, useRouter } from 'expo-router'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 type RootStackParamList = {
   Signup: {
@@ -13,138 +12,105 @@ type RootStackParamList = {
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('')
-  const [passsword, setPassword] = useState('')
+  const [password, setPassword] = useState('')
 
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
+  const router = useRouter()
 
   return (
-    <View style={styles.wrapper}>
-      <Image source={require('../../../assets/mainlogo.png')} style={styles.mainlogoImg} />
-      <View style={styles.headerWrapper}>
-        <Text style={styles.headerTxt}>Đăng nhập vào tài khoản của bạn</Text>
-        <Text style={styles.desTxt}>Vui lòng nhập email và mật khẩu để tiếp tục.</Text>
+    <SafeAreaView className="flex-1 bg-white px-2">
+      <View className="flex-1 justify-between pb-5">
+        {/* Logo */}
+        <Image 
+          source={require('../../../assets/mainlogo.png')} 
+          className="w-[130px] h-[35px]" 
+          resizeMode="contain"
+        />
+
+        {/* Header */}
+        <View className="h-[18%] justify-between">
+          <Text className="text-[40px] font-bold leading-[42px]">
+            Đăng nhập vào tài khoản của bạn
+          </Text>
+          <Text className="text-gray-500">
+            Vui lòng nhập email và mật khẩu để tiếp tục.
+          </Text>
+        </View>
+
+        {/* Input */}
+        <View className="h-[25%] justify-between">
+          <Input 
+            header="Email" 
+            placeholder="abcd@gmail.com" 
+            imgsrc={require('../../../assets/emailIcon.png')} 
+            eyeIcon={false} 
+            value={email} 
+            onchange={setEmail} 
+            type="email-address" 
+          />
+          <Input 
+            header="Mật khẩu" 
+            placeholder="Nhập mật khẩu" 
+            imgsrc={require('../../../assets/pwdIcon.png')} 
+            eyeIcon={true} 
+            value={password} 
+            onchange={setPassword} 
+            type="default" 
+          />
+        </View>
+
+        {/* Quên mật khẩu */}
+        <Link
+          href={{
+            pathname: '/forgotpassword',
+            params: { step: 1 },
+          }}
+          className="text-right font-bold text-[#1677FF]"
+        >
+          Quên mật khẩu?
+        </Link>
+
+        {/* Buttons */}
+        <View className="h-[20%] justify-between">
+          <TouchableOpacity 
+            className="rounded-lg bg-[#1677FF] p-3"
+            onPress={() => {
+              alert('login successful')
+              router.push('/(tabs)/home')
+            } 
+          }>
+            <Text className="text-center text-white">Đăng nhập</Text>
+          </TouchableOpacity>
+
+          <Text className="text-center">Hoặc</Text>
+
+          <TouchableOpacity 
+            className="w-full flex-row items-center justify-center rounded-lg border border-gray-300 p-3"
+            onPress={() =>alert('login successful')}>
+            <Image 
+              source={require('../../../assets/googleIcon.png')} 
+              className="w-4 h-5"
+              resizeMode="contain"
+            />
+            <Text className="ml-2">Đăng nhập với Google</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Footer */}
+        <View className="flex-row justify-center">
+          <Text>Bạn chưa có tài khoản?</Text>
+          <Link
+            href={{
+              pathname: '/signup',
+              params: { step: 1 },
+            }}
+            className="font-bold text-[#1677FF]"
+          >
+            {' '}Tạo tài khoản ngay!
+          </Link>
+        </View>
       </View>
-      <View style={styles.inputWrapper}>
-        <Input header='Email' placeholder='abcd@gmail.com' imgsrc={require('../../../assets/emailIcon.png')} eyeIcon={false} value={email} onchange={setEmail} type='email-address' />
-        <Input header='Mật khẩu' placeholder='Nhập mật khẩu' imgsrc={require('../../../assets/pwdIcon.png')} eyeIcon={true} value={passsword} onchange={setPassword} type='default' />
-      </View>
-      <Link href={{
-        pathname: '/forgotpassword',
-        params: { step: 1 }
-      }} style={styles.forgotpwdTxt}>Quên mật khẩu?</Link>
-      <View style={styles.btnWrapper}>
-        <TouchableOpacity style={styles.loginBtn} onPress={() => alert('login successful')}>
-          <Text style={{textAlign: 'center', color: '#fff'}}>Đăng nhập</Text>
-        </TouchableOpacity>
-        <Text style={styles.orTxt}>Hoặc</Text>
-        <TouchableOpacity style={styles.ggloginBtn} onPress={() => alert('login successful')}>
-          <Image style={styles.icon} source={require('../../../assets/googleIcon.png')} />
-          <Text style={{marginLeft: 5}}>Đăng nhập với Google</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.footerWrapper}>
-        <Text>Bạn chưa có tài khoản?</Text>
-        <Text style={{fontWeight: 'bold', color: '#1677FF'}} onPress={() => navigation.navigate('Signup', {step: 1})}> Tạo tài khoản ngay!</Text>
-      </View>
-    </View>
+    </SafeAreaView>
   )
 }
 
 export default LoginScreen
-
-const styles = StyleSheet.create({
-  wrapper: {
-    width: '100%',
-    height: '100%',
-    justifyContent: 'space-between',
-    padding: 5,
-  },
-  mainlogoImg: {
-    width: 130,
-    height: 35,
-  },
-  headerWrapper: {
-    height: '18%',
-    justifyContent: 'space-between',
-  },
-  headerTxt: {
-    fontWeight: 'bold',
-    fontSize: 40,
-    lineHeight: 42,
-  },
-  desTxt: {
-    color: 'gray',
-  },
-  inputWrapper: {
-    width: '100%',
-    height: '25%',
-    justifyContent: 'space-between',
-  },
-  icon: {
-    width: 16,
-    height: 20,
-  },
-  emailWrapper: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    borderColor: '#ccc',
-    borderStyle: 'solid',
-    borderWidth: 1,
-    borderRadius: 10,
-    height: 30,
-    marginTop: 3,
-    position: 'relative',
-  },
-  pwdWrapper: {
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    borderColor: '#ccc',
-    borderStyle: 'solid',
-    borderWidth: 1,
-    borderRadius: 10,   
-    height: 30,
-    marginTop: 3,
-    position: 'relative',
-  },
-  input: {
-    width: '100%',
-    paddingLeft: 25,
-  },
-  forgotpwdTxt: {
-    textAlign: 'right',
-    color: '#1677FF',
-    fontWeight: 'bold',
-  },
-  btnWrapper: {
-    width: '100%',
-    height: '20%',
-    justifyContent: 'space-between',
-  },
-  loginBtn: {
-    borderRadius: 10,
-    backgroundColor: '#1677FF',
-    textAlign: 'center',
-    padding: 10,
-  },
-  orTxt: {
-    textAlign: 'center',
-  },
-  ggloginBtn: {
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignContent: 'center',
-    borderRadius: 10,
-    borderColor: '#ccc',
-    borderStyle: 'solid',
-    borderWidth: 1,
-    textAlign: 'center',
-    padding: 10,
-  },
-  footerWrapper: {
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'center',
-  }
-})
