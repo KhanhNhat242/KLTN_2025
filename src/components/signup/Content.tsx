@@ -27,7 +27,7 @@ const Content = ({ step, fwstep }: Props) => {
         return (
             <View style={styles.contentWrapper}>
                 <Text style={styles.otpHeader}>Nhập OTP</Text>
-                <OtpInput numberOfDigits={6} onTextChange={setOtp} />
+                <OtpInput numberOfDigits={6} onTextChange={setOtp} blurOnFilled={true} />
                 <Text style={styles.desTxt}>Mã xác nhận hết hạn trong 1p</Text>
                 <Text style={styles.resendOtp}>Gửi lại mã</Text>
             </View>

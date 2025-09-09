@@ -19,14 +19,11 @@ const LoginScreen = () => {
   return (
     <SafeAreaView className="flex-1 bg-white px-2">
       <View className="flex-1 justify-between pb-5">
-        {/* Logo */}
         <Image 
           source={require('../../../assets/mainlogo.png')} 
           className="w-[130px] h-[35px]" 
           resizeMode="contain"
         />
-
-        {/* Header */}
         <View className="h-[18%] justify-between">
           <Text className="text-[40px] font-bold leading-[42px]">
             Đăng nhập vào tài khoản của bạn
@@ -35,9 +32,7 @@ const LoginScreen = () => {
             Vui lòng nhập email và mật khẩu để tiếp tục.
           </Text>
         </View>
-
-        {/* Input */}
-        <View className="h-[25%] justify-between">
+        <View className="h-[15%] justify-between">
           <Input 
             header="Email" 
             placeholder="abcd@gmail.com" 
@@ -57,8 +52,6 @@ const LoginScreen = () => {
             type="default" 
           />
         </View>
-
-        {/* Quên mật khẩu */}
         <Link
           href={{
             pathname: '/forgotpassword',
@@ -68,8 +61,6 @@ const LoginScreen = () => {
         >
           Quên mật khẩu?
         </Link>
-
-        {/* Buttons */}
         <View className="h-[20%] justify-between">
           <TouchableOpacity 
             className="rounded-lg bg-[#1677FF] p-3"
@@ -94,8 +85,6 @@ const LoginScreen = () => {
             <Text className="ml-2">Đăng nhập với Google</Text>
           </TouchableOpacity>
         </View>
-
-        {/* Footer */}
         <View className="flex-row justify-center">
           <Text>Bạn chưa có tài khoản?</Text>
           <Link

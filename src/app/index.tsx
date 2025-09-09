@@ -1,64 +1,41 @@
-import { Link } from "expo-router";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Link, useRouter } from "expo-router";
+import { useEffect } from "react";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 
 export default function WelcomeScreen() {
 
+  const router = useRouter()
+  
+  useEffect(() => {
+    router.push('/(tabs)/home')
+  })
+
   return (
     <SafeAreaView>
-      <View style={styles.wrapper}>
-        <Image source={require('../../assets/mainlogo.png')} style={styles.mainlogoImg} />
-        <Text style={styles.welcomeTxt}>Welcome to RideHub!</Text>
-        <View style={styles.btnWrapper}>
-          <TouchableOpacity style={styles.btn}>
-            <Link href='/(auth)/login' style={styles.btnTxt}>Đăng nhập</Link>
+      <View className=" w-full h-full flex-column items-center justify-center">
+        <Text>hello world</Text>
+        {/* <Image 
+          source={require("../../assets/mainlogo.png")} 
+          className="w-[140px] h-[40px]" 
+        />
+        <Text className="text-[30px] mt-4">Welcome to RideHub!</Text>
+        <View className="w-full h-[20%] justify-between mt-8 px-5">
+          <TouchableOpacity className="w-full bg-[#1677FF] p-4 rounded-lg">
+            <Link href="/(auth)/login" className="text-white text-center text-lg">
+              Đăng nhập
+            </Link>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.btn}>
-            <Link href={{
-              pathname: '/(auth)/signup',
-              params: { step: 1 }
-            }} style={styles.btnTxt}>Đăng ký</Link>
+          <TouchableOpacity className="w-full bg-[#1677FF] p-4 rounded-lg">
+            <Link
+              href={{ pathname: "/signup", params: { step: 1 } }}
+              className="text-white text-center text-lg"
+            >
+              Đăng ký
+            </Link>
           </TouchableOpacity>
-        </View> 
+        </View> */}
       </View>
     </SafeAreaView>
-    
-  )
+  );
 }
-
-const styles = StyleSheet.create({
-  wrapper: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  mainlogoImg: {
-    width: 140,
-    height: 40,
-  },
-  welcomeTxt: {
-    fontSize: 30,
-  },
-  btnWrapper: {
-    width: '100%',
-    height: '25%',
-    justifyContent: 'space-between',
-    marginTop: 30,
-    padding: 20,
-  },
-  btn: {
-    width: '100%',
-    backgroundColor: '#1677FF',
-    padding: 15,
-    borderRadius: 10,
-    fontSize: 18,
-  },
-  btnTxt: {
-    color: '#fff',
-    textAlign: 'center',
-  },
-});
