@@ -1,38 +1,88 @@
 import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
+import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker'
 
 interface Props {
   returnDate: boolean,
 }
+interface FromDateProps {
+  date: Date,
+  setDate: React.Dispatch<React.SetStateAction<Date>>,
+}
 
-const FromDate = (
-  <View className='w-full h-[60px] flex-row bg-white p-[10px] rounded-[10px] mt-[10px]'>
-      <Image source={require('../../../assets/fromicon.png')} className="w-[40px] h-[40px]" />
-      <View className="w-[50%] h-full ml-[6px]">
-        <Text>Ngày đi</Text>
-        <Text className='font-bold'>12/12/2025</Text>
-      </View>
-  </View>
-)
+interface FromtoDateProps {
+  fromDay: Date, 
+  returnDay: Date, 
+  setFromDay: React.Dispatch<React.SetStateAction<Date>>,
+  setReturnDay: React.Dispatch<React.SetStateAction<Date>>,
+}
 
-const FromtoDate = (
-  <View className="w-full h-[150px] bg-white p-[10px] flex-row items-center rounded-[10px] mt-[10px]">
-    <Image source={require('../../../assets/fromtoicon.png')} className="w-[40px] h-full mr-[10px]" />
-    <View className="w-[85%] h-full justify-between">
-      <View className="h-[38%] justify-between">
-        <Text>Ngày đi</Text>
-        <Text className='font-bold'>12/11/2025</Text>
-      </View>
-      <Image source={require('../../../assets/line.png')} className="w-full h-[2px]" />
-      <View className="h-[38%] justify-between">
-        <Text>Ngày về</Text>
-        <Text className='font-bold'>12/12/2025</Text>
-      </View>
+const FromDate = ({ date, setDate }: FromDateProps) => {
+  const [show, setShow] = useState<boolean>(false)
+
+  const onChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
+    if (selectedDate) {
+      setDate(selectedDate)
+    }
+    setShow(false)
+  };
+
+  return (
+    <View className='w-full h-[60px] flex-row bg-white p-[10px] rounded-[10px] mt-[10px]'>
+        <Image source={require('../../../assets/fromicon.png')} className="w-[40px] h-[40px]" />
+        <View className="w-[50%] h-full ml-[6px]">
+          <Text onPress={() => setShow(true)}>Ngày đi</Text>
+          {show && <DateTimePicker value={date} mode={'date'} is24Hour={true} onChange={onChange} />}
+          <Text className='font-bold'>{date.toLocaleDateString('vi-VN')}</Text>
+        </View>
     </View>
-  </View>
-)
+  )
+}
+
+
+const FromtoDate = ({ fromDay, returnDay, setFromDay, setReturnDay }: FromtoDateProps) => {
+    const [show, setShow] = useState<boolean>(false)
+
+    const onChangeFrom = (event: DateTimePickerEvent, selectedDate?: Date) => {
+      if (selectedDate) {
+        setFromDay(selectedDate)
+      }
+      setShow(false)
+    };
+
+    const onChangeTo = (event: DateTimePickerEvent, selectedDate?: Date) => {
+      if (selectedDate) {
+        setReturnDay(selectedDate)
+      }
+      setShow(false)
+    };
+
+    return (
+      <View className="w-full h-[150px] bg-white p-[10px] flex-row items-center rounded-[10px] mt-[10px]">
+        <Image source={require('../../../assets/fromtoicon.png')} className="w-[40px] h-full mr-[10px]" />
+        <View className="w-[85%] h-full justify-between">
+          <View className="h-[38%] justify-between">
+            <Text onPress={() => setShow(true)}>Ngày đi</Text>
+            {show && <DateTimePicker value={fromDay} mode={'date'} is24Hour={true} onChange={onChangeFrom} />}
+            <Text className='font-bold'>{fromDay.toLocaleDateString('vi-VN')}</Text>
+          </View>
+          <Image source={require('../../../assets/line.png')} className="w-full h-[2px]" />
+          <View className="h-[38%] justify-between">
+            <Text onPress={() => setShow(true)}>Ngày về</Text>
+            {show && <DateTimePicker value={returnDay} mode={'date'} is24Hour={true} onChange={onChangeTo} />}
+            <Text className='font-bold'>{returnDay.toLocaleDateString('vi-VN')}</Text>
+          </View>
+        </View>
+      </View>
+    )
+}
+
 
 const Content = ({ returnDate }: Props) => {
+  const [date, setDate] = useState<Date>(new Date())
+  const [fromDay, setFromDay] = useState<Date>(new Date())
+  const [returnDay, setReturnDay] = useState<Date>(new Date())
+
   return (
     <View>
       <View className="w-full h-[150px] bg-white p-[10px] flex-row justify-between items-center rounded-[10px] mt-[10px]">
@@ -50,7 +100,8 @@ const Content = ({ returnDate }: Props) => {
         </View>
         <Image source={require('../../../assets/swapicon.png')} className="size-[40px]" />
       </View>
-      {returnDate ? FromtoDate : FromDate}
+      {returnDate ? <FromtoDate fromDay={fromDay} setFromDay={setFromDay} returnDay={returnDay} setReturnDay={setReturnDay} /> 
+                : <FromDate date={date} setDate={setDate} />}
       <View className="w-full h-[60px] bg-white p-[10px] flex-row justify-between items-center rounded-[10px] mt-[10px]">
         <Image source={require('../../../assets/numpeople.png')} className="w-[40px] h-full" />
         <View className="flex-1 ml-[6px]">
