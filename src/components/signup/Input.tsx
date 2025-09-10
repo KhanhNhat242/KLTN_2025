@@ -6,8 +6,8 @@ interface Props {
     placeholder: string,
     imgsrc: ImageSourcePropType,
     eyeIcon: boolean,
-    value: string,
-    onchange: React.Dispatch<React.SetStateAction<string>>,
+    value?: string,
+    onchange?: React.Dispatch<React.SetStateAction<string>>,
     type: KeyboardTypeOptions,
 }
 

@@ -1,14 +1,14 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-const bookticket = () => {
+const notification = () => {
   return (
     <View>
-      <Text>bookticket</Text>
+      <Text>notification</Text>
     </View>
   )
 }
 
-export default bookticket
+export default notification
 
 const styles = StyleSheet.create({})

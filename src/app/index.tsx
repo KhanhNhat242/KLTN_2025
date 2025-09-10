@@ -8,7 +8,7 @@ export default function WelcomeScreen() {
   const router = useRouter()
   
   useEffect(() => {
-    router.push('/(tabs)/home')
+    setTimeout(() => router.push('/(tabs)/account'), 3000)
   })
 
   return (

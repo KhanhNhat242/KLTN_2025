@@ -21,8 +21,12 @@ const FromDate = ({ date, setDate }: FromDateProps) => {
   const [show, setShow] = useState<boolean>(false)
 
   const onChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
-    if (selectedDate) {
+    if (selectedDate && selectedDate > date) {
       setDate(selectedDate)
+    }
+    else {
+      alert('fail!!!')
+      setDate(date)
     }
     setShow(false)
   };
@@ -33,7 +37,7 @@ const FromDate = ({ date, setDate }: FromDateProps) => {
         <View className="w-[50%] h-full ml-[6px]">
           <Text onPress={() => setShow(true)}>Ngày đi</Text>
           {show && <DateTimePicker value={date} mode={'date'} is24Hour={true} onChange={onChange} />}
-          <Text className='font-bold'>{date.toLocaleDateString('vi-VN')}</Text>
+          <Text className='font-bold'>{show ? '' : date.toLocaleDateString('vi-VN')}</Text>
         </View>
     </View>
   )
@@ -44,15 +48,23 @@ const FromtoDate = ({ fromDay, returnDay, setFromDay, setReturnDay }: FromtoDate
     const [show, setShow] = useState<boolean>(false)
 
     const onChangeFrom = (event: DateTimePickerEvent, selectedDate?: Date) => {
-      if (selectedDate) {
+      if (selectedDate && selectedDate > fromDay) {
         setFromDay(selectedDate)
+      }
+      else {
+        alert('fail!!!')
+        setFromDay(fromDay)
       }
       setShow(false)
     };
 
     const onChangeTo = (event: DateTimePickerEvent, selectedDate?: Date) => {
-      if (selectedDate) {
+      if (selectedDate && selectedDate > fromDay) {
         setReturnDay(selectedDate)
+      }
+      else {
+        alert('fail!!!')
+        setReturnDay(returnDay)
       }
       setShow(false)
     };
@@ -64,13 +76,13 @@ const FromtoDate = ({ fromDay, returnDay, setFromDay, setReturnDay }: FromtoDate
           <View className="h-[38%] justify-between">
             <Text onPress={() => setShow(true)}>Ngày đi</Text>
             {show && <DateTimePicker value={fromDay} mode={'date'} is24Hour={true} onChange={onChangeFrom} />}
-            <Text className='font-bold'>{fromDay.toLocaleDateString('vi-VN')}</Text>
+            <Text className='font-bold'>{show ? '' : fromDay.toLocaleDateString('vi-VN')}</Text>
           </View>
           <Image source={require('../../../assets/line.png')} className="w-full h-[2px]" />
           <View className="h-[38%] justify-between">
             <Text onPress={() => setShow(true)}>Ngày về</Text>
             {show && <DateTimePicker value={returnDay} mode={'date'} is24Hour={true} onChange={onChangeTo} />}
-            <Text className='font-bold'>{returnDay.toLocaleDateString('vi-VN')}</Text>
+            <Text className='font-bold'>{show ? '' : returnDay.toLocaleDateString('vi-VN')}</Text>
           </View>
         </View>
       </View>
@@ -82,6 +94,7 @@ const Content = ({ returnDate }: Props) => {
   const [date, setDate] = useState<Date>(new Date())
   const [fromDay, setFromDay] = useState<Date>(new Date())
   const [returnDay, setReturnDay] = useState<Date>(new Date())
+  const [numpeople, setNumpeople] = useState<number>(1)
 
   return (
     <View>
@@ -108,12 +121,12 @@ const Content = ({ returnDate }: Props) => {
           <Text>Số hành khách</Text>
           <Text className="font-bold">Chọn số người đi</Text>
         </View>
-        <View className="w-[20%] h-[50%] flex-row justify-between">
-          <TouchableOpacity className="bg-[#ccc] rounded-[5px] px-[5px]">
+        <View className="w-[25%] h-[70%] flex-row justify-between items-center">
+          <TouchableOpacity style={{backgroundColor: `${numpeople >= 2 ? '#1677FF' : '#ccc'}`}} className=" h-full rounded-[5px] pl-[10px] pr-[10px] justify-center" onPress={() => numpeople >= 2 && setNumpeople(numpeople - 1)}>
             <Text className="text-white text-center">-</Text>
           </TouchableOpacity>
-          <Text>10</Text>
-          <TouchableOpacity className="bg-[#1677FF] rounded-[5px] px-[5px]">
+          <Text>{numpeople}</Text>
+          <TouchableOpacity className="bg-[#1677FF] h-full rounded-[5px] pl-[10px] pr-[10px] justify-center" onPress={() => setNumpeople(numpeople + 1)}>
             <Text className="text-white text-center">+</Text>
           </TouchableOpacity>
         </View>

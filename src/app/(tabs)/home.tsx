@@ -2,6 +2,7 @@ import { FlatList, Image, ImageBackground, StyleSheet, Text, TextInput, Touchabl
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Content from '@/components/home/Content'
+import BookedTicket from '@/components/home/BookedTicket'
 
 const data = [
   { id: 1, city: 'Đà Lạt', price: 240000 },
@@ -16,6 +17,7 @@ interface Props {
 }
 
 const Item = ({ city, price }: Props) => (
+  // <Text>kkk</Text>
   <ImageBackground
     source={require('../../../assets/examplecityimg.png')}
     className="w-[45%] h-[100px] mt-[3%] ml-[3%] justify-end"
@@ -31,14 +33,15 @@ const Home = () => {
 
   return (
     <SafeAreaView>
-      <FlatList
+      <FlatList 
+        style={{height: '105%'}}
         data={data}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => <Item city={item.city} price={item.price} />}
         numColumns={2}
         ListHeaderComponent={
           <>
-            <View className='w-full bg-[#ccc] h-[90-vh]'>
+            <View className='w-full h-[100vmax]'>
               <ImageBackground
                 source={require('../../../assets/homebg.png')}
                 // className="h-[50vh]"
@@ -55,9 +58,10 @@ const Home = () => {
                     </TouchableOpacity>
                   </View>
                   <Content returnDate={returndate} />
-                  <TouchableOpacity className="w-full bg-[#1677FF] p-[15px] mt-[10px] rounded-[10px]">
+                  <TouchableOpacity className="w-full bg-[#1677FF] p-[15px] mt-[10px] mb-[15px] rounded-[10px]">
                     <Text className="text-white text-center">Tìm kiếm</Text>
                   </TouchableOpacity>
+                  <BookedTicket />
                   <Text className="font-bold text-[20px] mt-[10px] mb-[10px]">Điểm đến phổ biến</Text>
                   <View className="w-full flex-row justify-start">
                     <TouchableOpacity className="p-[10px] rounded-[10px] bg-[#1677FF]">
