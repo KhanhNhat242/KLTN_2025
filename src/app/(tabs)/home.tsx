@@ -9,6 +9,8 @@ const data = [
   { id: 2, city: 'Hồ Chí Minh', price: 240000 },
   { id: 3, city: 'Vũng Tàu', price: 240000 },
   { id: 4, city: 'Đà Nẵng', price: 240000 },
+  { id: 5, city: 'Vũng Tàu', price: 240000 },
+  { id: 6, city: 'Đà Nẵng', price: 240000 },
 ]
 
 interface Props {
@@ -34,7 +36,7 @@ const Home = () => {
   return (
     <SafeAreaView>
       <FlatList 
-        style={{height: '105%'}}
+        style={{height: '100%'}}
         data={data}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => <Item city={item.city} price={item.price} />}

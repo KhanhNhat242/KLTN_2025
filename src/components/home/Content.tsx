@@ -1,6 +1,7 @@
 import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker'
+import { Link, useRouter } from 'expo-router'
 
 interface Props {
   returnDate: boolean,
@@ -95,20 +96,23 @@ const Content = ({ returnDate }: Props) => {
   const [fromDay, setFromDay] = useState<Date>(new Date())
   const [returnDay, setReturnDay] = useState<Date>(new Date())
   const [numpeople, setNumpeople] = useState<number>(1)
+  // const [typeLocation, setTypeLocation] = useState<number>(0)
+
+  const router = useRouter()
 
   return (
     <View>
       <View className="w-full h-[150px] bg-white p-[10px] flex-row justify-between items-center rounded-[10px] mt-[10px]">
         <Image source={require('../../../assets/locationicon.png')} className="w-[40px] h-full" />
-        <View className="w-[70%] h-full justify-between">
+        <View className="w-[70%] h-full justify-between"> 
           <View className="h-[38%] justify-between">
             <Text>Từ</Text>
-            <TextInput placeholder="Chọn điểm đi..." />
+            <Link href={{pathname: '/(auth)/location', params: {typeLocation: 1}}}>Chọn điểm đi...</Link>
           </View>
           <Image source={require('../../../assets/line.png')} className="w-full h-[2px]" />
           <View className="h-[38%] justify-between">
             <Text>Đến</Text>
-            <TextInput placeholder="Chọn điểm đến..." />
+            <Link href={{pathname: '/(auth)/location', params: {typeLocation: 2}}}>Chọn điểm đến...</Link>
           </View>
         </View>
         <Image source={require('../../../assets/swapicon.png')} className="size-[40px]" />
