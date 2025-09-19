@@ -2,6 +2,7 @@ import Filter from '../components/Filter';
 import Header from '../components/Header'
 import HeaderTop from '../components/HeaderTop';
 import Search from '../components/Search';
+import downloadicon from '../assets/downloadicon.png'
 
 const trip = [
   { id: "47291", location: "TP.HCM – An Giang", time: '8:30 - 11:30', type: 'Limousine', price: '300.000đ', status: "Hoạt động" },
@@ -28,16 +29,19 @@ const Trip = () => {
       <Header />
       <div className='w-full p-[10px]'>
         <HeaderTop />
-        <div className='w-full flex flex-row justify-between mt-[10px] mb-[10px]'>
-          <h2 className='text-[20px] font-bold pl-[10px]'>Danh sách tuyến xe</h2>
-          <button className='color-white bg-[#1677FF] font-bold'>Thêm tuyến mới</button>
-        </div>
+        <h2 className='text-[20px] text-left font-bold mt-[10px] mb-[10px]'>Danh sách tuyến xe</h2>
         <div className='w-full flex flex-row justify-between'>
           <div className='flex flex-row'>
             <Search placeholder='Tìm trong danh sách tuyến' />
             <Filter />
           </div>
-          <button>Xuất Excel</button>
+          <div className='flex flex-row'>
+            <button className='p-[10px] flex flex-row items-center mr-[10px] rounded-[10px] cursor-pointer' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}>
+              <img src={downloadicon} className='size-[20px] mr-[5px]' />
+              <p>Xuất Excel</p>
+            </button>
+            <button className='p-[10px] cursor-pointer text-white bg-[#1447E6] rounded-[10px]'>+ Tạo xe mới</button>
+          </div>
         </div>
         <div className='mt-[20px]'>
           <table className="w-full border border-gray-200 text-left">

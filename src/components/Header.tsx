@@ -17,7 +17,7 @@ const Trip = () => {
     return (
     <div className='w-full flex flex-col items-start pl-[30px]'>
         <p className='p-[5px] cursor-pointer' onClick={() => navigate('/trip')}>Tuyến xe</p>
-        <p className='p-[5px] cursor-pointer'>Xe & Sơ đồ ghế</p>
+        <p className='p-[5px] cursor-pointer' onClick={() => navigate('/bus-information')}>Xe & Sơ đồ ghế</p>
         <p className='p-[5px] cursor-pointer'>Trạm đón/trả</p>
         <p className='p-[5px] cursor-pointer'>Lịch trình (Trips)</p>
     </div>

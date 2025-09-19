@@ -1,77 +1,80 @@
-import React from 'react'
 import Header from '../components/Header'
+import HeaderTop from '../components/HeaderTop';
+import Search from '../components/Search';
+import Filter from '../components/Filter';
+import downloadicon from '../assets/downloadicon.png'
 
-const tickets = [
-  {
-    route: "Hà Nội → Huế",
-    type: "Ghế ngồi",
-    price: "500,000",
-    date: "01/08/2024",
-  },
-  {
-    route: "Hà Nội → Huế",
-    type: "Giường nằm",
-    price: "700,000",
-    date: "02/08/2024",
-  },
-  {
-    route: "Hà Nội → TP.Hồ Chí Minh",
-    type: "Limousine",
-    price: "1,500,000",
-    date: "05/08/2024",
-  },
+const ticket = [
+  {id: 221, customer: 'Le Van An', trip: 'Saigon - Angiang', seat: 'A22', status: 'Đã trả'},
+  {id: 222, customer: 'Le Van An', trip: 'Saigon - Angiang', seat: 'A22', status: 'Giữ chỗ'},
+  {id: 223, customer: 'Le Van An', trip: 'Saigon - Angiang', seat: 'A22', status: 'Thất bại'},
+  {id: 224, customer: 'Le Van An', trip: 'Saigon - Angiang', seat: 'A22', status: 'Đã trả'},
+  {id: 225, customer: 'Le Van An', trip: 'Saigon - Angiang', seat: 'A22', status: 'Hoàn thành'},
+  {id: 226, customer: 'Le Van An', trip: 'Saigon - Angiang', seat: 'A22', status: 'Đã trả'},
+  {id: 227, customer: 'Le Van An', trip: 'Saigon - Angiang', seat: 'A22', status: 'Đã trả'},
+  {id: 228, customer: 'Le Van An', trip: 'Saigon - Angiang', seat: 'A22', status: 'Đã trả'},
+  {id: 229, customer: 'Le Van An', trip: 'Saigon - Angiang', seat: 'A22', status: 'Đã trả'},
+  {id: 230, customer: 'Le Van An', trip: 'Saigon - Angiang', seat: 'A22', status: 'Đã trả'},
+  {id: 231, customer: 'Le Van An', trip: 'Saigon - Angiang', seat: 'A22', status: 'Đã trả'},
+  {id: 232, customer: 'Le Van An', trip: 'Saigon - Angiang', seat: 'A22', status: 'Đã trả'},
+  {id: 233, customer: 'Le Van An', trip: 'Saigon - Angiang', seat: 'A22', status: 'Đã trả'},
+  {id: 234, customer: 'Le Van An', trip: 'Saigon - Angiang', seat: 'A22', status: 'Đã trả'},
+  {id: 235, customer: 'Le Van An', trip: 'Saigon - Angiang', seat: 'A22', status: 'Đã trả'},
+  {id: 236, customer: 'Le Van An', trip: 'Saigon - Angiang', seat: 'A22', status: 'Đã trả'},
+  {id: 237, customer: 'Le Van An', trip: 'Saigon - Angiang', seat: 'A22', status: 'Đã trả'},
+  {id: 238, customer: 'Le Van An', trip: 'Saigon - Angiang', seat: 'A22', status: 'Đã trả'},
 ];
 
 const Ticket = () => {
   return (
     <div className='w-full h-full flex flex-row justify-start'>
       <Header />
-      <div className='w-[80%] p-[10px]'>
+      <div className='w-full p-[10px]'>
+        <HeaderTop />
+        <h2 className='text-[20px] text-left font-bold mt-[10px] mb-[10px]'>Danh sách vé</h2>
         <div className='w-full flex flex-row justify-between'>
-          <h2 className='text-[20px] font-bold'>Quản lý thông tin tuyến xe</h2>
-          <button className='color-white bg-[#1677FF] font-bold'>Thêm tuyến mới</button>
+          <div className='flex flex-row'>
+            <Search placeholder='Tìm trong danh sách tuyến' />
+            <Filter />
+          </div>
+          <div className='flex flex-row'>
+            <button className='p-[10px] flex flex-row items-center mr-[10px] rounded-[10px] cursor-pointer' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}>
+              <img src={downloadicon} className='size-[20px] mr-[5px]' />
+              <p>Xuất Excel</p>
+            </button>
+            <button className='p-[10px] cursor-pointer text-white bg-[#1447E6] rounded-[10px]'>+ Tạo vé mới</button>
+          </div>
         </div>
-        <div className='w-full flex flex-row justify-between'>
-          <input className='w-[60%]' type="text" placeholder='Tìm kiếm theo điểm đi/điểm đến' />
-          <p></p>
-          <form>
-            <label className='mr-[10px]'>Trạng thái</label>
-            <select>
-              <option value="volvo">Tất cả</option>
-              <option value="saab">Hoạt động</option>
-              <option value="fiat">Tạm dừng</option>
-            </select>
-          </form>
-        </div>
-        <div className="mt-[20px]">
-          <table className="w-full border-collapse bg-white shadow rounded-lg">
-            <thead>
-              <tr className="bg-gray-100 text-center">
-                <th className="p-3 font-medium">Tuyến đường</th>
-                <th className="p-3 font-medium">Loại xe</th>
-                <th className="p-3 font-medium">Giá vé (VND)</th>
-                <th className="p-3 font-medium">Ngày áp dụng</th>
-                <th className="p-3 font-medium">Chỉnh sửa</th>
-              </tr>
-            </thead>
-            <tbody>
-              {tickets.map((ticket, idx) => (
-                <tr key={idx} className="border-t hover:bg-gray-50">
-                  <td className="p-3">{ticket.route}</td>
-                  <td className="p-3">{ticket.type}</td>
-                  <td className="p-3">{ticket.price}</td>
-                  <td className="p-3">{ticket.date}</td>
-                  <td className="p-3">
-                    <button className="text-blue-600 hover:underline">
-                      Chỉnh sửa
-                    </button>
-                  </td>
+        <div className='mt-[20px]'>
+            <table className="w-full border border-gray-200 text-left">
+              <thead className="bg-gray-100">
+                <tr>
+                  <th className="p-3 border-b">Mã vé</th>
+                  <th className="p-3 border-b">Khách hàng</th>
+                  <th className="p-3 border-b">Chuyến xe</th>
+                  <th className="p-3 border-b">Ghế</th>
+                  <th className="p-3 border-b">Trạng thái</th>
+                  <th className="p-3 border-b">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {ticket.map((ticket) => (
+                  <tr key={ticket.id} className="hover:bg-gray-50">
+                    <td className="p-3 border-b">{ticket.id}</td>
+                    <td className="p-3 border-b">{ticket.customer}</td>
+                    <td className="p-3 border-b">{ticket.trip}</td>
+                    <td className="p-3 border-b">{ticket.seat}</td>
+                    <td className="p-3 border-b">{ticket.status}</td>
+                    <td className="p-3 border-b space-x-2">
+                      <button className="text-blue-600 hover:underline">Sửa</button>
+                      <button className="text-blue-600 hover:underline">Xóa</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
     </div>
   )
 }
