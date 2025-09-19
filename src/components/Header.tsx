@@ -1,25 +1,84 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
-import { useRouter } from 'expo-router'
+import mainlogo from '../assets/mainlogo.png'
+import dashboardicon from '../assets/dashboardicon.png'
+import tripicon from '../assets/tripicon.png'
+import ticketicon from '../assets/ticketicon.png'
+import customericon from '../assets/customericon.png'
+import paymenticon from '../assets/paymenticon.png'
+import promotionicon from '../assets/promotionicon.png'
+import stafficon from '../assets/stafficon.png'
+import upcollapseicon from '../assets/upcollapseicon.png'
+import downcollapseicon from '../assets/downcollapseicon.png'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-interface Props {
-  headerTxt: string
+const Trip = () => {
+    const navigate = useNavigate()
+
+    return (
+    <div className='w-full flex flex-col items-start pl-[30px]'>
+        <p className='p-[5px] cursor-pointer' onClick={() => navigate('/trip')}>Tuyến xe</p>
+        <p className='p-[5px] cursor-pointer'>Xe & Sơ đồ ghế</p>
+        <p className='p-[5px] cursor-pointer'>Trạm đón/trả</p>
+        <p className='p-[5px] cursor-pointer'>Lịch trình (Trips)</p>
+    </div>
+)
 }
 
-const Header = ({ headerTxt }: Props) => {
-  const router = useRouter()
+const Header = () => {
+    const [count, setCount] = useState<number>(0)
 
-  return (
-    <View className='w-full h-[10vh] pt-[10%] bg-[#1677FF] flex-row justify-between items-center'>
-        <TouchableOpacity>
-            <Text className='text-white pl-[10px]' onPress={() => router.back()}>{'<'}</Text>
-        </TouchableOpacity>
-        <Text className='text-white font-bold text-[20px]'>{headerTxt}</Text>
-        <Text className='text-[#1677FF] pr-[10px]'>{'>'}</Text>
-    </View>
-  )
+
+    return (
+        <div className='w-[20%] h-[100vh] flex flex-col justify-start items-start bg-white ml-[10px]'>
+            <img src={mainlogo} alt="admin-logo" className='w-[50%] h-[50px] p-[10px]' />
+            <div className='w-full'>
+                <div className='w-full flex flex-row items-center p-[10px] cursor-pointer'>
+                    <img src={dashboardicon} className='mr-[10px]' />
+                    <p>Tổng quát</p>
+                </div>
+                <div className='w-full flex flex-row justify-between items-center p-[10px] cursor-pointer' onClick={() => count === 2 ? setCount(0) : setCount(2)}>
+                    <div className='flex flex-row'>
+                        <img src={tripicon} className='mr-[10px]' />
+                        <p>Chuyến xe</p>
+                    </div>
+                    <img src={count === 2 ? upcollapseicon : downcollapseicon} />
+                </div>
+                {count === 2 && <Trip />}
+                <div className='w-full flex flex-row items-center p-[10px] cursor-pointer'>
+                    <img src={ticketicon} className='mr-[10px]' />
+                    <p>Quản lý vé</p>
+                </div>
+                <div className='w-full flex flex-row justify-between items-center p-[10px] cursor-pointer'>
+                    <div className='flex flex-row'>
+                        <img src={customericon} className='mr-[10px]' />
+                        <p>Khách hàng</p>
+                    </div>
+                    <img src={downcollapseicon} />
+                </div>
+                <div className='w-full flex flex-row justify-between items-center p-[10px] cursor-pointer'>
+                    <div className='flex flex-row'>
+                        <img src={paymenticon} className='mr-[10px]' />
+                        <p>Thanh toán</p>
+                    </div>
+                    <img src={downcollapseicon} />
+                </div>
+                <div className='w-full flex flex-row justify-between items-center p-[10px] cursor-pointer'>
+                    <div className='flex flex-row'>
+                        <img src={promotionicon} className='mr-[10px]' />
+                        <p>Giá vé & Khuyến mãi</p>
+                    </div>
+                    <img src={downcollapseicon} />
+                </div>
+                <div className='w-full flex flex-row justify-between items-center p-[10px] cursor-pointer'>
+                    <div className='flex flex-row'>
+                        <img src={stafficon} className='mr-[10px]' />
+                        <p>Nhân viên</p>
+                    </div>
+                    <img src={downcollapseicon} />
+                </div>
+            </div>
+        </div>
+    )
 }
 
 export default Header
-
-const styles = StyleSheet.create({})
