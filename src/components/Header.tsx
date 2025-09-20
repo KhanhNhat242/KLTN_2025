@@ -26,7 +26,7 @@ const Trip = () => {
 
 const Header = () => {
     const [count, setCount] = useState<number>(0)
-
+    const navigate = useNavigate()
 
     return (
         <div className='w-[20%] h-[100vh] flex flex-col justify-start items-start bg-white ml-[10px]'>
@@ -44,7 +44,7 @@ const Header = () => {
                     <img src={count === 2 ? upcollapseicon : downcollapseicon} />
                 </div>
                 {count === 2 && <Trip />}
-                <div className='w-full flex flex-row items-center p-[10px] cursor-pointer'>
+                <div className='w-full flex flex-row items-center p-[10px] cursor-pointer' onClick={() => navigate('/ticket')}>
                     <img src={ticketicon} className='mr-[10px]' />
                     <p>Quản lý vé</p>
                 </div>
@@ -62,12 +62,12 @@ const Header = () => {
                     </div>
                     <img src={downcollapseicon} />
                 </div>
-                <div className='w-full flex flex-row justify-between items-center p-[10px] cursor-pointer'>
+                <div className='w-full flex flex-row justify-between items-center p-[10px] cursor-pointer' onClick={() => navigate('/promotion')}>
                     <div className='flex flex-row'>
                         <img src={promotionicon} className='mr-[10px]' />
                         <p>Giá vé & Khuyến mãi</p>
                     </div>
-                    <img src={downcollapseicon} />
+                    {/* <img src={downcollapseicon} /> */}
                 </div>
                 <div className='w-full flex flex-row justify-between items-center p-[10px] cursor-pointer'>
                     <div className='flex flex-row'>
