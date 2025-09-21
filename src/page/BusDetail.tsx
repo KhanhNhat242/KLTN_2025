@@ -8,6 +8,10 @@ import hammericon from '../assets/hammericon.png'
 import blanketicon from '../assets/blanketicon.png'
 import bottleicon from '../assets/bottleicon.png'
 import Free from '../components/Free'
+import currenticon from '../assets/currenticon.png'
+import soldicon from '../assets/soldicon.png'
+import emptyicon from '../assets/emptyicon.png'
+import SeatMap from '../components/SeatMap'
 
 const BusDetail = () => {
   return (
@@ -60,8 +64,28 @@ const BusDetail = () => {
                         </div>
                     </div>
                 </div>
-                <div>
-                    <h2>Sơ đồ ghế</h2>
+                <div className='w-[70%] bg-white'>
+                    <h2 className='font-bold text-left p-[10px]' style={{borderStyle: 'solid', borderBottomColor: '#ccc', borderBottomWidth: 2}}>Sơ đồ ghế</h2>
+                    <div className='w-full p-[10px] flex flex-row'>
+                        <SeatMap />
+                        <div className='w-[50% pl-[20px]'>
+                            <h2 className='h-[40px] font-bold text-left pt-[20px] text-gray'>Trạng thái</h2>
+                            <div className='w-full mt-[30px]'>
+                                <div className='w-full flex flex-row items-center p-[5px]'>
+                                    <img src={emptyicon} className='mr-[5px]' />
+                                    <p>Còn trống</p>
+                                </div>
+                                <div className='w-full flex flex-row items-center p-[5px]'>
+                                    <img src={currenticon} className='mr-[5px]' />
+                                    <p>Đang chọn</p>
+                                </div>
+                                <div className='w-full flex flex-row items-center p-[5px]'>
+                                    <img src={soldicon} className='mr-[5px]' />
+                                    <p>Đã bán</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
