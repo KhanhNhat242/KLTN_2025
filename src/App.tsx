@@ -6,6 +6,7 @@ import BusInformation from './page/BusInformation'
 import Ticket from './page/Ticket'
 import Promotion from './page/Promotion'
 import BusDetail from './page/BusDetail'
+import Login from './page/Login'
 
 function App() {
 
@@ -14,6 +15,7 @@ function App() {
       <Router>
         <Routes>
           <Route path='/' element={<Home />}/>
+          <Route path='/log-in' element={<Login />}/>
           <Route path='/trip' element={<Trip />}/>
           <Route path='/bus-information' element={<BusInformation />}/>
           <Route path='/ticket' element={<Ticket />}/>

@@ -9,7 +9,7 @@ const ticket = [
   {id: 222, customer: 'Le Van An', trip: 'Saigon - Angiang', seat: 'A22', status: 'Giữ chỗ'},
   {id: 223, customer: 'Le Van An', trip: 'Saigon - Angiang', seat: 'A22', status: 'Thất bại'},
   {id: 224, customer: 'Le Van An', trip: 'Saigon - Angiang', seat: 'A22', status: 'Đã trả'},
-  {id: 225, customer: 'Le Van An', trip: 'Saigon - Angiang', seat: 'A22', status: 'Hoàn thành'},
+  {id: 225, customer: 'Le Van An', trip: 'Saigon - Angiang', seat: 'A22', status: 'Thất bại'},
   {id: 226, customer: 'Le Van An', trip: 'Saigon - Angiang', seat: 'A22', status: 'Đã trả'},
   {id: 227, customer: 'Le Van An', trip: 'Saigon - Angiang', seat: 'A22', status: 'Đã trả'},
   {id: 228, customer: 'Le Van An', trip: 'Saigon - Angiang', seat: 'A22', status: 'Đã trả'},
@@ -35,7 +35,7 @@ const Ticket = () => {
         <div className='w-full flex flex-row justify-between'>
           <div className='flex flex-row'>
             <Search placeholder='Tìm trong danh sách tuyến' />
-            <Filter />
+            <Filter type='ticket' />
           </div>
           <div className='flex flex-row'>
             <button className='p-[10px] flex flex-row items-center mr-[10px] rounded-[10px] cursor-pointer' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}>

@@ -1,11 +1,14 @@
-import { useState } from 'react'
 import drivericon from '../assets/drivericon.png'
 import Seat from './Seat'
 
-const SeatMap = () => {
+interface Props {
+    isLimousine: boolean
+}
+
+const SeatMap = ({ isLimousine }: Props) => {
 
     return (
-        <div className='w-[40%] pt-[10px] pl-[10px] pb-[10px] pr-[20px] flex flex-row' style={{borderStyle: 'solid', borderRightColor: '#000', borderRightWidth: 2}}>
+        <div className={`pt-[10px] pl-[10px] pb-[10px] pr-[20px] flex flex-row ${isLimousine ? 'w-[30%]' : 'w-[40%]' }`} style={{borderStyle: 'solid', borderRightColor: '#000', borderRightWidth: 2}}>
             <div className='w-[50%] flex flex-col pr-[10px]' style={{borderStyle: 'solid', borderRightColor: '#ccc', borderRightWidth: 2}}>
                 <div className='w-full mb-[10px] flex flex-row justify-between items-center'>
                     <img src={drivericon} className='size-[40px]' />
@@ -18,15 +21,18 @@ const SeatMap = () => {
                         <Seat status={0} />
                         <Seat status={0} />
                         <Seat status={0} />
-                    </div>
-                    <div className='flex flex-col'>
-                        <Seat status={0} />
-                        <Seat status={0} />
-                        <Seat status={0} />
-                        <Seat status={0} />
                         <Seat status={0} />
                     </div>
                     <div className='flex flex-col'>
+                        <Seat status={0} />
+                        <Seat status={0} />
+                        <Seat status={0} />
+                        <Seat status={0} />
+                        <Seat status={0} />
+                        <Seat status={0} />
+                    </div>
+                    <div className={`flex flex-col ${isLimousine && 'hidden'}`}>
+                        <Seat status={0} />
                         <Seat status={0} />
                         <Seat status={0} />
                         <Seat status={0} />
@@ -44,15 +50,18 @@ const SeatMap = () => {
                         <Seat status={0} />
                         <Seat status={0} />
                         <Seat status={0} />
-                    </div>
-                    <div className='flex flex-col'>
-                        <Seat status={0} />
-                        <Seat status={0} />
-                        <Seat status={0} />
-                        <Seat status={0} />
                         <Seat status={0} />
                     </div>
                     <div className='flex flex-col'>
+                        <Seat status={0} />
+                        <Seat status={0} />
+                        <Seat status={0} />
+                        <Seat status={0} />
+                        <Seat status={0} />
+                        <Seat status={0} />
+                    </div>
+                    <div className={`flex flex-col ${isLimousine && 'hidden'}`}>
+                        <Seat status={0} />
                         <Seat status={0} />
                         <Seat status={0} />
                         <Seat status={0} />

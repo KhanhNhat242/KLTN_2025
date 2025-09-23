@@ -7,12 +7,12 @@ import downloadicon from '../assets/downloadicon.png'
 const bus = [
   { id: '111', licensePlate: "29A-00123", trip: "Saigon - Danang", type: 'Limousine', seatNumber: "36", driver: 'Nguyen Nhat Hoang', status: "Hoạt động" },
   { id: '112', licensePlate: "29A-00123", trip: "Saigon - Danang", type: 'Limousine', seatNumber: "36", driver: 'Nguyen Nhat Hoang', status: "Bảo trì" },
-  { id: '113', licensePlate: "29A-00123", trip: "Saigon - Danang", type: 'Limousine', seatNumber: "36", driver: 'Nguyen Nhat Hoang', status: "Hết hạn" },
-  { id: '114', licensePlate: "29A-00123", trip: "Saigon - Danang", type: 'Limousine', seatNumber: "36", driver: 'Nguyen Nhat Hoang', status: "Ngưng hoạt động" },
+  { id: '113', licensePlate: "29A-00123", trip: "Saigon - Danang", type: 'Limousine', seatNumber: "36", driver: 'Nguyen Nhat Hoang', status: "Đã ngưng" },
+  { id: '114', licensePlate: "29A-00123", trip: "Saigon - Danang", type: 'Limousine', seatNumber: "36", driver: 'Nguyen Nhat Hoang', status: "Đã ngưng" },
   { id: '115', licensePlate: "29A-00123", trip: "Saigon - Danang", type: 'Limousine', seatNumber: "36", driver: 'Nguyen Nhat Hoang', status: "Hoạt động" },
   { id: '116', licensePlate: "29A-00123", trip: "Saigon - Danang", type: 'Limousine', seatNumber: "36", driver: 'Nguyen Nhat Hoang', status: "Hoạt động" },
   { id: '117', licensePlate: "29A-00123", trip: "Saigon - Danang", type: 'Limousine', seatNumber: "36", driver: 'Nguyen Nhat Hoang', status: "Hoạt động" },
-  { id: '118', licensePlate: "29A-00123", trip: "Saigon - Danang", type: 'Limousine', seatNumber: "36", driver: 'Nguyen Nhat Hoang', status: "Ngưng hoạt động" },
+  { id: '118', licensePlate: "29A-00123", trip: "Saigon - Danang", type: 'Limousine', seatNumber: "36", driver: 'Nguyen Nhat Hoang', status: "Đã ngưng" },
   { id: '119', licensePlate: "29A-00123", trip: "Saigon - Danang", type: 'Limousine', seatNumber: "36", driver: 'Nguyen Nhat Hoang', status: "Hoạt động" },
   { id: '120', licensePlate: "29A-00123", trip: "Saigon - Danang", type: 'Limousine', seatNumber: "36", driver: 'Nguyen Nhat Hoang', status: "Hoạt động" },
   { id: '121', licensePlate: "29A-00123", trip: "Saigon - Danang", type: 'Limousine', seatNumber: "36", driver: 'Nguyen Nhat Hoang', status: "Hoạt động" },
@@ -35,7 +35,7 @@ const Seat = () => {
         <div className='w-full flex flex-row justify-between'>
           <div className='flex flex-row'>
             <Search placeholder='Tìm trong danh sách tuyến' />
-            <Filter />
+            <Filter type='bus-information' />
           </div>
           <div className='flex flex-row'>
             <button className='p-[10px] flex flex-row items-center mr-[10px] rounded-[10px] cursor-pointer' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}>
