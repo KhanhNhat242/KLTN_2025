@@ -4,6 +4,8 @@ import HeaderTop from '../components/HeaderTop';
 import Search from '../components/Search';
 import downloadicon from '../assets/downloadicon.png'
 import { useState } from 'react';
+import TripModal from '../components/TripModal';
+import DeleteMocal from '../components/DeleteMocal';
 
 const trip = [
   { id: "47291", location: "TP.HCM – An Giang", time: '8:30 - 11:30', type: 'Limousine', price: '300.000đ', status: "Hoạt động" },
@@ -25,7 +27,9 @@ const trip = [
 ];
 
 const Trip = () => {
-  // const [isEdit, setIsEdit] = useState<boolean>(false)
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [isEdit, setIsEdit] = useState<boolean>(false)
+  const [isDelete, setIsDelete] = useState<boolean>(false)
 
   return (
     <div className='w-full h-full flex flex-row justify-start'>
@@ -43,7 +47,11 @@ const Trip = () => {
               <img src={downloadicon} className='size-[20px] mr-[5px]' />
               <p>Xuất Excel</p>
             </button>
-            <button className='p-[10px] cursor-pointer text-white bg-[#1447E6] rounded-[10px]'>+ Tạo xe mới</button>
+            <button className='p-[10px] cursor-pointer text-white bg-[#1447E6] rounded-[10px]' 
+              onClick={() => {
+                setIsOpen(true)
+                setIsEdit(false)
+              }}>+ Tạo tuyến xe mới</button>
           </div>
         </div>
         <div className='mt-[20px]'>
@@ -69,16 +77,21 @@ const Trip = () => {
                       <td className="p-3 border-b">{trip.price}</td>
                       <td className="p-3 border-b">{trip.status}</td>
                       <td className="p-3 border-b space-x-2">
-                        <button className="text-blue-600 hover:underline">Sửa</button>
-                        <button className="text-blue-600 hover:underline">Xóa</button>
+                        <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
+                          onClick={() => {
+                            setIsOpen(true)
+                            setIsEdit(true)
+                          }}>Sửa</button>
+                        <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" onClick={() => setIsDelete(true)}>Xóa</button>
                       </td>
                     </tr>
                 ))}
-              
             </tbody>
           </table>
         </div>
       </div>
+      {isOpen && (isEdit ? <TripModal isEdit={true} setIsOpen={setIsOpen} /> : <TripModal isEdit={false} setIsOpen={setIsOpen} /> ) }
+      {isDelete && <DeleteMocal setIsDelete={setIsDelete} />}
     </div>
   )
 }
