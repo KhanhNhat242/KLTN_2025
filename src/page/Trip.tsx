@@ -6,25 +6,9 @@ import downloadicon from '../assets/downloadicon.png'
 import { useState } from 'react';
 import TripModal from '../components/TripModal';
 import DeleteMocal from '../components/DeleteMocal';
+import tripdata from '../fakedata/fakeapitrip.json'
 
-const trip = [
-  { id: "47291", location: "TP.HCM – An Giang", time: '8:30 - 11:30', type: 'Limousine', price: '300.000đ', status: "Hoạt động" },
-  { id: "47292", location: "TP.HCM – An Giang", time: '8:30 - 11:30', type: 'Limousine', price: '300.000đ', status: "Hoạt động" },
-  { id: "47293", location: "TP.HCM – An Giang", time: '8:30 - 11:30', type: 'Limousine', price: '300.000đ', status: "Tạm dừng" },
-  { id: "47294", location: "TP.HCM – An Giang", time: '8:30 - 11:30', type: 'Limousine', price: '300.000đ', status: "Hoạt động" },
-  { id: "47295", location: "TP.HCM – An Giang", time: '8:30 - 11:30', type: 'Limousine', price: '300.000đ', status: "Hoạt động" },
-  { id: "47296", location: "TP.HCM – An Giang", time: '8:30 - 11:30', type: 'Limousine', price: '300.000đ', status: "Hoạt động" },
-  { id: "47297", location: "TP.HCM – An Giang", time: '8:30 - 11:30', type: 'Limousine', price: '300.000đ', status: "Tạm dừng" },
-  { id: "47298", location: "TP.HCM – An Giang", time: '8:30 - 11:30', type: 'Limousine', price: '300.000đ', status: "Tạm dừng" },
-  { id: "47299", location: "TP.HCM – An Giang", time: '8:30 - 11:30', type: 'Limousine', price: '300.000đ', status: "Hoạt động" },
-  { id: "47300", location: "TP.HCM – An Giang", time: '8:30 - 11:30', type: 'Limousine', price: '300.000đ', status: "Hoạt động" },
-  { id: "47301", location: "TP.HCM – An Giang", time: '8:30 - 11:30', type: 'Limousine', price: '300.000đ', status: "Sắp khai trương" },
-  { id: "47302", location: "TP.HCM – An Giang", time: '8:30 - 11:30', type: 'Limousine', price: '300.000đ', status: "Sắp khai trương" },
-  { id: "47303", location: "TP.HCM – An Giang", time: '8:30 - 11:30', type: 'Limousine', price: '300.000đ', status: "Hoạt động" },
-  { id: "47304", location: "TP.HCM – An Giang", time: '8:30 - 11:30', type: 'Limousine', price: '300.000đ', status: "Hoạt động" },
-  { id: "47305", location: "TP.HCM – An Giang", time: '8:30 - 11:30', type: 'Limousine', price: '300.000đ', status: "Đã ngưng" },
-  { id: "47306", location: "TP.HCM – An Giang", time: '8:30 - 11:30', type: 'Limousine', price: '300.000đ', status: "Đã ngưng" },
-];
+const trip = tripdata;
 
 const Trip = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -62,20 +46,22 @@ const Trip = () => {
                 <th className="p-3 border-b">Tuyến xe</th>
                 <th className="p-3 border-b">Thời gian dự kiến</th>
                 <th className="p-3 border-b">Loại xe</th>
+                <th className="p-3 border-b">Khoảng cách</th>
                 <th className="p-3 border-b">Giá vé cơ bản</th>
-                <th className="p-3 border-b">Trạng thái</th>
+                {/* <th className="p-3 border-b">Trạng thái</th> */}
                 <th className="p-3 border-b">Actions</th>
               </tr>
             </thead>
             <tbody>
               {trip.map((trip) => (
                     <tr key={trip.id} className="hover:bg-gray-50">
-                      <td className="p-3 border-b">{trip.id}</td>
-                      <td className="p-3 border-b">{trip.location}</td>
-                      <td className="p-3 border-b">{trip.time}</td>
-                      <td className="p-3 border-b">{trip.type}</td>
-                      <td className="p-3 border-b">{trip.price}</td>
-                      <td className="p-3 border-b">{trip.status}</td>
+                      <td className="p-3 border-b">111</td>
+                      <td className="p-3 border-b">{trip.station}</td>
+                      <td className="p-3 border-b">{trip.totaltime}</td>
+                      <td className="p-3 border-b">{trip.typeofbus}</td>
+                      <td className="p-3 border-b">{trip.distance}</td>
+                      {/* <td className="p-3 border-b">{trip.price}</td> */}
+                      <td className="p-3 border-b">(Hoạt động)</td>
                       <td className="p-3 border-b space-x-2">
                         <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
                           onClick={() => {

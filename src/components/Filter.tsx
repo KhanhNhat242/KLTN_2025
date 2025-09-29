@@ -34,6 +34,13 @@ const Filter = ({ type }: Props) => {
         'Thất bại',
       ])
     }
+    else if (type === 'promotion') {
+      setStatus([
+        'Tất cả',
+        'Hoạt động',
+        'Tạm ngưng',
+      ])
+    }
   }, [])
 
   return (

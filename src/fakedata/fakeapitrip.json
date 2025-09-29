@@ -1,0 +1,2276 @@
+[
+  {
+    "station": "An Hữu (Tiền Giang) - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "123km",
+    "totaltime": "2 giờ"
+  },
+  {
+    "station": "An Khê (Gia Lai) - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "640km",
+    "totaltime": "13 giờ"
+  },
+  {
+    "station": "An Khê (Gia Lai) - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "690km",
+    "totaltime": "14 giờ"
+  },
+  {
+    "station": "An Minh (Kiên Giang) - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "295km",
+    "totaltime": "7 giờ"
+  },
+  {
+    "station": "An Nhơn - TP. Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "639km",
+    "totaltime": "11 giờ 30 phút"
+  },
+  {
+    "station": "An Nhơn - TP. Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "660km",
+    "totaltime": "13 giờ 46 phút"
+  },
+  {
+    "station": "An Nhơn - TP.Hồ Chí Minh",
+    "typeofbus": "",
+    "distance": "627km",
+    "totaltime": "10 giờ 7 phút"
+  },
+  {
+    "station": "Ba Tri (Bến Tre) - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "126km",
+    "totaltime": "4 giờ"
+  },
+  {
+    "station": "Bạc Liêu - TP.Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "271km",
+    "totaltime": "6 giờ"
+  },
+  {
+    "station": "Bạc Liêu - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "243km",
+    "totaltime": "5 giờ"
+  },
+  {
+    "station": "Bảo Lộc - Bình Sơn",
+    "typeofbus": "Limousine",
+    "distance": "650km",
+    "totaltime": "15 giờ 30 phút"
+  },
+  {
+    "station": "Bảo Lộc - Đà Nẵng",
+    "typeofbus": "Giường",
+    "distance": "756km",
+    "totaltime": "16 giờ 38 phút"
+  },
+  {
+    "station": "Bảo Lộc - Huế",
+    "typeofbus": "Giường",
+    "distance": "827km",
+    "totaltime": "19 giờ"
+  },
+  {
+    "station": "Bảo Lộc - Huế",
+    "typeofbus": "Limousine",
+    "distance": "900km",
+    "totaltime": "18 giờ 30 phút"
+  },
+  {
+    "station": "Bảo Lộc - Quảng Ngãi",
+    "typeofbus": "",
+    "distance": "",
+    "totaltime": ""
+  },
+  {
+    "station": "Bảo Lộc - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "165km",
+    "totaltime": "5 giờ 21 phút"
+  },
+  {
+    "station": "Bến Tre - TP.Hồ Chí Minh",
+    "typeofbus": "",
+    "distance": "75km",
+    "totaltime": "2 giờ"
+  },
+  {
+    "station": "Bình Dương - Bình Dương",
+    "typeofbus": "Limousine",
+    "distance": "260km",
+    "totaltime": "5 giờ 26 phút"
+  },
+  {
+    "station": "Bình Dương - Cà Mau",
+    "typeofbus": "Limousine",
+    "distance": "317km",
+    "totaltime": "6 giờ 21 phút"
+  },
+  {
+    "station": "Bình Dương - Cà Mau",
+    "typeofbus": "Limousine",
+    "distance": "380km",
+    "totaltime": "7 giờ 37 phút"
+  },
+  {
+    "station": "Bình Dương - Đà Lạt",
+    "typeofbus": "Limousine",
+    "distance": "338km",
+    "totaltime": "9 giờ"
+  },
+  {
+    "station": "Bình Dương - Hà Tiên",
+    "typeofbus": "Limousine",
+    "distance": "352km",
+    "totaltime": "8 giờ 30 phút"
+  },
+  {
+    "station": "Bình Dương - Khánh Bình (An Giang)",
+    "typeofbus": "Limousine",
+    "distance": "294km",
+    "totaltime": "8 giờ"
+  },
+  {
+    "station": "Bình Dương - Nha Trang",
+    "typeofbus": "Limousine",
+    "distance": "425km",
+    "totaltime": "10 giờ"
+  },
+  {
+    "station": "Bình Dương - Ninh Sơn (Ninh Thuận)",
+    "typeofbus": "Limousine",
+    "distance": "340km",
+    "totaltime": "8 giờ"
+  },
+  {
+    "station": "Bình Dương - Óc Eo (An Giang)",
+    "typeofbus": "Limousine",
+    "distance": "280km",
+    "totaltime": "8 giờ"
+  },
+  {
+    "station": "Bình Dương - Ô Môn",
+    "typeofbus": "Limousine",
+    "distance": "220km",
+    "totaltime": "4 giờ"
+  },
+  {
+    "station": "Bình Dương - Rạch Giá",
+    "typeofbus": "Limousine",
+    "distance": "272km",
+    "totaltime": "6 giờ 35 phút"
+  },
+  {
+    "station": "Bình Dương - Sóc Trăng",
+    "typeofbus": "Limousine",
+    "distance": "255km",
+    "totaltime": "5 giờ 26 phút"
+  },
+  {
+    "station": "Bình Dương - Vĩnh Châu (Sóc Trăng)",
+    "typeofbus": "Limousine",
+    "distance": "275km",
+    "totaltime": "7 giờ"
+  },
+  {
+    "station": "Bình Dương - Vĩnh Thuận (Kiên Giang)",
+    "typeofbus": "Giường",
+    "distance": "311km",
+    "totaltime": "8 giờ"
+  },
+  {
+    "station": "Bình Sơn - Bảo Lộc",
+    "typeofbus": "Limousine",
+    "distance": "650km",
+    "totaltime": "15 giờ 30 phút"
+  },
+  {
+    "station": "Bình Sơn - Đà Lạt",
+    "typeofbus": "Limousine",
+    "distance": "560km",
+    "totaltime": "12 giờ"
+  },
+  {
+    "station": "Bình Sơn - Đà Lạt",
+    "typeofbus": "Limousine",
+    "distance": "560km",
+    "totaltime": "12 giờ"
+  },
+  {
+    "station": "Bình Sơn - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "870km",
+    "totaltime": "16 giờ"
+  },
+  {
+    "station": "Bù Đăng - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "163km",
+    "totaltime": "5 giờ 30 phút"
+  },
+  {
+    "station": "Bù Đăng - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "185km",
+    "totaltime": "6 giờ"
+  },
+  {
+    "station": "Buôn Hồ - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "450km",
+    "totaltime": "10 giờ"
+  },
+  {
+    "station": "Buôn Ma Thuột - Nha Trang",
+    "typeofbus": "",
+    "distance": "",
+    "totaltime": ""
+  },
+  {
+    "station": "Buôn Ma Thuột - Phan Rang",
+    "typeofbus": "Limousine",
+    "distance": "290km",
+    "totaltime": "8 giờ"
+  },
+  {
+    "station": "Buôn Ma Thuột - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "367km",
+    "totaltime": "9 giờ"
+  },
+  {
+    "station": "Buôn Ma Thuột - TP.Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "354km",
+    "totaltime": "8 giờ"
+  },
+  {
+    "station": "Buôn Ma Thuột - TP.Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "330km",
+    "totaltime": "9 giờ 30 phút"
+  },
+  {
+    "station": "Buôn Ma Thuột - TP.Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "435km",
+    "totaltime": "9 giờ"
+  },
+  {
+    "station": "BX An Sương - Đà Nẵng",
+    "typeofbus": "Giường",
+    "distance": "966km",
+    "totaltime": "20 giờ"
+  },
+  {
+    "station": "BX An Sương - Quảng Ngãi",
+    "typeofbus": "Giường",
+    "distance": "820km",
+    "totaltime": "17 giờ"
+  },
+  {
+    "station": "Cà Mau - Bình Dương",
+    "typeofbus": "Limousine",
+    "distance": "380km",
+    "totaltime": "7 giờ 37 phút"
+  },
+  {
+    "station": "Cà Mau - Bình Dương",
+    "typeofbus": "Limousine",
+    "distance": "317km",
+    "totaltime": "6 giờ 21 phút"
+  },
+  {
+    "station": "Cà Mau - Cần Thơ",
+    "typeofbus": "",
+    "distance": "143km",
+    "totaltime": "4 giờ"
+  },
+  {
+    "station": "Cà Mau - Cần Thơ",
+    "typeofbus": "Giường",
+    "distance": "135km",
+    "totaltime": "3 giờ"
+  },
+  {
+    "station": "Cà Mau - Châu Đốc",
+    "typeofbus": "Giường",
+    "distance": "236km",
+    "totaltime": "6 giờ 30 phút"
+  },
+  {
+    "station": "Cà Mau - Đà Lạt",
+    "typeofbus": "Limousine",
+    "distance": "660km",
+    "totaltime": "16 giờ"
+  },
+  {
+    "station": "Cà Mau - TP. Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "282km",
+    "totaltime": "6 giờ 30 phút"
+  },
+  {
+    "station": "Cà Mau - TP.Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "302km",
+    "totaltime": "8 giờ"
+  },
+  {
+    "station": "Cà Mau - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "311km",
+    "totaltime": "8 giờ"
+  },
+  {
+    "station": "Cam Ranh - Đà Nẵng",
+    "typeofbus": "Giường",
+    "distance": "568km",
+    "totaltime": "10 giờ 4 phút"
+  },
+  {
+    "station": "Cam Ranh - TP.Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "350km",
+    "totaltime": "9 giờ"
+  },
+  {
+    "station": "Cần Thơ - Cà Mau",
+    "typeofbus": "",
+    "distance": "144km",
+    "totaltime": "4 giờ"
+  },
+  {
+    "station": "Cần Thơ - Cà Mau",
+    "typeofbus": "Giường",
+    "distance": "135km",
+    "totaltime": "3 giờ 33 phút"
+  },
+  {
+    "station": "Cần Thơ - Châu Đốc",
+    "typeofbus": "",
+    "distance": "115km",
+    "totaltime": "4 giờ 30 phút"
+  },
+  {
+    "station": "Cần Thơ - Đà Lạt",
+    "typeofbus": "Giường",
+    "distance": "459km",
+    "totaltime": "11 giờ"
+  },
+  {
+    "station": "Cần Thơ - Gành Hào (Bạc Liêu)",
+    "typeofbus": "Limousine",
+    "distance": "180km",
+    "totaltime": "6 giờ"
+  },
+  {
+    "station": "Cần Thơ - Hà Tiên",
+    "typeofbus": "Limousine",
+    "distance": "210km",
+    "totaltime": "6 giờ"
+  },
+  {
+    "station": "Cần Thơ - Hồng Ngự",
+    "typeofbus": "Giường",
+    "distance": "166km",
+    "totaltime": "5 giờ 30 phút"
+  },
+  {
+    "station": "Cần Thơ - Năm Căn",
+    "typeofbus": "Giường",
+    "distance": "190km",
+    "totaltime": "4 giờ 4 phút"
+  },
+  {
+    "station": "Cần Thơ - Nha Trang",
+    "typeofbus": "Limousine",
+    "distance": "630km",
+    "totaltime": "14 giờ"
+  },
+  {
+    "station": "Cần Thơ - Rạch Giá",
+    "typeofbus": "",
+    "distance": "112km",
+    "totaltime": "4 giờ 30 phút"
+  },
+  {
+    "station": "Cần Thơ - TP. Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "166km",
+    "totaltime": "5 giờ"
+  },
+  {
+    "station": "Cần Thơ - TP.Hồ Chí Minh",
+    "typeofbus": "",
+    "distance": "167km",
+    "totaltime": "4 giờ 30 phút"
+  },
+  {
+    "station": "Cần Thơ - Vũng Tàu",
+    "typeofbus": "Limousine",
+    "distance": "451km",
+    "totaltime": "9 giờ 9 phút"
+  },
+  {
+    "station": "Cao Lãnh - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "165km",
+    "totaltime": "4 giờ"
+  },
+  {
+    "station": "Cao Lãnh - TP.Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "144km",
+    "totaltime": "3 giờ"
+  },
+  {
+    "station": "Cầu Kè (Trà Vinh) - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "210km",
+    "totaltime": "4 giờ"
+  },
+  {
+    "station": "Châu Đốc - Cà Mau",
+    "typeofbus": "Giường",
+    "distance": "236km",
+    "totaltime": "6 giờ 30 phút"
+  },
+  {
+    "station": "Châu Đốc - Cần Thơ",
+    "typeofbus": "",
+    "distance": "115km",
+    "totaltime": "4 giờ 30 phút"
+  },
+  {
+    "station": "Châu Đốc - Đà Lạt",
+    "typeofbus": "Limousine",
+    "distance": "615km",
+    "totaltime": "15 giờ"
+  },
+  {
+    "station": "Châu Đốc - Rạch Giá",
+    "typeofbus": "Limousine",
+    "distance": "125km",
+    "totaltime": "3 giờ"
+  },
+  {
+    "station": "Châu Đốc - TP.Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "240km",
+    "totaltime": "6 giờ 15 phút"
+  },
+  {
+    "station": "Đà Lạt - Bình Dương",
+    "typeofbus": "Limousine",
+    "distance": "338km",
+    "totaltime": "9 giờ"
+  },
+  {
+    "station": "Đà Lạt - Bình Sơn",
+    "typeofbus": "Limousine",
+    "distance": "560km",
+    "totaltime": "12 giờ"
+  },
+  {
+    "station": "Đà Lạt - Bình Sơn",
+    "typeofbus": "Limousine",
+    "distance": "560km",
+    "totaltime": "12 giờ"
+  },
+  {
+    "station": "Đà Lạt - Cà Mau",
+    "typeofbus": "Limousine",
+    "distance": "660km",
+    "totaltime": "16 giờ"
+  },
+  {
+    "station": "Đà Lạt - Cần Thơ",
+    "typeofbus": "Giường",
+    "distance": "457km",
+    "totaltime": "11 giờ"
+  },
+  {
+    "station": "Đà Lạt - Châu Đốc",
+    "typeofbus": "Limousine",
+    "distance": "615km",
+    "totaltime": "15 giờ"
+  },
+  {
+    "station": "Đà Lạt - Đà Nẵng",
+    "typeofbus": "Giường",
+    "distance": "757km",
+    "totaltime": "17 giờ"
+  },
+  {
+    "station": "Đà Lạt - Huế",
+    "typeofbus": "Giường",
+    "distance": "843km",
+    "totaltime": "17 giờ"
+  },
+  {
+    "station": "Đà Lạt - Nha Trang",
+    "typeofbus": "Limousine",
+    "distance": "130km",
+    "totaltime": "4 giờ"
+  },
+  {
+    "station": "Đà Lạt - Nha Trang",
+    "typeofbus": "",
+    "distance": "137km",
+    "totaltime": "4 giờ"
+  },
+  {
+    "station": "Đà Lạt - Phan Thiết",
+    "typeofbus": "Limousine",
+    "distance": "163km",
+    "totaltime": "4 giờ"
+  },
+  {
+    "station": "Đà Lạt - Quảng Ngãi",
+    "typeofbus": "Giường",
+    "distance": "511km",
+    "totaltime": "10 giờ 49 phút"
+  },
+  {
+    "station": "Đà Lạt - TP. Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "310km",
+    "totaltime": "8 giờ"
+  },
+  {
+    "station": "Đà Lạt - TP. Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "305km",
+    "totaltime": "8 giờ"
+  },
+  {
+    "station": "Đà Lạt - TP.Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "293km",
+    "totaltime": "8 giờ"
+  },
+  {
+    "station": "Đà Lạt - TP.Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "294km",
+    "totaltime": "8 giờ"
+  },
+  {
+    "station": "Đà Lạt - TP.Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "320km",
+    "totaltime": "8 giờ"
+  },
+  {
+    "station": "Đà Lạt - Tu Bông (Khánh Hoà)",
+    "typeofbus": "Limousine",
+    "distance": "200km",
+    "totaltime": "4 giờ"
+  },
+  {
+    "station": "Đà Lạt - Vũng Tàu",
+    "typeofbus": "Limousine",
+    "distance": "318km",
+    "totaltime": "9 giờ"
+  },
+  {
+    "station": "Đà Nẵng - Bảo Lộc",
+    "typeofbus": "Giường",
+    "distance": "756km",
+    "totaltime": "16 giờ 38 phút"
+  },
+  {
+    "station": "Đà Nẵng - BX An Sương",
+    "typeofbus": "Giường",
+    "distance": "966km",
+    "totaltime": "20 giờ"
+  },
+  {
+    "station": "Đà Nẵng - Cam Ranh",
+    "typeofbus": "Giường",
+    "distance": "568km",
+    "totaltime": "10 giờ 4 phút"
+  },
+  {
+    "station": "Đà Nẵng - Đà Lạt",
+    "typeofbus": "Giường",
+    "distance": "666km",
+    "totaltime": "17 giờ"
+  },
+  {
+    "station": "Đà Nẵng - Đắk Nông",
+    "typeofbus": "Giường",
+    "distance": "636km",
+    "totaltime": "12 giờ 12 phút"
+  },
+  {
+    "station": "Đà Nẵng - Gia Lai",
+    "typeofbus": "Limousine",
+    "distance": "429km",
+    "totaltime": "8 giờ 10 phút"
+  },
+  {
+    "station": "Đà Nẵng - Hà Nội",
+    "typeofbus": "Giường",
+    "distance": "736km",
+    "totaltime": "15 giờ"
+  },
+  {
+    "station": "Đà Nẵng - Hà Nội",
+    "typeofbus": "Giường",
+    "distance": "766km",
+    "totaltime": "18 giờ"
+  },
+  {
+    "station": "Đà Nẵng - Kon Tum",
+    "typeofbus": "Limousine",
+    "distance": "329km",
+    "totaltime": "6 giờ 55 phút"
+  },
+  {
+    "station": "Đà Nẵng - Nha Trang",
+    "typeofbus": "Giường",
+    "distance": "528km",
+    "totaltime": "9 giờ 25 phút"
+  },
+  {
+    "station": "Đà Nẵng - Nha Trang",
+    "typeofbus": "Giường",
+    "distance": "543km",
+    "totaltime": "12 giờ"
+  },
+  {
+    "station": "Đà Nẵng - Quảng Phú (Đắk Lắk)",
+    "typeofbus": "Limousine",
+    "distance": "660km",
+    "totaltime": "14 giờ"
+  },
+  {
+    "station": "Đà Nẵng - Qui Nhơn",
+    "typeofbus": "",
+    "distance": "",
+    "totaltime": ""
+  },
+  {
+    "station": "Đà Nẵng - TP. Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "957km",
+    "totaltime": "20 giờ"
+  },
+  {
+    "station": "Đà Nẵng - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "850km",
+    "totaltime": "20 giờ"
+  },
+  {
+    "station": "Đà Nẵng - TP.Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "850km",
+    "totaltime": "20 giờ"
+  },
+  {
+    "station": "Đại Lộc - TP. Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "942km",
+    "totaltime": "17 giờ 29 phút"
+  },
+  {
+    "station": "Đại Ngãi - TP.Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "230km",
+    "totaltime": "6 giờ"
+  },
+  {
+    "station": "Đắk Nông - Đà Nẵng",
+    "typeofbus": "Giường",
+    "distance": "636km",
+    "totaltime": "12 giờ 12 phút"
+  },
+  {
+    "station": "Đầm Dơi (Cà Mau) - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "340km",
+    "totaltime": "8 giờ"
+  },
+  {
+    "station": "Di Linh - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "198km",
+    "totaltime": "6 giờ"
+  },
+  {
+    "station": "Đơn Dương - TP. Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "290km",
+    "totaltime": "8 giờ"
+  },
+  {
+    "station": "Đồng Xoài - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "109km",
+    "totaltime": "3 giờ"
+  },
+  {
+    "station": "Đồng Xoài - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "109km",
+    "totaltime": "3 giờ 30 phút"
+  },
+  {
+    "station": "Đức Linh (Bình Thuận) - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "150km",
+    "totaltime": "4 giờ"
+  },
+  {
+    "station": "Duyên Hải - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "253km",
+    "totaltime": "5 giờ"
+  },
+  {
+    "station": "Gành Hào - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "260km",
+    "totaltime": "6 giờ"
+  },
+  {
+    "station": "Gành Hào (Bạc Liêu) - Cần Thơ",
+    "typeofbus": "Limousine",
+    "distance": "180km",
+    "totaltime": "6 giờ"
+  },
+  {
+    "station": "Gia Lai - Đà Nẵng",
+    "typeofbus": "Limousine",
+    "distance": "429km",
+    "totaltime": "8 giờ 10 phút"
+  },
+  {
+    "station": "Gia Lai - Huế",
+    "typeofbus": "Limousine",
+    "distance": "458km",
+    "totaltime": "11 giờ"
+  },
+  {
+    "station": "Gia Lai - TP.Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "590km",
+    "totaltime": "12 giờ"
+  },
+  {
+    "station": "Gia Lai - TP.Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "515km",
+    "totaltime": "12 giờ"
+  },
+  {
+    "station": "Hà Nội - Đà Nẵng",
+    "typeofbus": "Giường",
+    "distance": "763km",
+    "totaltime": "14 giờ 38 phút"
+  },
+  {
+    "station": "Hà Nội - Đà Nẵng",
+    "typeofbus": "Giường",
+    "distance": "764km",
+    "totaltime": "18 giờ"
+  },
+  {
+    "station": "Hà Nội - Huế",
+    "typeofbus": "Giường",
+    "distance": "654km",
+    "totaltime": "12 giờ 50 phút"
+  },
+  {
+    "station": "Hà Nội - Nam Định",
+    "typeofbus": "",
+    "distance": "79km",
+    "totaltime": "2 giờ 30 phút"
+  },
+  {
+    "station": "Hà Tiên - Bình Dương",
+    "typeofbus": "Limousine",
+    "distance": "352km",
+    "totaltime": "10 giờ 30 phút"
+  },
+  {
+    "station": "Hà Tiên - Cần Thơ",
+    "typeofbus": "Limousine",
+    "distance": "210km",
+    "totaltime": "6 giờ"
+  },
+  {
+    "station": "Hà Tiên - Rạch Giá",
+    "typeofbus": "",
+    "distance": "89km",
+    "totaltime": "3 giờ 30 phút"
+  },
+  {
+    "station": "Hà Tiên - TP.Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "314km",
+    "totaltime": "8 giờ"
+  },
+  {
+    "station": "Hộ Phòng - TP. Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "271km",
+    "totaltime": "5 giờ 21 phút"
+  },
+  {
+    "station": "Hồng Ngự - Cần Thơ",
+    "typeofbus": "Giường",
+    "distance": "166km",
+    "totaltime": "5 giờ 30 phút"
+  },
+  {
+    "station": "Hồng Ngự - TP.Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "178km",
+    "totaltime": "5 giờ"
+  },
+  {
+    "station": "Hồng Ngự - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "174km",
+    "totaltime": "5 giờ"
+  },
+  {
+    "station": "Huế - Bảo Lộc",
+    "typeofbus": "Limousine",
+    "distance": "90km",
+    "totaltime": "18 giờ 30 phút"
+  },
+  {
+    "station": "Huế - Bảo Lộc",
+    "typeofbus": "Giường",
+    "distance": "827km",
+    "totaltime": "19 giờ"
+  },
+  {
+    "station": "Huế - Đà Lạt",
+    "typeofbus": "Giường",
+    "distance": "745km",
+    "totaltime": "16 giờ 35 phút"
+  },
+  {
+    "station": "Huế - Gia Lai",
+    "typeofbus": "Limousine",
+    "distance": "458km",
+    "totaltime": "11 giờ"
+  },
+  {
+    "station": "Huế - Hà Nội",
+    "typeofbus": "Giường",
+    "distance": "654km",
+    "totaltime": "12 giờ 50 phút"
+  },
+  {
+    "station": "Huế - Nha Trang",
+    "typeofbus": "Giường",
+    "distance": "610km",
+    "totaltime": "12 giờ 30 phút"
+  },
+  {
+    "station": "Huế - TP. Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "1042km",
+    "totaltime": "18 giờ 25 phút"
+  },
+  {
+    "station": "Huế - TP. Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "1043km",
+    "totaltime": "19 giờ 15 phút"
+  },
+  {
+    "station": "Huế - TP.Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "1040km",
+    "totaltime": "18 giờ 30 phút"
+  },
+  {
+    "station": "Huế - TP.Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "943km",
+    "totaltime": "25 giờ"
+  },
+  {
+    "station": "Khánh Bình (An Giang) - Bình Dương",
+    "typeofbus": "Limousine",
+    "distance": "294km",
+    "totaltime": "8 giờ"
+  },
+  {
+    "station": "Khánh Bình (An Giang) - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "260km",
+    "totaltime": "7 giờ"
+  },
+  {
+    "station": "Kiên Giang - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "211km",
+    "totaltime": "6 giờ 30 phút"
+  },
+  {
+    "station": "Kon Tum - Đà Nẵng",
+    "typeofbus": "Limousine",
+    "distance": "329km",
+    "totaltime": "6 giờ 55 phút"
+  },
+  {
+    "station": "Kon Tum - TP.Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "590km",
+    "totaltime": "12 giờ"
+  },
+  {
+    "station": "Kon Tum - TP.Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "570km",
+    "totaltime": "12 giờ"
+  },
+  {
+    "station": "La Gi (Bình Thuận) - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "150km",
+    "totaltime": "3 giờ"
+  },
+  {
+    "station": "Lai Vung (Đồng Tháp) - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "137km",
+    "totaltime": "3 giờ"
+  },
+  {
+    "station": "Long Xuyên - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "203km",
+    "totaltime": "5 giờ"
+  },
+  {
+    "station": "Long Xuyên - TP.Hồ Chí Minh",
+    "typeofbus": "",
+    "distance": "186km",
+    "totaltime": "5 giờ"
+  },
+  {
+    "station": "Mũi Né - TP. Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "205km",
+    "totaltime": "5 giờ 30 phút"
+  },
+  {
+    "station": "Mũi Né - TP.Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "210km",
+    "totaltime": "5 giờ 30 phút"
+  },
+  {
+    "station": "Năm Căn - Cần Thơ",
+    "typeofbus": "Giường",
+    "distance": "190km",
+    "totaltime": "4 giờ 4 phút"
+  },
+  {
+    "station": "Năm Căn - TP.Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "357km",
+    "totaltime": "7 giờ 18 phút"
+  },
+  {
+    "station": "Nam Định - Hà Nội",
+    "typeofbus": "",
+    "distance": "78km",
+    "totaltime": "2 giờ 30 phút"
+  },
+  {
+    "station": "Ngã 5 - TP. Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "224km",
+    "totaltime": "5 giờ 30 phút"
+  },
+  {
+    "station": "Nha Trang - Bình Dương",
+    "typeofbus": "Limousine",
+    "distance": "425km",
+    "totaltime": "10 giờ"
+  },
+  {
+    "station": "Nha Trang - Buôn Ma Thuột",
+    "typeofbus": "",
+    "distance": "",
+    "totaltime": ""
+  },
+  {
+    "station": "Nha Trang - Cần Thơ",
+    "typeofbus": "Limousine",
+    "distance": "630km",
+    "totaltime": "14 giờ"
+  },
+  {
+    "station": "Nha Trang - Đà Lạt",
+    "typeofbus": "",
+    "distance": "138km",
+    "totaltime": "4 giờ"
+  },
+  {
+    "station": "Nha Trang - Đà Lạt",
+    "typeofbus": "Limousine",
+    "distance": "130km",
+    "totaltime": "4 giờ"
+  },
+  {
+    "station": "Nha Trang - Đà Nẵng",
+    "typeofbus": "Giường",
+    "distance": "528km",
+    "totaltime": "9 giờ 25 phút"
+  },
+  {
+    "station": "Nha Trang - Đà Nẵng",
+    "typeofbus": "Giường",
+    "distance": "545km",
+    "totaltime": "12 giờ"
+  },
+  {
+    "station": "Nha Trang - Huế",
+    "typeofbus": "Giường",
+    "distance": "610km",
+    "totaltime": "12 giờ 30 phút"
+  },
+  {
+    "station": "Nha Trang - TP. Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "436km",
+    "totaltime": "9 giờ 40 phút"
+  },
+  {
+    "station": "Nha Trang - TP.Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "427km",
+    "totaltime": "9 giờ"
+  },
+  {
+    "station": "Nha Trang - TP.Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "429km",
+    "totaltime": "9 giờ"
+  },
+  {
+    "station": "Ninh Hoà - TP. Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "469km",
+    "totaltime": "9 giờ 18 phút"
+  },
+  {
+    "station": "Ninh Hoà - TP. Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "465km",
+    "totaltime": "9 giờ"
+  },
+  {
+    "station": "Ninh Hòa - TP.Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "464km",
+    "totaltime": "12 giờ"
+  },
+  {
+    "station": "Ninh Sơn - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "311km",
+    "totaltime": "5 giờ"
+  },
+  {
+    "station": "Ninh Sơn (Ninh Thuận) - Bình Dương",
+    "typeofbus": "Limousine",
+    "distance": "340km",
+    "totaltime": "8 giờ"
+  },
+  {
+    "station": "Ninh Thuận - TP. Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "341km",
+    "totaltime": "8 giờ"
+  },
+  {
+    "station": "Núi Sập - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "200km",
+    "totaltime": "6 giờ"
+  },
+  {
+    "station": "Ô Môn - Bình Dương",
+    "typeofbus": "Limousine",
+    "distance": "220km",
+    "totaltime": "4 giờ"
+  },
+  {
+    "station": "Ô Môn - TP.Hồ Chí Minh",
+    "typeofbus": "",
+    "distance": "208km",
+    "totaltime": "5 giờ 30 phút"
+  },
+  {
+    "station": "Óc Eo (An Giang) - Bình Dương",
+    "typeofbus": "Limousine",
+    "distance": "280km",
+    "totaltime": "8 giờ"
+  },
+  {
+    "station": "Óc Eo (An Giang) - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "214km",
+    "totaltime": "6 giờ"
+  },
+  {
+    "station": "Phan Rang - Buôn Ma Thuột",
+    "typeofbus": "Limousine",
+    "distance": "290km",
+    "totaltime": "8 giờ"
+  },
+  {
+    "station": "Phan Rang - Quảng Phú (Đắk Lắk)",
+    "typeofbus": "Limousine",
+    "distance": "310km",
+    "totaltime": "8 giờ"
+  },
+  {
+    "station": "Phan Rang - TP. Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "326km",
+    "totaltime": "7 giờ"
+  },
+  {
+    "station": "Phan Rang - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "311km",
+    "totaltime": "7 giờ"
+  },
+  {
+    "station": "Phan Thiết - Đà Lạt",
+    "typeofbus": "Limousine",
+    "distance": "163km",
+    "totaltime": "4 giờ"
+  },
+  {
+    "station": "Phan Thiết - TP. Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "192km",
+    "totaltime": "4 giờ 15 phút"
+  },
+  {
+    "station": "Phan Thiết - TP.Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "205km",
+    "totaltime": "6 giờ"
+  },
+  {
+    "station": "Phước Long - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "158km",
+    "totaltime": "4 giờ"
+  },
+  {
+    "station": "Quảng Nam - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "935km",
+    "totaltime": "16 giờ"
+  },
+  {
+    "station": "Quãng Ngãi - TP.Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "753km",
+    "totaltime": "17 giờ"
+  },
+  {
+    "station": "Quảng Ngãi - Bảo Lộc",
+    "typeofbus": "",
+    "distance": "",
+    "totaltime": ""
+  },
+  {
+    "station": "Quảng Ngãi - BX An Sương",
+    "typeofbus": "Giường",
+    "distance": "820km",
+    "totaltime": "17 giờ"
+  },
+  {
+    "station": "Quảng Ngãi - Đà Lạt",
+    "typeofbus": "Giường",
+    "distance": "511km",
+    "totaltime": "10 giờ 49 phút"
+  },
+  {
+    "station": "Quảng Ngãi - TP. Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "812km",
+    "totaltime": "17 giờ"
+  },
+  {
+    "station": "Quảng Ngãi - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "870km",
+    "totaltime": "16 giờ"
+  },
+  {
+    "station": "Quảng Phú (Đắk Lắk) - Đà Nẵng",
+    "typeofbus": "Limousine",
+    "distance": "660km",
+    "totaltime": "14 giờ"
+  },
+  {
+    "station": "Quảng Phú (Đắk Lắk) - Phan Rang",
+    "typeofbus": "Limousine",
+    "distance": "310km",
+    "totaltime": "8 giờ"
+  },
+  {
+    "station": "Qui Nhơn - Đà Nẵng",
+    "typeofbus": "Giường",
+    "distance": "",
+    "totaltime": ""
+  },
+  {
+    "station": "Qui Nhơn - TP. Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "643km",
+    "totaltime": "12 giờ 36 phút"
+  },
+  {
+    "station": "Qui Nhơn - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "625km",
+    "totaltime": "11 giờ 29 phút"
+  },
+  {
+    "station": "Qui Nhơn - TP.Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "612km",
+    "totaltime": "14 giờ"
+  },
+  {
+    "station": "Rạch giá - TP.Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "271km",
+    "totaltime": "6 giờ"
+  },
+  {
+    "station": "Rạch Giá - Bình Dương",
+    "typeofbus": "Limousine",
+    "distance": "272km",
+    "totaltime": "7 giờ"
+  },
+  {
+    "station": "Rạch Giá - Cần Thơ",
+    "typeofbus": "",
+    "distance": "112km",
+    "totaltime": "4 giờ 30 phút"
+  },
+  {
+    "station": "Rạch Giá - Châu Đốc",
+    "typeofbus": "Limousine",
+    "distance": "125km",
+    "totaltime": "3 giờ"
+  },
+  {
+    "station": "Rạch Giá - Hà Tiên",
+    "typeofbus": "",
+    "distance": "89km",
+    "totaltime": "3 giờ 30 phút"
+  },
+  {
+    "station": "Rạch Giá - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "256km",
+    "totaltime": "6 giờ"
+  },
+  {
+    "station": "Sa Đéc - TP.Hồ Chí Minh",
+    "typeofbus": "",
+    "distance": "142km",
+    "totaltime": "4 giờ 30 phút"
+  },
+  {
+    "station": "Sóc Trăng - TP.Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "222km",
+    "totaltime": "6 giờ 30 phút"
+  },
+  {
+    "station": "Sơn Hoà (Phú Yên) - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "545km",
+    "totaltime": "9 giờ"
+  },
+  {
+    "station": "Sông Cầu (Phú Yên) - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "570km",
+    "totaltime": "11 giờ"
+  },
+  {
+    "station": "Sông Hinh (Phú Yên) - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "615km",
+    "totaltime": "11 giờ"
+  },
+  {
+    "station": "Tân Châu (Châu Đốc) - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "201km",
+    "totaltime": "6 giờ"
+  },
+  {
+    "station": "Tây Ninh - TP. Hồ Chí Minh",
+    "typeofbus": "",
+    "distance": "103km",
+    "totaltime": "3 giờ 34 phút"
+  },
+  {
+    "station": "Tây Ninh - TP. Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "112km",
+    "totaltime": "3 giờ 50 phút"
+  },
+  {
+    "station": "Tây Ninh - TP. Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "121km",
+    "totaltime": "3 giờ 50 phút"
+  },
+  {
+    "station": "Tây Ninh - TP. Hồ Chí Minh",
+    "typeofbus": "",
+    "distance": "103km",
+    "totaltime": "3 giờ 34 phút"
+  },
+  {
+    "station": "Tây Ninh - TP. Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "84km",
+    "totaltime": "3 giờ 30 phút"
+  },
+  {
+    "station": "Tây Sơn - TP.Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "720km",
+    "totaltime": "12 giờ 30 phút"
+  },
+  {
+    "station": "Tây Sơn - TP.Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "750km",
+    "totaltime": "12 giờ"
+  },
+  {
+    "station": "Tây Sơn - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "700km",
+    "totaltime": "15 giờ"
+  },
+  {
+    "station": "Thạnh Phú (Bến Tre) - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "128km",
+    "totaltime": "4 giờ 30 phút"
+  },
+  {
+    "station": "Tháp Mười (Đồng Tháp) - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "105km",
+    "totaltime": "3 giờ"
+  },
+  {
+    "station": "Tịnh Biên - TP. Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "252km",
+    "totaltime": "5 giờ 13 phút"
+  },
+  {
+    "station": "TP. Hồ Chí Minh - An Nhơn",
+    "typeofbus": "Giường",
+    "distance": "639km",
+    "totaltime": "11 giờ 30 phút"
+  },
+  {
+    "station": "TP. Hồ Chí Minh - An Nhơn",
+    "typeofbus": "Giường",
+    "distance": "660km",
+    "totaltime": "13 giờ 46 phút"
+  },
+  {
+    "station": "TP. Hồ Chí Minh - Cà Mau",
+    "typeofbus": "Giường",
+    "distance": "282km",
+    "totaltime": "7 giờ"
+  },
+  {
+    "station": "TP. Hồ Chí Minh - Cần Thơ",
+    "typeofbus": "Limousine",
+    "distance": "166km",
+    "totaltime": "5 giờ"
+  },
+  {
+    "station": "TP. Hồ Chí Minh - Đà Lạt",
+    "typeofbus": "Limousine",
+    "distance": "305km",
+    "totaltime": "8 giờ"
+  },
+  {
+    "station": "TP. Hồ Chí Minh - Đà Lạt",
+    "typeofbus": "Limousine",
+    "distance": "310km",
+    "totaltime": "8 giờ"
+  },
+  {
+    "station": "TP. Hồ Chí Minh - Đà Nẵng",
+    "typeofbus": "Giường",
+    "distance": "957km",
+    "totaltime": "20 giờ"
+  },
+  {
+    "station": "TP. Hồ Chí Minh - Đại Lộc",
+    "typeofbus": "Giường",
+    "distance": "942km",
+    "totaltime": "17 giờ 29 phút"
+  },
+  {
+    "station": "TP. Hồ Chí Minh - Đơn Dương",
+    "typeofbus": "Limousine",
+    "distance": "290km",
+    "totaltime": "8 giờ"
+  },
+  {
+    "station": "TP. Hồ Chí Minh - Huế",
+    "typeofbus": "Giường",
+    "distance": "1042km",
+    "totaltime": "22 giờ"
+  },
+  {
+    "station": "TP. Hồ Chí Minh - Huế",
+    "typeofbus": "Giường",
+    "distance": "1043km",
+    "totaltime": "22 giờ"
+  },
+  {
+    "station": "TP. Hồ Chí Minh - Mũi Né",
+    "typeofbus": "Giường",
+    "distance": "205km",
+    "totaltime": "5 giờ 30 phút"
+  },
+  {
+    "station": "TP. Hồ Chí Minh - Ngã Năm",
+    "typeofbus": "Giường",
+    "distance": "224km",
+    "totaltime": "5 giờ 30 phút"
+  },
+  {
+    "station": "TP. Hồ Chí Minh - Nha Trang",
+    "typeofbus": "Limousine",
+    "distance": "436km",
+    "totaltime": "9 giờ 40 phút"
+  },
+  {
+    "station": "TP. Hồ Chí Minh - Ninh Hoà",
+    "typeofbus": "Limousine",
+    "distance": "469km",
+    "totaltime": "9 giờ 18 phút"
+  },
+  {
+    "station": "TP. Hồ Chí Minh - Ninh Hoà",
+    "typeofbus": "Limousine",
+    "distance": "465km",
+    "totaltime": "9 giờ"
+  },
+  {
+    "station": "TP. Hồ Chí Minh - Ninh Thuận",
+    "typeofbus": "Giường",
+    "distance": "341km",
+    "totaltime": "8 giờ"
+  },
+  {
+    "station": "TP. Hồ Chí Minh - Phan Rang",
+    "typeofbus": "Giường",
+    "distance": "326km",
+    "totaltime": "7 giờ"
+  },
+  {
+    "station": "TP. Hồ Chí Minh - Phan Thiết",
+    "typeofbus": "Giường",
+    "distance": "192km",
+    "totaltime": "4 giờ 15 phút"
+  },
+  {
+    "station": "TP. Hồ Chí Minh - Quảng Ngãi",
+    "typeofbus": "Giường",
+    "distance": "812km",
+    "totaltime": "17 giờ"
+  },
+  {
+    "station": "TP. Hồ Chí Minh - Qui Nhơn",
+    "typeofbus": "Giường",
+    "distance": "643km",
+    "totaltime": "12 giờ 36 phút"
+  },
+  {
+    "station": "TP. Hồ Chí Minh - Tây Ninh",
+    "typeofbus": "Limousine",
+    "distance": "84km",
+    "totaltime": "3 giờ 30 phút"
+  },
+  {
+    "station": "TP. Hồ Chí Minh - Tây Ninh",
+    "typeofbus": "Giường",
+    "distance": "121km",
+    "totaltime": "3 giờ 50 phút"
+  },
+  {
+    "station": "TP. Hồ Chí Minh - Tây Ninh",
+    "typeofbus": "Giường",
+    "distance": "11km",
+    "totaltime": "3 giờ 50 phút"
+  },
+  {
+    "station": "TP. Hồ Chí Minh - Tây Ninh",
+    "typeofbus": "",
+    "distance": "122km",
+    "totaltime": "3 giờ"
+  },
+  {
+    "station": "TP. Hồ Chí Minh - Tây Ninh",
+    "typeofbus": "",
+    "distance": "122km",
+    "totaltime": "3 giờ"
+  },
+  {
+    "station": "TP. Hồ Chí Minh - Trà Ôn",
+    "typeofbus": "Giường",
+    "distance": "161km",
+    "totaltime": "3 giờ 16 phút"
+  },
+  {
+    "station": "TP. Hồ Chí Minh - Tuy Hoà",
+    "typeofbus": "Giường",
+    "distance": "506km",
+    "totaltime": "12 giờ 41 phút"
+  },
+  {
+    "station": "TP. Hồ Chí Minh - Vĩnh Châu",
+    "typeofbus": "Giường",
+    "distance": "247km",
+    "totaltime": "6 giờ"
+  },
+  {
+    "station": "TP. Hồ Chí Minh - Vĩnh Thuận",
+    "typeofbus": "Giường",
+    "distance": "283km",
+    "totaltime": "8 giờ"
+  },
+  {
+    "station": "TP. Hồ Chí Minh - Vũng Tàu",
+    "typeofbus": "",
+    "distance": "105km",
+    "totaltime": "5 giờ 30 phút"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - An Hữu (Tiền Giang)",
+    "typeofbus": "Limousine",
+    "distance": "123km",
+    "totaltime": "2 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - An Khê (Gia Lai)",
+    "typeofbus": "Limousine",
+    "distance": "690km",
+    "totaltime": "14 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - An Khê (Gia Lai)",
+    "typeofbus": "Limousine",
+    "distance": "640km",
+    "totaltime": "13 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - An Minh (Kiên Giang)",
+    "typeofbus": "Limousine",
+    "distance": "295km",
+    "totaltime": "7 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - An Nhơn",
+    "typeofbus": "",
+    "distance": "627km",
+    "totaltime": "10 giờ 7 phút"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Ba Tri (Bến Tre)",
+    "typeofbus": "Limousine",
+    "distance": "126km",
+    "totaltime": "4 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Bạc Liêu",
+    "typeofbus": "Giường",
+    "distance": "272km",
+    "totaltime": "6 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Bạc Liêu",
+    "typeofbus": "Limousine",
+    "distance": "243km",
+    "totaltime": "5 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Bảo Lộc",
+    "typeofbus": "Limousine",
+    "distance": "165km",
+    "totaltime": "5 giờ 21 phút"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Bến Tre",
+    "typeofbus": "",
+    "distance": "75km",
+    "totaltime": "2 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Bình Sơn",
+    "typeofbus": "Limousine",
+    "distance": "870km",
+    "totaltime": "16 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Bình Sơn",
+    "typeofbus": "Limousine",
+    "distance": "870km",
+    "totaltime": "16 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Bù Đăng",
+    "typeofbus": "Limousine",
+    "distance": "163km",
+    "totaltime": "5 giờ 30 phút"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Bù Đăng",
+    "typeofbus": "Limousine",
+    "distance": "185km",
+    "totaltime": "6 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Buôn Hồ",
+    "typeofbus": "Limousine",
+    "distance": "450km",
+    "totaltime": "10 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Buôn Ma Thuột",
+    "typeofbus": "Giường",
+    "distance": "330km",
+    "totaltime": "9 giờ 30 phút"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Buôn Ma Thuột",
+    "typeofbus": "Giường",
+    "distance": "354km",
+    "totaltime": "8 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Buôn Ma Thuột",
+    "typeofbus": "Giường",
+    "distance": "435km",
+    "totaltime": "9 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Buôn Ma Thuột",
+    "typeofbus": "Limousine",
+    "distance": "367km",
+    "totaltime": "9 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Cà Mau",
+    "typeofbus": "Limousine",
+    "distance": "311km",
+    "totaltime": "9 giờ 30 phút"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Cà Mau",
+    "typeofbus": "Giường",
+    "distance": "303km",
+    "totaltime": "8 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Cam Ranh",
+    "typeofbus": "Giường",
+    "distance": "350km",
+    "totaltime": "9 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Cao Lãnh",
+    "typeofbus": "Giường",
+    "distance": "145km",
+    "totaltime": "3 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Cao Lãnh",
+    "typeofbus": "Limousine",
+    "distance": "165km",
+    "totaltime": "6 giờ 30 phút"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Cần Thơ",
+    "typeofbus": "Giường",
+    "distance": "167km",
+    "totaltime": "4 giờ 30 phút"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Cầu Kè (Trà Vinh)",
+    "typeofbus": "Limousine",
+    "distance": "210km",
+    "totaltime": "4 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Châu Đốc",
+    "typeofbus": "Giường",
+    "distance": "240km",
+    "totaltime": "6 giờ 15 phút"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Di Linh",
+    "typeofbus": "Limousine",
+    "distance": "198km",
+    "totaltime": "6 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Duyên Hải",
+    "typeofbus": "Limousine",
+    "distance": "253km",
+    "totaltime": "5 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Đà Lạt",
+    "typeofbus": "Giường",
+    "distance": "310km",
+    "totaltime": "8 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Đà Lạt",
+    "typeofbus": "Giường",
+    "distance": "310km",
+    "totaltime": "8 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Đà Lạt",
+    "typeofbus": "Giường",
+    "distance": "310km",
+    "totaltime": "8 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Đà Nẵng",
+    "typeofbus": "Giường",
+    "distance": "980km",
+    "totaltime": "20 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Đà Nẵng",
+    "typeofbus": "Limousine",
+    "distance": "850km",
+    "totaltime": "20 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Đại Ngãi",
+    "typeofbus": "Giường",
+    "distance": "230km",
+    "totaltime": "6 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Đầm Dơi (Cà Mau)",
+    "typeofbus": "Limousine",
+    "distance": "340km",
+    "totaltime": "8 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Đồng Xoài",
+    "typeofbus": "Limousine",
+    "distance": "109km",
+    "totaltime": "3 giờ 30 phút"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Đồng Xoài",
+    "typeofbus": "Limousine",
+    "distance": "109km",
+    "totaltime": "3 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Đức Linh (Bình Thuận)",
+    "typeofbus": "Limousine",
+    "distance": "150km",
+    "totaltime": "4 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Gành Hào",
+    "typeofbus": "Limousine",
+    "distance": "260km",
+    "totaltime": "6 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Gia Lai",
+    "typeofbus": "Giường",
+    "distance": "515km",
+    "totaltime": "12 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Gia Lai",
+    "typeofbus": "Giường",
+    "distance": "590km",
+    "totaltime": "12 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Hà Tiên",
+    "typeofbus": "Giường",
+    "distance": "316km",
+    "totaltime": "8 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Hộ Phòng",
+    "typeofbus": "Giường",
+    "distance": "271km",
+    "totaltime": "5 giờ 21 phút"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Hồng Ngự",
+    "typeofbus": "Giường",
+    "distance": "178km",
+    "totaltime": "5 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Hồng Ngự",
+    "typeofbus": "Limousine",
+    "distance": "174km",
+    "totaltime": "5 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Huế",
+    "typeofbus": "Giường",
+    "distance": "1040km",
+    "totaltime": "18 giờ 30 phút"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Huế",
+    "typeofbus": "Giường",
+    "distance": "943km",
+    "totaltime": "25 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Khánh Bình (An Giang)",
+    "typeofbus": "Limousine",
+    "distance": "260km",
+    "totaltime": "7 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Kiên Giang",
+    "typeofbus": "Limousine",
+    "distance": "211km",
+    "totaltime": "6 giờ 30 phút"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Kon Tum",
+    "typeofbus": "Giường",
+    "distance": "570km",
+    "totaltime": "12 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Kon Tum",
+    "typeofbus": "Giường",
+    "distance": "590km",
+    "totaltime": "12 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - La Gi (Bình Thuận)",
+    "typeofbus": "Limousine",
+    "distance": "150km",
+    "totaltime": "3 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Lai Vung (Đồng Tháp)",
+    "typeofbus": "Limousine",
+    "distance": "137km",
+    "totaltime": "3 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Long Xuyên",
+    "typeofbus": "Limousine",
+    "distance": "203km",
+    "totaltime": "5 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Long Xuyên",
+    "typeofbus": "",
+    "distance": "186km",
+    "totaltime": "5 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Mũi Né",
+    "typeofbus": "Giường",
+    "distance": "207km",
+    "totaltime": "6 giờ 30 phút"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Năm Căn",
+    "typeofbus": "Giường",
+    "distance": "357km",
+    "totaltime": "7 giờ 18 phút"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Nha Trang",
+    "typeofbus": "Giường",
+    "distance": "427km",
+    "totaltime": "9 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Nha Trang",
+    "typeofbus": "Giường",
+    "distance": "426km",
+    "totaltime": "9 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Ninh Hòa",
+    "typeofbus": "Giường",
+    "distance": "462km",
+    "totaltime": "12 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Ninh Sơn",
+    "typeofbus": "Limousine",
+    "distance": "311km",
+    "totaltime": "5 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Núi Sập",
+    "typeofbus": "Limousine",
+    "distance": "200km",
+    "totaltime": "6 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Óc Eo (An Giang)",
+    "typeofbus": "Limousine",
+    "distance": "214km",
+    "totaltime": "6 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Ô Môn",
+    "typeofbus": "",
+    "distance": "208km",
+    "totaltime": "5 giờ 30 phút"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Phan Rang",
+    "typeofbus": "Limousine",
+    "distance": "311km",
+    "totaltime": "7 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Phan Thiết",
+    "typeofbus": "Giường",
+    "distance": "203km",
+    "totaltime": "6 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Phước Long",
+    "typeofbus": "Limousine",
+    "distance": "158km",
+    "totaltime": "4 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Quảng Nam",
+    "typeofbus": "Limousine",
+    "distance": "935km",
+    "totaltime": "16 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Quảng Ngãi",
+    "typeofbus": "Limousine",
+    "distance": "870km",
+    "totaltime": "16 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Quãng Ngãi",
+    "typeofbus": "Giường",
+    "distance": "757km",
+    "totaltime": "17 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Qui Nhơn",
+    "typeofbus": "Giường",
+    "distance": "585km",
+    "totaltime": "14 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Qui Nhơn",
+    "typeofbus": "Limousine",
+    "distance": "625km",
+    "totaltime": "11 giờ 29 phút"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Rạch Giá",
+    "typeofbus": "Limousine",
+    "distance": "256km",
+    "totaltime": "6 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Rạch Giá",
+    "typeofbus": "Giường",
+    "distance": "272km",
+    "totaltime": "6 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Sa Đéc",
+    "typeofbus": "",
+    "distance": "142km",
+    "totaltime": "4 giờ 30 phút"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Sóc Trăng",
+    "typeofbus": "Giường",
+    "distance": "223km",
+    "totaltime": "6 giờ 30 phút"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Sông Cầu (Phú Yên)",
+    "typeofbus": "Limousine",
+    "distance": "570km",
+    "totaltime": "11 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Sông Hinh (Phú Yên)",
+    "typeofbus": "Limousine",
+    "distance": "615km",
+    "totaltime": "11 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Sơn Hoà (Phú Yên)",
+    "typeofbus": "Limousine",
+    "distance": "545km",
+    "totaltime": "9 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Tân Châu (Châu Đốc)",
+    "typeofbus": "Limousine",
+    "distance": "201km",
+    "totaltime": "6 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Tây Sơn",
+    "typeofbus": "Giường",
+    "distance": "750km",
+    "totaltime": "12 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Tây Sơn",
+    "typeofbus": "Giường",
+    "distance": "720km",
+    "totaltime": "12 giờ 30 phút"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Tây Sơn",
+    "typeofbus": "Limousine",
+    "distance": "700km",
+    "totaltime": "15 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Thạnh Phú (Bến Tre)",
+    "typeofbus": "Limousine",
+    "distance": "128km",
+    "totaltime": "4 giờ 30 phút"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Tháp Mười (Đồng Tháp)",
+    "typeofbus": "Limousine",
+    "distance": "105km",
+    "totaltime": "3 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Tịnh Biên",
+    "typeofbus": "Giường",
+    "distance": "252km",
+    "totaltime": "5 giờ 13 phút"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Trà Vinh",
+    "typeofbus": "Giường",
+    "distance": "133km",
+    "totaltime": "4 giờ 30 phút"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Tri Tôn",
+    "typeofbus": "Giường",
+    "distance": "232km",
+    "totaltime": "5 giờ 59 phút"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Tu Bông (Khánh Hoà)",
+    "typeofbus": "Limousine",
+    "distance": "515km",
+    "totaltime": "12 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Tuy Hoà",
+    "typeofbus": "Limousine",
+    "distance": "585km",
+    "totaltime": "11 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Tuy Hòa",
+    "typeofbus": "Giường",
+    "distance": "535km",
+    "totaltime": "12 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Vị Thanh",
+    "typeofbus": "Giường",
+    "distance": "209km",
+    "totaltime": "5 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Vĩnh Thạnh (Quy Nhơn)",
+    "typeofbus": "Limousine",
+    "distance": "700km",
+    "totaltime": "15 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Vũng Liêm (Vĩnh Long)",
+    "typeofbus": "Limousine",
+    "distance": "174km",
+    "totaltime": "5 giờ"
+  },
+  {
+    "station": "TP.Hồ Chí Minh - Vũng Tàu",
+    "typeofbus": "",
+    "distance": "94km",
+    "totaltime": "4 giờ"
+  },
+  {
+    "station": "Trà Ôn - TP. Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "161km",
+    "totaltime": "3 giờ 16 phút"
+  },
+  {
+    "station": "Trà Vinh - TP.Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "130km",
+    "totaltime": "4 giờ 30 phút"
+  },
+  {
+    "station": "Tri Tôn - TP. Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "232km",
+    "totaltime": "5 giờ 59 phút"
+  },
+  {
+    "station": "Tu Bông (Khánh Hoà) - Đà Lạt",
+    "typeofbus": "Limousine",
+    "distance": "200km",
+    "totaltime": "4 giờ"
+  },
+  {
+    "station": "Tu Bông (Khánh Hoà) - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "515km",
+    "totaltime": "12 giờ"
+  },
+  {
+    "station": "Tuy Hoà - TP. Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "506km",
+    "totaltime": "13 giờ"
+  },
+  {
+    "station": "Tuy Hoà - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "585km",
+    "totaltime": "11 giờ"
+  },
+  {
+    "station": "Tuy Hòa - TP.Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "535km",
+    "totaltime": "13 giờ"
+  },
+  {
+    "station": "Vị Thanh - TP.Hồ Chí Minh",
+    "typeofbus": "",
+    "distance": "209km",
+    "totaltime": "5 giờ"
+  },
+  {
+    "station": "Vĩnh Châu - TP. Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "247km",
+    "totaltime": "6 giờ"
+  },
+  {
+    "station": "Vĩnh Châu (Sóc Trăng) - Bình Dương",
+    "typeofbus": "Limousine",
+    "distance": "275km",
+    "totaltime": "7 giờ"
+  },
+  {
+    "station": "Vĩnh Thạnh (Quy Nhơn) - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "700km",
+    "totaltime": "15 giờ"
+  },
+  {
+    "station": "Vĩnh Thuận - TP. Hồ Chí Minh",
+    "typeofbus": "Giường",
+    "distance": "283km",
+    "totaltime": "8 giờ"
+  },
+  {
+    "station": "Vĩnh Thuận (Kiên Giang) - Bình Dương",
+    "typeofbus": "Giường",
+    "distance": "311km",
+    "totaltime": "9 giờ"
+  },
+  {
+    "station": "Vũng Liêm (Vĩnh Long) - TP.Hồ Chí Minh",
+    "typeofbus": "Limousine",
+    "distance": "174km",
+    "totaltime": "5 giờ"
+  },
+  {
+    "station": "Vũng Tàu - Cần Thơ",
+    "typeofbus": "Limousine",
+    "distance": "451km",
+    "totaltime": "9 giờ 9 phút"
+  },
+  {
+    "station": "Vũng Tàu - Đà Lạt",
+    "typeofbus": "Limousine",
+    "distance": "318km",
+    "totaltime": "9 giờ"
+  },
+  {
+    "station": "Vũng Tàu - TP. Hồ Chí Minh",
+    "typeofbus": "",
+    "distance": "105km",
+    "totaltime": "3 giờ 44 phút"
+  },
+  {
+    "station": "Vũng Tàu - TP.Hồ Chí Minh",
+    "typeofbus": "",
+    "distance": "95km",
+    "totaltime": "3 giờ"
+  }
+]
