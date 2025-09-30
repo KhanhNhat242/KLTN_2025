@@ -32,7 +32,7 @@ const Login = ({ setAccesstoken }: Props) => {
             )
             setAccesstoken(res.data.accessToken)
             alert('login successfull!')
-            navigate('/trip')
+            navigate('/promotion')
         }
         catch(err) {
             console.log(err)

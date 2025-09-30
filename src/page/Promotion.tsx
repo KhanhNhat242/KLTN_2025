@@ -18,13 +18,18 @@ interface Promotion {
     description: string,
     startDate: [],
     endDate: [],
+    buyNGetMS: [],
+    percentOffs: [],
 }
 
 const Promotion = ({ accesstoken }: Props) => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [promotions, setPromotions] = useState<Promotion[]>([])
-    const [nav, isNav] = useState<boolean>(false)
     const [currentnav, setCurrentnav] = useState<number>(0)
+    const [buyngetms, setBuyngetms] = useState([])
+    const [percentoffs, setPercentoffs] = useState([])
+    const [num1, setNum1] = useState<number>(0)
+    const [num2, setNum2] = useState<number>(0)
 
     const getData = async () => {
         try {
@@ -59,14 +64,19 @@ const Promotion = ({ accesstoken }: Props) => {
             const line = await axios.get(`https://apigateway.microservices.appf4s.io.vn/services/mspromotion/api/promotions/${currentnav}/detail`,
                 {
                     headers: {
-                    'Authorization': `Bearer ${accesstoken}`,
-                    'accept': '*/*',
-                    'Content-Type': 'application/json',
-                    'X-XSRF-TOKEN': '41866a2d-cdc1-4547-9eef-f6d3464f7b6b',
+                        'Authorization': `Bearer ${accesstoken}`,
+                        'accept': '*/*',
+                        'Content-Type': 'application/json',
+                        'X-XSRF-TOKEN': '41866a2d-cdc1-4547-9eef-f6d3464f7b6b',
                     },
                 }
             )
-            console.log('line data', line.data)
+            // console.log('line data', line.data)
+            setNum1(line.data.buyNGetMS.length)
+            setNum2(line.data.percentOffs.length)
+
+            setBuyngetms(line.data.buyNGetMS)
+            setPercentoffs(line.data.percentOffs)
         }
         catch (err) {
             console.log(err)
@@ -75,6 +85,8 @@ const Promotion = ({ accesstoken }: Props) => {
 
     useEffect(() => {
         handleCollapse()
+        console.log(currentnav)
+
     }, [currentnav])
 
     return (
@@ -134,7 +146,7 @@ const Promotion = ({ accesstoken }: Props) => {
                                     </tr>
                                     <tr className='border-b'>
                                         <td colSpan={6}>
-                                            {currentnav === promotion.id && <PromotionLine />}
+                                            {currentnav === promotion.id && <PromotionLine buyNGetMS={buyngetms} percentOffs={percentoffs} num1={num1} num2={num2} />}
                                         </td>
                                     </tr>
                                 </>
