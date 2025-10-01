@@ -5,15 +5,21 @@ import Search from '../components/Search';
 import downloadicon from '../assets/downloadicon.png'
 import { useState } from 'react';
 import TripModal from '../components/TripModal';
-import DeleteMocal from '../components/DeleteMocal';
+import DeleteMocal from '../components/DeleteModal';
 import tripdata from '../fakedata/fakeapitrip.json'
 
-const trip = tripdata;
+// const trip = tripdata;
+
+interface Trip {
+  id: number,
+  
+}
 
 const Trip = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [isEdit, setIsEdit] = useState<boolean>(false)
   const [isDelete, setIsDelete] = useState<boolean>(false)
+  const [trips, setTrips] = useState([])
 
   return (
     <div className='w-full h-full flex flex-row justify-start'>

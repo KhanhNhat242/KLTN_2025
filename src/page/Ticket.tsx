@@ -4,7 +4,7 @@ import Search from '../components/Search';
 import Filter from '../components/Filter';
 import downloadicon from '../assets/downloadicon.png'
 import { useState } from 'react';
-import DeleteMocal from '../components/DeleteMocal';
+import DeleteMocal from '../components/DeleteModal';
 import TicketModal from '../components/TicketModal';
 
 const ticket = [

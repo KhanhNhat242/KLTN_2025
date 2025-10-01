@@ -5,39 +5,41 @@ import pwdicon from '../assets/pwdicon.png'
 import eyeicon from '../assets/eyeicon.png'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import { setAccessToken } from '../redux/authSlice'
+import { useDispatch } from 'react-redux'
 
-interface Props {
-    setAccesstoken: React.Dispatch<React.SetStateAction<string>>,
-}
-
-const Login = ({ setAccesstoken }: Props) => {
+const Login = () => {
     const [hide, setHide] = useState<boolean>(true)
     const [username, setUsername] = useState<string>('')
     const [pwd, setPwd] = useState<string>('')
 
+    const  dispatch = useDispatch()
     const navigate = useNavigate()
 
-    const login = async () => {
-        try {
-            const res = await axios.post('https://apigateway.microservices.appf4s.io.vn/services/msuser/api/auth/login', 
+    const login = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        e.preventDefault()
+
+            await axios.post('https://apigateway.microservices.appf4s.io.vn/services/msuser/api/auth/login', 
                 {
                     'username': username,
                     'password': pwd,
                 },
-                {headers: {
-                    'accept': '*/*',
-                    'Content-Type': 'application/json',
-                    'X-XSRF-TOKEN': '41866a2d-cdc1-4547-9eef-f6d3464f7b6b'
+                {
+                    headers: {
+                        'accept': '*/*',
+                        'Content-Type': 'application/json',
+                        'X-XSRF-TOKEN': '41866a2d-cdc1-4547-9eef-f6d3464f7b6b'
                 }}
             )
-            setAccesstoken(res.data.accessToken)
-            alert('login successfull!')
-            navigate('/promotion')
-        }
-        catch(err) {
-            console.log(err)
-            alert('login fail!')
-        }
+            .then((res) => {
+                // alert('log in success')
+                dispatch(setAccessToken(res.data.accessToken))
+                navigate('/promotion')
+            })
+            .catch(() => {
+                alert('log in fail!')
+            })
+
     }
 
     return (
@@ -66,7 +68,7 @@ const Login = ({ setAccesstoken }: Props) => {
                     </div>
                     {/* <p className='text-[#1447E6] font-bold cursor-pointer hover:underline'>Quên mật khẩu?</p> */}
                 </div>
-                <button className='w-full bg-[#1447E6] text-white py-[10px] rounded-[10px] cursor-pointer' onClick={() => login()}>Đăng nhập ngay</button>
+                <button className='w-full bg-[#1447E6] text-white py-[10px] rounded-[10px] cursor-pointer' onClick={(e) => login(e)}>Đăng nhập ngay</button>
                 <p className='mt-[10px]'>Cần tài khoản quản trị? <span className='text-[#1447E6] font-bold cursor-pointer hover:underline'>Liên hệ với RideHub</span></p>
             </div>
         </div>

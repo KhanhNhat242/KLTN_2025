@@ -3,7 +3,7 @@ interface Props {
     setIsDelete: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
-const DeleteMocal = ({ setIsDelete }: Props) => {
+const DeleteModal = ({ setIsDelete }: Props) => {
     return (
         <div className="fixed inset-0 flex items-center justify-center z-50" aria-labelledby="dialog-title" role="dialog" aria-modal="true">
             <div className="fixed inset-0 bg-gray-500/75 transition-opacity" onClick={() => setIsDelete(false)}></div>
@@ -29,4 +29,4 @@ const DeleteMocal = ({ setIsDelete }: Props) => {
     )
 }
 
-export default DeleteMocal
+export default DeleteModal

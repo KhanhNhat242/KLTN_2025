@@ -3,7 +3,7 @@ import Header from '../components/Header'
 import HeaderTop from '../components/HeaderTop';
 import Search from '../components/Search';
 import downloadicon from '../assets/downloadicon.png'
-import DeleteMocal from '../components/DeleteMocal';
+import DeleteMocal from '../components/DeleteModal';
 import BusModal from '../components/BusModal';
 import { useState } from 'react';
 

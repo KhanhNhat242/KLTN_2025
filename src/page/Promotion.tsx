@@ -7,10 +7,9 @@ import { useEffect, useState } from 'react'
 import PromotionModal from '../components/PromotionModal'
 import axios from 'axios'
 import PromotionLine from '../components/PromotionLine'
-
-interface Props {
-    accesstoken: string,
-}
+import { type RootState } from '../redux/store'
+import { useSelector } from 'react-redux'
+import DeleteMocal from '../components/DeleteModal'
 
 interface Promotion {
     id: number,
@@ -22,14 +21,19 @@ interface Promotion {
     percentOffs: [],
 }
 
-const Promotion = ({ accesstoken }: Props) => {
-    const [isOpen, setIsOpen] = useState<boolean>(false);
+const Promotion = () => {
+    const [isOpen, setIsOpen] = useState<boolean>(false)
+    const [isDelete, setIsDelete] = useState<boolean>(false)
+    const [isEdit, setIsEdit] = useState<boolean>(false)
     const [promotions, setPromotions] = useState<Promotion[]>([])
     const [currentnav, setCurrentnav] = useState<number>(0)
     const [buyngetms, setBuyngetms] = useState([])
     const [percentoffs, setPercentoffs] = useState([])
     const [num1, setNum1] = useState<number>(0)
     const [num2, setNum2] = useState<number>(0)
+
+    // const token = store.getState().auth.accessToken
+    const token = useSelector((state: RootState) => state.auth.accessToken)
 
     const getData = async () => {
         try {
@@ -39,7 +43,7 @@ const Promotion = ({ accesstoken }: Props) => {
                     'size': '20',
                 },
                 headers: {
-                    'Authorization': `Bearer ${accesstoken}`,
+                    'Authorization': `Bearer ${token}`,
                     'accept': '*/*',
                     'Content-Type': 'application/json',
                     'X-XSRF-TOKEN': '41866a2d-cdc1-4547-9eef-f6d3464f7b6b',
@@ -53,18 +57,13 @@ const Promotion = ({ accesstoken }: Props) => {
         }
     }
 
-    useEffect(() => {
-        // console.log('token:', accesstoken)
-        getData()
-        // console.log(temp)
-    }, [])
-
+    
     const handleCollapse = async () => {
         try {
             const line = await axios.get(`https://apigateway.microservices.appf4s.io.vn/services/mspromotion/api/promotions/${currentnav}/detail`,
                 {
                     headers: {
-                        'Authorization': `Bearer ${accesstoken}`,
+                        'Authorization': `Bearer ${token}`,
                         'accept': '*/*',
                         'Content-Type': 'application/json',
                         'X-XSRF-TOKEN': '41866a2d-cdc1-4547-9eef-f6d3464f7b6b',
@@ -74,7 +73,7 @@ const Promotion = ({ accesstoken }: Props) => {
             // console.log('line data', line.data)
             setNum1(line.data.buyNGetMS.length)
             setNum2(line.data.percentOffs.length)
-
+            
             setBuyngetms(line.data.buyNGetMS)
             setPercentoffs(line.data.percentOffs)
         }
@@ -84,10 +83,20 @@ const Promotion = ({ accesstoken }: Props) => {
     }
 
     useEffect(() => {
-        handleCollapse()
+        // console.log('token:', accesstoken)
+        if (token) {
+            getData()
+        }
+        // console.log(temp)
+    }, [token])
+    
+    useEffect(() => {
+        if (token && currentnav !== 0) {
+            handleCollapse()
+        }
         console.log(currentnav)
 
-    }, [currentnav])
+    }, [currentnav, token])
 
     return (
         <div className='w-full flex flex-row'>
@@ -131,7 +140,6 @@ const Promotion = ({ accesstoken }: Props) => {
                                             else if (currentnav === promotion.id) {
                                                 setCurrentnav(0)       
                                             }
-                                            handleCollapse()
                                         }}
                                     >
                                         <td className="p-3">{promotion.id}</td>
@@ -140,8 +148,12 @@ const Promotion = ({ accesstoken }: Props) => {
                                         <td className="p-3">{`${promotion.startDate[2]}/${promotion.startDate[1]}/${promotion.startDate[0]}`}</td>
                                         <td className="p-3">{`${promotion.endDate[2]}/${promotion.endDate[1]}/${promotion.endDate[0]}`}</td>
                                         <td className="p-3 space-x-2">
-                                            <button className="text-blue-600 hover:underline">Sửa</button>
-                                            <button className="text-blue-600 hover:underline">Xóa</button>
+                                            <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
+                                            onClick={() => {
+                                                setIsOpen(true)
+                                                setIsEdit(true)
+                                            }}>Sửa</button>
+                                            <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" onClick={() => setIsDelete(true)}>Xóa</button>
                                         </td>
                                     </tr>
                                     <tr className='border-b'>
@@ -154,9 +166,9 @@ const Promotion = ({ accesstoken }: Props) => {
                         </tbody>
                     </table>
                 </div>
-                {/* <button onClick={() => setIsOpen(true)}>opennnnn</button> */}
-                {isOpen && <PromotionModal setIsOpen={setIsOpen} />}
             </div>
+            { isOpen && (isEdit ? <PromotionModal isEdit={true} setIsOpen={setIsOpen} /> : <PromotionModal isEdit={false} setIsOpen={setIsOpen} /> ) }
+            { isDelete && <DeleteMocal setIsDelete={setIsDelete} /> }
         </div>
     )
 }

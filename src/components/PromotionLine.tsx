@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import DeleteModal from './DeleteModal'
+import PromotionDetailModal from './PromotionDetailModal'
 
 interface PercentOff {
     id: number,
@@ -28,52 +30,86 @@ interface PercentoffsProps {
     percentoffs: PercentOff[]
 }
 
-const PercentOff = ({ percentoffs }: PercentoffsProps) => (
-    <table className='ml-[100px]'>
-        <thead>
-            <tr>
-                <th className='px-[10px]'>ID</th>
-                <th className='px-[10px]'>Phần trăm giảm</th>
-                <th className='px-[10px]'>Giảm tối đa</th>
-                <th className='px-[10px]'>Hóa đơn tối thiểu</th>
-            </tr>
-        </thead>
-        <tbody>
-            {
-                percentoffs.map((percentoff) => (
-                    <tr>
-                        <td className='px-[10px]'>{percentoff.id}</td>
-                        <td className='px-[10px]'>{percentoff.percent}</td>
-                        <td className='px-[10px]'>{percentoff.maxOff}</td>
-                        <td className='px-[10px]'>{percentoff.minPrice}</td>
-                    </tr>
-                ))
-            }
-        </tbody>
-    </table>
-)
+const PercentOff = ({ percentoffs }: PercentoffsProps) => {
+    const [isOpen, setIsOpen] = useState<boolean>(false)
+    const [isDelete, setIsDelete] = useState<boolean>(false)
+    const [isEdit, setIsEdit] = useState<boolean>(false)
 
-const BuyNGetM = ({ buyngetms }: BuyngetmsProps) => (
-    <table className='ml-[100px]'>
-        <thead>
-            <tr>
-                <th className='px-[10px]'>ID</th>
-                <th className='px-[10px]'>Vé mua</th>
-                <th className='px-[10px]'>Vé được tặng</th>
-            </tr>
-        </thead>
-        <tbody>
-            {
-                buyngetms.map((buyngetm) => (
-                    <tr>
-                        <td className='px-[10px]'>{buyngetm.id}</td>
-                        <td className='px-[10px]'>{buyngetm.buyN}</td>
-                        <td className='px-[10px]'>{buyngetm.getM}</td>
-                    </tr>
-            ))}
-        </tbody>
-    </table>
-)
+    return (
+        <table className='ml-[100px]'>
+            <thead>
+                <tr>
+                    <th className='px-[10px]'>ID</th>
+                    <th className='px-[10px]'>Phần trăm giảm</th>
+                    <th className='px-[10px]'>Giảm tối đa</th>
+                    <th className='px-[10px]'>Hóa đơn tối thiểu</th>
+                    <th className='px-[10px]'>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {
+                    percentoffs.map((percentoff) => (
+                        <tr>
+                            <td className='px-[10px]'>{percentoff.id}</td>
+                            <td className='px-[10px]'>{percentoff.percent}</td>
+                            <td className='px-[10px]'>{percentoff.maxOff}</td>
+                            <td className='px-[10px]'>{percentoff.minPrice}</td>
+                            <td className="p-3 space-x-2">
+                                <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
+                                onClick={() => {
+                                    setIsOpen(true)
+                                    setIsEdit(true)
+                                }}>Sửa</button>
+                                <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" onClick={() => setIsDelete(true)}>Xóa</button>
+                            </td>
+                        </tr>
+                    ))
+                }
+            </tbody>
+            { isOpen && (isEdit ? <PromotionDetailModal isEdit={true} setIsOpen={setIsOpen} type={1} /> : <PromotionDetailModal isEdit={false} setIsOpen={setIsOpen} type={1} /> ) }
+            { isDelete && <DeleteModal setIsDelete={setIsDelete} /> }
+        </table>
+    )
+}
+
+const BuyNGetM = ({ buyngetms }: BuyngetmsProps) => {
+    const [isOpen, setIsOpen] = useState<boolean>(false)
+    const [isDelete, setIsDelete] = useState<boolean>(false)
+    const [isEdit, setIsEdit] = useState<boolean>(false)
+
+    return (
+        <table className='ml-[100px]'>
+            <thead>
+                <tr>
+                    <th className='px-[10px]'>ID</th>
+                    <th className='px-[10px]'>Vé mua</th>
+                    <th className='px-[10px]'>Vé được tặng</th>
+                    <th className='px-[10px]'>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {
+                    buyngetms.map((buyngetm) => (
+                        <tr>
+                            <td className='px-[10px]'>{buyngetm.id}</td>
+                            <td className='px-[10px]'>{buyngetm.buyN}</td>
+                            <td className='px-[10px]'>{buyngetm.getM}</td>
+                            <td className="p-3 space-x-2">
+                                <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
+                                onClick={() => {
+                                    setIsOpen(true)
+                                    setIsEdit(true)
+                                }}>Sửa</button>
+                                <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" onClick={() => setIsDelete(true)}>Xóa</button>
+                            </td>
+                        </tr>
+                ))}
+            </tbody>
+            { isOpen && (isEdit ? <PromotionDetailModal isEdit={true} setIsOpen={setIsOpen} type={2} /> : <PromotionDetailModal isEdit={false} setIsOpen={setIsOpen} type={2} /> ) }
+            { isDelete && <DeleteModal setIsDelete={setIsDelete} /> }
+        </table>
+    )
+}
 
 const PromotionLine = ({ buyNGetMS, percentOffs, num1, num2 }: Props) => {
     const [count, setCount] = useState<number>(0)
