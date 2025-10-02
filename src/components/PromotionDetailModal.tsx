@@ -6,13 +6,43 @@ interface Props {
     type: number,
 }
 
-const BuyNGetM = () => (
-    <p>buyngetm</p>
-)
+const BuyNGetM = () => {
+    return (
+        <div className='w-full flex flex-row justify-between'>
+            <div className='w-[48%]'>
+                <p>Số lượng vé mua</p>
+                <input type='number' className='w-full my-[5px] rounded-[5px] p-[5px] border-1' />
+            </div>
+            <div className='w-[48%]'>
+                <p>Số lượng vé được tặng</p>
+                <input type='number' className='w-full my-[5px] rounded-[5px] p-[5px] border-1' />
+            </div>
+        </div>
+    )
+}
 
-const PercentOff = () => (
-    <p>percentoff</p>
-)
+
+const PercentOff = () => {
+    return (
+        <div>
+            <div className='w-[48%]'>
+                <p>Phần trăm giảm</p>
+                <input type="number" className='w-full my-[5px] rounded-[5px] p-[5px] border-1' />
+            </div>
+            <div className='w-full flex flex-row justify-between'>
+                <div className='w-[48%]'>
+                    <p>Giảm tối đa</p>
+                    <input type="number" className='w-full my-[5px] rounded-[5px] p-[5px] border-1' />
+                </div>
+                <div className='w-[48%]'>
+                    <p>Hóa đơn tối thiểu</p>
+                    <input type="number" className='w-full my-[5px] rounded-[5px] p-[5px] border-1' />
+                </div>
+            </div>
+        </div>
+    )
+}
+
 
 
 const PromotionDetailModal = ({ setIsOpen, isEdit, type }: Props) => {
@@ -25,7 +55,7 @@ const PromotionDetailModal = ({ setIsOpen, isEdit, type }: Props) => {
                         <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                             <h3 id="dialog-title" className="text-base text-[20px] mb-[10px] font-bold text-gray">{isEdit ? 'Chỉnh sửa chi tiết khuyến mãi' : 'Tạo chi tiết khuyến mãi'}</h3>
                             <div className='w-full flex flex-col'>
-                                { type === 1 ? <BuyNGetM /> : <PercentOff /> }
+                                { type === 1 ? <PercentOff /> : <BuyNGetM /> }
                             </div>
                         </div>
                     </div>
