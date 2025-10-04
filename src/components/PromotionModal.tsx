@@ -1,15 +1,17 @@
 import axios from 'axios'
-import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import type { RootState } from '../redux/store'
+import { add, update } from '../redux/promotionsSlice'
+import type { Promotion as PromotionInterface } from '../interface/Interface'
 
 interface Props {
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>,
     isEdit: boolean,
+    promo?: PromotionInterface,
 }
 
-const PromotionModal = ({ setIsOpen, isEdit }: Props) => {
-    const [id, setId] = useState<number>(0)
+const PromotionModal = ({ setIsOpen, isEdit, promo }: Props) => {
     const [code, setCode] = useState<string>('')
     const [description, setDescription] = useState<string>('')
     const [startDate, setStartDate] = useState<Date | null>(new Date())
@@ -18,6 +20,7 @@ const PromotionModal = ({ setIsOpen, isEdit }: Props) => {
     const [count, setCount] = useState<number>(0)
 
     const token = useSelector((state: RootState) => state.auth.accessToken)
+    const dispatch = useDispatch()
 
     const formatDate = (date: Date | null) => {
         if (!date) return ''
@@ -26,75 +29,102 @@ const PromotionModal = ({ setIsOpen, isEdit }: Props) => {
 
     const handleCreate = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
-        const currentTime = new Date()
-        console.log('token:', token)
-        console.log('create', currentTime.toISOString(), code, description, formatDate(startDate), formatDate(endDate), num, count)
 
-        try {
-        const res = await fetch(
-             "https://apigateway.microservices.appf4s.io.vn/services/mspromotion/api/promotions",
+        console.log('create', code, description, formatDate(startDate), formatDate(endDate), num, count)
+        const ca = new Date()
+        const ua = new Date()
+
+        await axios.post('https://apigateway.microservices.appf4s.io.vn/services/mspromotion/api/promotions', 
             {
-                method: "POST",
+                'code': code,
+                'description': description,
+                'startDate': formatDate(startDate),
+                'endDate': formatDate(endDate),
+                'usageLimit': num,
+                'usedCount': count,
+                'createdAt': ca.toISOString(),
+                'updatedAt': ua.toISOString(),
+                'isDeleted': true,
+                'deletedAt': '2025-10-02T13:59:26.338Z',
+                'deletedBy': '3fa85f64-5717-4562-b3fc-2c963f66afa6'
+            },
+            {
                 headers: {
-                    "Authorization": `Bearer ${token}`,
-                    "Accept": "*/*",
-                    "Content-Type": "application/json",
-                    "X-XSRF-TOKEN": "41866a2d-cdc1-4547-9eef-f6d3464f7b6b"
-                },
-                body: JSON.stringify({
-                code: code,
-                description: description,
-                startDate: formatDate(startDate),
-                endDate: formatDate(endDate),
-                usageLimit: num,
-                usedCount: count
-                })
-            }
-            );
+                    'Authorization': `Bearer ${token}`,
+                    'accept': '*/*',
+                    'Content-Type': 'application/json',
+                }
+            },
+        )
+        .then((res) => {
+            dispatch(add(res.data))
+            alert('Create success')
+            console.log(res)
+        })
+        .catch((error) => {
+            alert('Error when creating!')
+            console.log(error)
+        })
+    }
 
-            if (!res.ok) {
-            throw new Error(`Error ${res.status}`);
-            }
+    const handleEdit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        e.preventDefault()
 
-            const data = await res.json();
-            alert("Create success");
-            console.log("Response:", data);
-        } catch (error) {
-            alert("Error when creating!");
-            console.error("Fetch error:", error);
+        const ca = new Date()
+        const ua = new Date()
+
+        console.log('edit', code, description, formatDate(startDate), formatDate(endDate), num, count)
+
+        await axios.put(`https://apigateway.microservices.appf4s.io.vn/services/mspromotion/api/promotions/${promo.id}`,
+            {
+                'id': promo?.id,
+                'code': code,
+                'description': description,
+                'startDate': formatDate(startDate),
+                'endDate': formatDate(endDate),
+                'usageLimit': num,
+                'usedCount': count,
+                'createdAt': ca.toISOString(),
+                'updatedAt': ua.toISOString(),
+                'isDeleted': true,
+                'deletedAt': '2025-10-02T13:59:26.338Z',
+                'deletedBy': '3fa85f64-5717-4562-b3fc-2c963f66afa6'
+            }, 
+            {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'accept': '*/*',
+                'Content-Type': 'application/json',
+            },
+        })
+        .then((res) => {
+            dispatch(update(res.data))
+            alert('Edit success')
+            console.log(res)
+        })
+        .catch((error) => {
+            alert('Error when editing!')
+            console.log(error)
+        })
+    }
+
+    useEffect(() => {
+        console.log(promo)
+
+        if (promo) {
+            const sd = new Date(promo.startDate[0], promo.startDate[1] - 1, promo.startDate[2] + 1)
+            const ed = new Date(promo.endDate[0], promo.endDate[1] - 1, promo.endDate[2] + 1)
+
+            if (isEdit) {
+                setCode(promo?.code)
+                setDescription(promo?.description)
+                setStartDate(sd)
+                setEndDate(ed)
+                setNum(promo?.usageLimit)
+                setCount(promo?.usedCount)
+            }
         }
-
-        // await axios.post('https://apigateway.microservices.appf4s.io.vn/services/mspromotion/api/promotions', 
-        //     {
-        //         'code': code,
-        //         'description': description,
-        //         'startDate': sd,
-        //         'endDate': ed,
-        //         'usageLimit': num,
-        //         'usedCount': count,
-        //     },
-        //     {
-        //         headers: {
-        //             'Authorization': `Bearer ${token}`,
-        //             'accept': '*/*',
-        //             'Content-Type': 'application/json',
-        //             'X-XSRF-TOKEN': '41866a2d-cdc1-4547-9eef-f6d3464f7b6b',
-        //         }
-        //     },
-        // )
-        // .then((res) => {
-        //     alert('Create success')
-        //     console.log(res)
-        // })
-        // .catch((error) => {
-        //     alert('Error when creating!')
-        //     console.log(error)
-        // })
-    }
-
-    const handleEdit = () => {
-        console.log('edit', id, code, description, startDate, endDate, num, count)
-    }
+    }, [])
 
     return (
         <div className="fixed inset-0 flex items-center justify-center z-50" aria-labelledby="dialog-title" role="dialog" aria-modal="true">
@@ -105,12 +135,6 @@ const PromotionModal = ({ setIsOpen, isEdit }: Props) => {
                             <h3 id="dialog-title" className="text-base text-[20px] mb-[10px] font-bold text-gray">{isEdit ? 'Chỉnh sửa thông tin khuyến mãi' : 'Tạo khuyến mãi mới'}</h3>
                             <div className='w-full flex flex-col'>
                                 <div className='w-full flex flex-row justify-between'>
-                                    { isEdit && 
-                                        <div className='w-[48%]'>
-                                            <p>Mã loại KM</p>
-                                            <input value={id} onChange={(e) => setId(e.target.valueAsNumber)} type='number' placeholder='1111' className='w-[30%] px-[5px] py-[3px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}} />
-                                        </div>
-                                    }
                                     <div className='w-[48%]'>
                                         <p>CODE</p>
                                         <input value={code} onChange={(e) => setCode(e.target.value)} type="text" className='w-full px-[5px] py-[3px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}} />
@@ -152,7 +176,8 @@ const PromotionModal = ({ setIsOpen, isEdit }: Props) => {
                                 handleCreate(e)
                             }
                             else if (isEdit === true) {
-                                handleEdit()
+                                console.log(promo)
+                                handleEdit(e)
                             }
                             setIsOpen(false)
                         }

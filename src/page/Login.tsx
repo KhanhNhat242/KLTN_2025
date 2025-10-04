@@ -13,7 +13,7 @@ const Login = () => {
     const [username, setUsername] = useState<string>('')
     const [pwd, setPwd] = useState<string>('')
 
-    const  dispatch = useDispatch()
+    const dispatch = useDispatch()
     const navigate = useNavigate()
 
     const login = async () => {

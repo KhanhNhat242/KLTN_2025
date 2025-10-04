@@ -16,10 +16,6 @@ const BusModal = ({ setIsOpen, isEdit }: Props) => {
                         <div className='w-full flex flex-col'>
                             <div className='w-full flex flex-row justify-between my-[5px]'>
                                 <div className='w-[48%]'>
-                                    <p>ID</p>
-                                    <input type="number" className='w-full p-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}/>
-                                </div>
-                                <div className='w-[48%]'>
                                     <p>Biển số</p>
                                     <input type="text" className='w-full p-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}/>
                                 </div>
@@ -31,16 +27,12 @@ const BusModal = ({ setIsOpen, isEdit }: Props) => {
                                 </div>
                                 <div className='w-[48%]'>
                                     <p>Loại xe</p>
-                                    <input type="text" className='w-full p-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}/>
+                                    <select name="" id="" className='w-full p-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}>
+                                        <option value="">STANDARD_BUS_VIP</option>
+                                        <option value="">LIMOUSINE</option>
+                                        <option value="">STANDARD_BUS_NORMAL</option>
+                                    </select>
                                 </div>
-                            </div>
-                            <div className='w-full flex flex-row items-center my-[5px]'>
-                                <p className='mr-[5px]'>Trạng thái</p>
-                                <select name="" id="" className='w-[33%] p-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}>
-                                    <option value="">Hoạt động</option>
-                                    <option value="">Bảo trì</option>
-                                    <option value="">Đã ngưng</option>
-                                </select>
                             </div>
                         </div>
                     </div>

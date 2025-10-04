@@ -8,39 +8,33 @@ import PromotionModal from '../components/PromotionModal'
 import axios from 'axios'
 import PromotionLine from '../components/PromotionLine'
 import { type RootState } from '../redux/store'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import DeleteMocal from '../components/DeleteModal'
-
-interface Promotion {
-    id: number,
-    code: string,
-    description: string,
-    startDate: [],
-    endDate: [],
-    buyNGetMS: [],
-    percentOffs: [],
-}
+import { setPromotions } from '../redux/promotionsSlice'
+import type {Promotion as PromotionInterface} from '../interface/Interface'
+import { setCurrentID } from '../redux/currentSelectedSlice'
 
 const Promotion = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [isDelete, setIsDelete] = useState<boolean>(false)
     const [isEdit, setIsEdit] = useState<boolean>(false)
-    const [promotions, setPromotions] = useState<Promotion[]>([])
+    // const [promotions, setPromotions] = useState<Promotion[]>([])
     const [currentnav, setCurrentnav] = useState<number>(0)
     const [buyngetms, setBuyngetms] = useState([])
     const [percentoffs, setPercentoffs] = useState([])
     const [num1, setNum1] = useState<number>(0)
     const [num2, setNum2] = useState<number>(0)
 
-    // const token = store.getState().auth.accessToken
     const token = useSelector((state: RootState) => state.auth.accessToken)
+    const dispatch = useDispatch()
+    const promotions = useSelector((state: RootState) => state.promotions)
+    const [selectedPromo, setSelectedPromo] = useState<PromotionInterface>()
 
     const getData = async () => {
-        try {
-            const res = await axios.get('https://apigateway.microservices.appf4s.io.vn/services/mspromotion/api/promotions', {
+            await axios.get('https://apigateway.microservices.appf4s.io.vn/services/mspromotion/api/promotions', {
                 params: {
                     'page': '0',
-                    'size': '20',
+                    'size': '40',
                 },
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -49,14 +43,17 @@ const Promotion = () => {
                     'X-XSRF-TOKEN': '41866a2d-cdc1-4547-9eef-f6d3464f7b6b',
                 },
             })
+            .then((res) => {
+                dispatch(setPromotions(res.data))
+                console.log(promotions)
+            })
+            .catch(() => {
+                console.log('Get data fail!')
+            })
             // console.log('data: ',res.data)
-            setPromotions(res.data)
-        }
-        catch(err) {
-            console.log(err)
-        }
+            // setPromotions(res.data)
+        
     }
-
     
     const handleCollapse = async () => {
         try {
@@ -89,6 +86,7 @@ const Promotion = () => {
         }
         // console.log(temp)
     }, [token])
+
     
     useEffect(() => {
         if (token && currentnav !== 0) {
@@ -110,11 +108,16 @@ const Promotion = () => {
                         <Filter type='promotion' />
                     </div>
                     <div className='flex flex-row'>
-                        <button className='p-[10px] flex flex-row items-center mr-[10px] rounded-[10px] cursor-pointer' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}>
-                        <img src={downloadicon} className='size-[20px] mr-[5px]' />
-                        <p>Xuất Excel</p>
+                        <button className='p-[10px] flex flex-row items-center mx-[10px] rounded-[10px] cursor-pointer' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}>
+                            <img src={downloadicon} className='size-[20px] mr-[5px]' />
+                            <p>Xuất Excel</p>
                         </button>
-                        <button className='p-[10px] cursor-pointer text-white bg-[#1447E6] rounded-[10px]' onClick={() => setIsOpen(true)}>+ Tạo khuyến mãi mới</button>
+                        <button className='p-[10px] cursor-pointer text-white bg-[#1447E6] rounded-[10px]' 
+                            onClick={() => {
+                                setIsEdit(false)
+                                setIsOpen(true)
+                            }
+                            }>+ Tạo khuyến mãi mới</button>
                     </div>
                 </div>
                 <div className='mt-[20px]'>
@@ -126,43 +129,50 @@ const Promotion = () => {
                                 <th className="p-3 border-b">Mô tả</th>
                                 <th className="p-3 border-b">Ngày bắt đầu</th>
                                 <th className="p-3 border-b">Ngày kết thúc</th>
+                                <th className="border-b">Số lượng giới hạn</th>
+                                <th className="border-b">Số lượng đã sử dụng</th>
                                 <th className="p-3 border-b">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {promotions.map((promotion) => (
-                                <>
-                                    <tr key={promotion.id} className="hover:bg-gray-50 border-b-[#ccc] cursor-pointer" 
-                                        onClick={() => {
-                                            if (currentnav === 0) {
-                                                setCurrentnav(promotion.id)
-                                            }
-                                            else if (currentnav === promotion.id) {
-                                                setCurrentnav(0)       
-                                            }
-                                        }}
-                                    >
-                                        <td className="p-3">{promotion.id}</td>
-                                        <td className="p-3">{promotion.code}</td>
-                                        <td className="p-3">{promotion.description}</td>
-                                        <td className="p-3">{`${promotion.startDate[2]}/${promotion.startDate[1]}/${promotion.startDate[0]}`}</td>
-                                        <td className="p-3">{`${promotion.endDate[2]}/${promotion.endDate[1]}/${promotion.endDate[0]}`}</td>
-                                        <td className="p-3 space-x-2">
-                                            <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
+                            {promotions.map((promo) => {
+                                return (
+                                    <>
+                                        <tr key={promo.id} className="hover:bg-gray-50 border-b-[#ccc] cursor-pointer" 
                                             onClick={() => {
-                                                setIsOpen(true)
-                                                setIsEdit(true)
-                                            }}>Sửa</button>
-                                            <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" onClick={() => setIsDelete(true)}>Xóa</button>
-                                        </td>
-                                    </tr>
-                                    <tr className='border-b'>
-                                        <td colSpan={6}>
-                                            {currentnav === promotion.id && <PromotionLine buyNGetMS={buyngetms} percentOffs={percentoffs} num1={num1} num2={num2} />}
-                                        </td>
-                                    </tr>
-                                </>
-                            ))}
+                                                if (currentnav === 0) {
+                                                    setCurrentnav(promo.id)
+                                                    dispatch(setCurrentID(promo.id))
+                                                }
+                                                else if (currentnav === promo.id) {
+                                                    setCurrentnav(0)       
+                                                }
+                                            }}
+                                        >
+                                            <td className="p-3">{promo.id}</td>
+                                            <td className="p-3">{promo.code}</td>
+                                            <td className="p-3">{promo.description}</td>
+                                            <td className="p-3">{`${promo.startDate[2]}/${promo.startDate[1]}/${promo.startDate[0]}`}</td>
+                                            <td className="p-3">{`${promo.endDate[2]}/${promo.endDate[1]}/${promo.endDate[0]}`}</td>
+                                            <td>{promo.usageLimit}</td>
+                                            <td>{promo.usedCount}</td>
+                                            <td className="p-3 space-x-2">
+                                                <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
+                                                onClick={() => {
+                                                    setSelectedPromo(promo)
+                                                    setIsOpen(true)
+                                                    setIsEdit(true)
+                                                }}>Sửa</button>
+                                                <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" onClick={() => setIsDelete(true)}>Xóa</button>
+                                            </td>
+                                        </tr>
+                                        <tr className='border-b'>
+                                            <td colSpan={6}>
+                                                {currentnav === promo.id && <PromotionLine buyNGetMS={buyngetms} percentOffs={percentoffs} num1={num1} num2={num2} />}
+                                            </td>
+                                        </tr>
+                                    </>
+                            ) })}
                         </tbody>
                     </table>
                 </div>

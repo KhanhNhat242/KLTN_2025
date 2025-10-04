@@ -3,10 +3,12 @@ import Header from '../components/Header'
 import HeaderTop from '../components/HeaderTop';
 import Search from '../components/Search';
 import downloadicon from '../assets/downloadicon.png'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import TripModal from '../components/TripModal';
 import DeleteMocal from '../components/DeleteModal';
-import tripdata from '../fakedata/fakeapitrip.json'
+import { useSelector } from 'react-redux';
+import axios from 'axios';
+import type { RootState } from '../redux/store';
 
 // const trip = tripdata;
 
@@ -19,7 +21,40 @@ const Trip = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [isEdit, setIsEdit] = useState<boolean>(false)
   const [isDelete, setIsDelete] = useState<boolean>(false)
-  const [trips, setTrips] = useState([])
+
+  const token = useSelector((state: RootState) => state.auth.accessToken)
+  // const dispatch = useDispatch()
+  // const promotions = useSelector((state: RootState) => state.promotions)
+
+  const getData = async () => {
+    await axios.get('https://apigateway.microservices.appf4s.io.vn/services/msroute/api/trips', {
+                params: {
+                    'page': '0',
+                    'size': '20',
+                },
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'accept': '*/*',
+                    'Content-Type': 'application/json',
+                    'X-XSRF-TOKEN': '41866a2d-cdc1-4547-9eef-f6d3464f7b6b',
+                },
+            })
+            .then((res) => {
+              console.log(res.data)
+                // dispatch(setPromotions(res.data))
+            })
+            .catch(() => {
+                console.log('Get data fail!')
+            })
+            // console.log('data: ',res.data)
+            // setPromotions(res.data)
+  }
+
+  useEffect(() => {
+    if (token) {
+            getData()
+        }
+  }, [token])
 
   return (
     <div className='w-full h-full flex flex-row justify-start'>

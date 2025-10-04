@@ -44,9 +44,6 @@ const PercentOff = ({ percentoffs }: PercentoffsProps) => {
                     <th className='px-[10px]'>Giảm tối đa</th>
                     <th className='px-[10px]'>Hóa đơn tối thiểu</th>
                     <th className='px-[10px]'>Actions</th>
-                    <th>
-                        <button className="ml-[20px] py-[5px] px-[10px] cursor-pointer text-blue-600 text-white bg-[#1447E6] rounded-[5px] hover:underline" >+ Chi tiết khuyến mãi</button>
-                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -62,6 +59,7 @@ const PercentOff = ({ percentoffs }: PercentoffsProps) => {
                                 onClick={() => {
                                     setIsOpen(true)
                                     setIsEdit(true)
+                                    console.log(isOpen, isEdit)
                                 }}>Sửa</button>
                                 <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" onClick={() => setIsDelete(true)}>Xóa</button>
                             </td>
@@ -88,9 +86,6 @@ const BuyNGetM = ({ buyngetms }: BuyngetmsProps) => {
                     <th className='px-[10px]'>Vé mua</th>
                     <th className='px-[10px]'>Vé được tặng</th>
                     <th className='px-[10px]'>Actions</th>
-                    <th>
-                        <button className="ml-[20px] py-[5px] px-[10px] cursor-pointer text-blue-600 text-white bg-[#1447E6] rounded-[5px] hover:underline" >+ Chi tiết khuyến mãi</button>
-                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -119,11 +114,13 @@ const BuyNGetM = ({ buyngetms }: BuyngetmsProps) => {
 
 const PromotionLine = ({ buyNGetMS, percentOffs, num1, num2 }: Props) => {
     const [count, setCount] = useState<number>(0)
+    const [isOpen, setIsOpen] = useState<boolean>(false)
+    const [type, setType] = useState<number>(0)
 
     return (
         <div className='w-full border-t-[#ccc]'>
-            {/* <div className='w-[35%] flex flex-row justify-between items-start'> */}
-                <div className='cursor-pointer py-[5px] hover:bg-gray-50' 
+            <div>
+                <div className='w-[45%] flex flex-row justify-between cursor-pointer py-[5px] hover:bg-gray-50' 
                     onClick={() => {
                         if ((count === 0 || count === 2) && buyNGetMS !== undefined) {
                             setCount(1)
@@ -131,14 +128,21 @@ const PromotionLine = ({ buyNGetMS, percentOffs, num1, num2 }: Props) => {
                         else if(count === 1) {
                             setCount(0)
                         }}}>
-                    <p className='pl-[40px]'>- Mua N vé tặng M vé</p>
-                    <p className='pl-[60px]'>Số lượng: {num1}</p>
+                    <div>
+                        <p className='pl-[40px]'>- Mua N vé tặng M vé</p>
+                        <p className='pl-[60px]'>Số lượng: {num1}</p>
+                    </div>
+                    <button className="h-full ml-[50px] p-[5px] cursor-pointer text-white bg-[#1447E6] rounded-[5px] hover:underline" 
+                        onClick={() => {
+                            setIsOpen(true)
+                            setType(2)
+                        }}
+                    >+ Chi tiết khuyến mãi</button>
                 </div>
-                {/* <button className='p-[10px] cursor-pointer text-white bg-[#1447E6] rounded-[10px]'>+ Chi tiết khuyến mãi</button> */}
                 { (count === 1 && num1 !== 0) && <BuyNGetM buyngetms={buyNGetMS} /> }
-            {/* </div> */}
-            {/* <div className='w-[35%] flex flex-row justify-between items-start'> */}
-                <div className='cursor-pointer py-[5px] hover:bg-gray-50' 
+            </div>
+            <div>
+                <div className='w-[45%] flex flex-row justify-between cursor-pointer py-[5px] hover:bg-gray-50' 
                     onClick={() => {
                         if ((count === 0 || count === 1) && percentOffs !== undefined) {
                             setCount(2)
@@ -146,12 +150,20 @@ const PromotionLine = ({ buyNGetMS, percentOffs, num1, num2 }: Props) => {
                         else if(count === 2) {
                             setCount(0)
                         }}}>
-                    <p className='pl-[40px]'>- Chiết khấu theo phần trăm hóa đơn</p>
-                    <p className='pl-[60px]'>Số lượng: {num2}</p>
+                    <div>
+                        <p className='pl-[40px]'>- Chiết khấu theo phần trăm hóa đơn</p>
+                        <p className='pl-[60px]'>Số lượng: {num2}</p>
+                    </div>
+                    <button className="h-full ml-[50px] p-[5px] cursor-pointer text-white bg-[#1447E6] rounded-[5px] hover:underline" 
+                        onClick={() => {
+                            setIsOpen(true)
+                            setType(1)
+                        }}
+                    >+ Chi tiết khuyến mãi</button>
                 </div>
-                {/* <button className='p-[10px] cursor-pointer text-white bg-[#1447E6] rounded-[10px]'>+ Chi tiết khuyến mãi</button> */}
                 { (count === 2 && num2 !== 0) && <PercentOff percentoffs={percentOffs} /> }
-            {/* </div> */}
+                { isOpen && <PromotionDetailModal setIsOpen={setIsOpen} isEdit={false} type={type} /> }
+            </div>
         </div>
     )
 }

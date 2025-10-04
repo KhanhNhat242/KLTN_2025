@@ -5,33 +5,53 @@ import Search from '../components/Search';
 import downloadicon from '../assets/downloadicon.png'
 import DeleteMocal from '../components/DeleteModal';
 import BusModal from '../components/BusModal';
-import { useState } from 'react';
-
-const bus = [
-  { id: '111', licensePlate: "29A-00123", trip: "Saigon - Danang", type: 'Limousine', seatNumber: "36", driver: 'Nguyen Nhat Hoang', status: "Hoạt động" },
-  { id: '112', licensePlate: "29A-00123", trip: "Saigon - Danang", type: 'Limousine', seatNumber: "36", driver: 'Nguyen Nhat Hoang', status: "Bảo trì" },
-  { id: '113', licensePlate: "29A-00123", trip: "Saigon - Danang", type: 'Limousine', seatNumber: "36", driver: 'Nguyen Nhat Hoang', status: "Đã ngưng" },
-  { id: '114', licensePlate: "29A-00123", trip: "Saigon - Danang", type: 'Limousine', seatNumber: "36", driver: 'Nguyen Nhat Hoang', status: "Đã ngưng" },
-  { id: '115', licensePlate: "29A-00123", trip: "Saigon - Danang", type: 'Limousine', seatNumber: "36", driver: 'Nguyen Nhat Hoang', status: "Hoạt động" },
-  { id: '116', licensePlate: "29A-00123", trip: "Saigon - Danang", type: 'Limousine', seatNumber: "36", driver: 'Nguyen Nhat Hoang', status: "Hoạt động" },
-  { id: '117', licensePlate: "29A-00123", trip: "Saigon - Danang", type: 'Limousine', seatNumber: "36", driver: 'Nguyen Nhat Hoang', status: "Hoạt động" },
-  { id: '118', licensePlate: "29A-00123", trip: "Saigon - Danang", type: 'Limousine', seatNumber: "36", driver: 'Nguyen Nhat Hoang', status: "Đã ngưng" },
-  { id: '119', licensePlate: "29A-00123", trip: "Saigon - Danang", type: 'Limousine', seatNumber: "36", driver: 'Nguyen Nhat Hoang', status: "Hoạt động" },
-  { id: '120', licensePlate: "29A-00123", trip: "Saigon - Danang", type: 'Limousine', seatNumber: "36", driver: 'Nguyen Nhat Hoang', status: "Hoạt động" },
-  { id: '121', licensePlate: "29A-00123", trip: "Saigon - Danang", type: 'Limousine', seatNumber: "36", driver: 'Nguyen Nhat Hoang', status: "Hoạt động" },
-  { id: '122', licensePlate: "29A-00123", trip: "Saigon - Danang", type: 'Limousine', seatNumber: "36", driver: 'Nguyen Nhat Hoang', status: "Hoạt động" },
-  { id: '123', licensePlate: "29A-00123", trip: "Saigon - Danang", type: 'Limousine', seatNumber: "36", driver: 'Nguyen Nhat Hoang', status: "Hoạt động" },
-  { id: '124', licensePlate: "29A-00123", trip: "Saigon - Danang", type: 'Limousine', seatNumber: "36", driver: 'Nguyen Nhat Hoang', status: "Hoạt động" },
-  { id: '125', licensePlate: "29A-00123", trip: "Saigon - Danang", type: 'Limousine', seatNumber: "36", driver: 'Nguyen Nhat Hoang', status: "Hoạt động" },
-  { id: '126', licensePlate: "29A-00123", trip: "Saigon - Danang", type: 'Limousine', seatNumber: "36", driver: 'Nguyen Nhat Hoang', status: "Hoạt động" },
-  { id: '127', licensePlate: "29A-00123", trip: "Saigon - Danang", type: 'Limousine', seatNumber: "36", driver: 'Nguyen Nhat Hoang', status: "Hoạt động" },
-  { id: '128', licensePlate: "29A-00123", trip: "Saigon - Danang", type: 'Limousine', seatNumber: "36", driver: 'Nguyen Nhat Hoang', status: "Hoạt động" },
-];
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import type { RootState } from '../redux/store';
+import { setBuses } from '../redux/busSlice';
+import axios from 'axios';
 
 const BusInformation = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [isEdit, setIsEdit] = useState<boolean>(false)
     const [isDelete, setIsDelete] = useState<boolean>(false)
+    const [seatNum, setSeatNum] = useState<number>(0)
+
+    const token = useSelector((state: RootState) => state.auth.accessToken)
+    const dispatch = useDispatch()
+    const buses = useSelector((state: RootState) => state.buses)
+
+    const getData = async () => {
+              await axios.get('https://apigateway.microservices.appf4s.io.vn/services/msroute/api/vehicles', {
+                  params: {
+                      'page': '0',
+                      'size': '20',
+                  },
+                  headers: {
+                      'Authorization': `Bearer ${token}`,
+                      'accept': '*/*',
+                      'Content-Type': 'application/json',
+                      'X-XSRF-TOKEN': '41866a2d-cdc1-4547-9eef-f6d3464f7b6b',
+                  },
+              })
+              .then((res) => {
+                console.log(res.data)
+                  dispatch(setBuses(res.data))
+              })
+              .catch(() => {
+                  console.log('Get data fail!')
+              })
+              // console.log('data: ',res.data)
+              // setPromotions(res.data)
+          
+      }
+
+      useEffect(() => {
+          console.log('token:', token)
+          if (token) {
+              getData()
+          }
+      }, [token])
 
     return (
       <div className='w-full h-full flex flex-row justify-start'>
@@ -62,34 +82,38 @@ const BusInformation = () => {
                   <tr>
                     <th className="p-3 border-b">Mã xe</th>
                     <th className="p-3 border-b">Biển số</th>
-                    <th className="p-3 border-b">Tuyến xe</th>
+                    {/* <th className="p-3 border-b">Tuyến xe</th> */}
                     <th className="p-3 border-b">Loại xe</th>
                     <th className="p-3 border-b">Số ghế</th>
-                    <th className="p-3 border-b">Tài xế chính</th>
-                    <th className="p-3 border-b">Trạng thái</th>
+                    {/* <th className="p-3 border-b">Tài xế chính</th>
+                    <th className="p-3 border-b">Trạng thái</th> */}
                     <th className="p-3 border-b">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {bus.map((bus) => (
-                    <tr key={bus.id} className="hover:bg-gray-50">
-                      <td className="p-3 border-b">{bus.id}</td>
-                      <td className="p-3 border-b">{bus.licensePlate}</td>
-                      <td className="p-3 border-b">{bus.trip}</td>
-                      <td className="p-3 border-b">{bus.type}</td>
-                      <td className="p-3 border-b">{bus.seatNumber}</td>
-                      <td className="p-3 border-b">{bus.driver}</td>
-                      <td className="p-3 border-b">{bus.status}</td>
-                      <td className="p-3 border-b space-x-2">
-                        <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
-                          onClick={() => {
-                            setIsOpen(true)
-                            setIsEdit(true)
-                          }}>Sửa</button>
-                        <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" onClick={() => setIsDelete(true)}>Xóa</button>
-                      </td>
-                    </tr>
-                  ))}
+                  {buses.map((bus) => {
+                      return (
+                        <tr key={bus.id} className="hover:bg-gray-50">
+                          <td className="p-3 border-b">{bus.id}</td>
+                          <td className="p-3 border-b">{bus.plateNumber}</td>
+                          {/* <td className="p-3 border-b">{bus.trip}</td> */}
+                          <td className="p-3 border-b">{bus.type}</td>
+                          <td className="p-3 border-b">{`${bus.type === 'LIMOUSINE' ? 24 : 36}`}</td>
+                          {/* <td className="p-3 border-b">{bus.driver}</td>
+                          <td className="p-3 border-b">{bus.status}</td> */}
+                          <td className="p-3 border-b space-x-2">
+                            <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
+                              onClick={() => {
+                                setIsOpen(true)
+                                setIsEdit(true)
+                              }}>Sửa</button>
+                            <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" onClick={() => setIsDelete(true)}>Xóa</button>
+                          </td>
+                        </tr>
+                      )
+
+                  }
+                  )}
                 </tbody>
               </table>
             </div>
