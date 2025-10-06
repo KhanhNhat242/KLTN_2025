@@ -1,29 +1,18 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import type { RootState } from './store'
+import type { Trip } from '../interface/Interface'
 
-interface Promotion {
-    id?: number,
-    code: string,
-    startTime: string,
-    endTime: string,
-    buyNGetMS: [],
-    percentOffs: [],
-    usageLimit: number,
-    usedCount: number
-}
-
-const promotionSlice = createSlice({
-    name: 'promotions',
-    initialState: [] as Promotion[],
+const tripSlice = createSlice({
+    name: 'trip',
+    initialState: [] as Trip[],
     reducers: {
-         setPromotions: (_, action: PayloadAction<Promotion[]>) => {
+         setTrips: (_, action: PayloadAction<Trip[]>) => {
             return action.payload 
         },
-        add: (state, action: PayloadAction<Promotion>) => {
+        add: (state, action: PayloadAction<Trip>) => {
             state.push(action.payload)
         },
-        update: (state, action: PayloadAction<Promotion>) => {
-            const index = state.findIndex((p) => p.code === action.payload.code);
+        update: (state, action: PayloadAction<Trip>) => {
+            const index = state.findIndex((p) => p.id === action.payload.id);
             if (index !== -1) {
                 state[index] = action.payload;
             }
@@ -34,6 +23,5 @@ const promotionSlice = createSlice({
     }
 })
 
-export const selectPromotionById = (state: RootState, id: number) => state.promotions.find((promo) => promo.id === id)
-export const { setPromotions, add, update, remove } = promotionSlice.actions
-export default promotionSlice.reducer
+export const { setTrips, add, update, remove } = tripSlice.actions
+export default tripSlice.reducer

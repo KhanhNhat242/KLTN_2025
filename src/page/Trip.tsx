@@ -6,54 +6,60 @@ import downloadicon from '../assets/downloadicon.png'
 import { useEffect, useState } from 'react';
 import TripModal from '../components/TripModal';
 import DeleteMocal from '../components/DeleteModal';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import type { RootState } from '../redux/store';
-
-// const trip = tripdata;
-
-interface Trip {
-  id: number,
-  
-}
+import { setTrips } from '../redux/tripSlice';
 
 const Trip = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [isEdit, setIsEdit] = useState<boolean>(false)
   const [isDelete, setIsDelete] = useState<boolean>(false)
-
+  
   const token = useSelector((state: RootState) => state.auth.accessToken)
-  // const dispatch = useDispatch()
-  // const promotions = useSelector((state: RootState) => state.promotions)
+  const dispatch = useDispatch()
+  const trips = useSelector((state: RootState) => state.trips)
+
+  const formatTimestamp = (timestamp: number) => {
+      const date = new Date(timestamp * 1000)
+
+      const day = String(date.getDate()).padStart(2, '0')
+      const month = String(date.getMonth() + 1).padStart(2, '0')
+      const year = date.getFullYear()
+
+      const hours = String(date.getHours()).padStart(2, '0')
+      const minutes = String(date.getMinutes()).padStart(2, '0')
+      const seconds = String(date.getSeconds()).padStart(2, '0')
+
+      return `${hours}:${minutes}:${seconds} ngày ${day}/${month}/${year}`
+  }
 
   const getData = async () => {
     await axios.get('https://apigateway.microservices.appf4s.io.vn/services/msroute/api/trips', {
-                params: {
-                    'page': '0',
-                    'size': '20',
-                },
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'accept': '*/*',
-                    'Content-Type': 'application/json',
-                    'X-XSRF-TOKEN': '41866a2d-cdc1-4547-9eef-f6d3464f7b6b',
-                },
-            })
-            .then((res) => {
-              console.log(res.data)
-                // dispatch(setPromotions(res.data))
-            })
-            .catch(() => {
-                console.log('Get data fail!')
-            })
-            // console.log('data: ',res.data)
-            // setPromotions(res.data)
+      params: {
+            'page': '0',
+            'size': '40',
+        },
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'accept': '*/*',
+            'Content-Type': 'application/json',
+            'X-XSRF-TOKEN': '41866a2d-cdc1-4547-9eef-f6d3464f7b6b',
+        },
+    })
+    .then((res) => {
+      console.log(res.data)
+      dispatch(setTrips(res.data))
+    })
+    .catch(() => {
+        console.log('Get data fail!')
+    })
   }
 
   useEffect(() => {
     if (token) {
-            getData()
-        }
+        getData()
+    }
   }, [token])
 
   return (
@@ -85,24 +91,21 @@ const Trip = () => {
               <tr>
                 <th className="p-3 border-b">Mã tuyến</th>
                 <th className="p-3 border-b">Tuyến xe</th>
-                <th className="p-3 border-b">Thời gian dự kiến</th>
-                <th className="p-3 border-b">Loại xe</th>
-                <th className="p-3 border-b">Khoảng cách</th>
+                <th className="p-3 border-b">Thời gian khởi hành</th>
+                <th className="p-3 border-b">Thời gian kết thúc</th>
                 <th className="p-3 border-b">Giá vé cơ bản</th>
-                {/* <th className="p-3 border-b">Trạng thái</th> */}
                 <th className="p-3 border-b">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {trip.map((trip) => (
-                    <tr key={trip.id} className="hover:bg-gray-50">
-                      <td className="p-3 border-b">111</td>
-                      <td className="p-3 border-b">{trip.station}</td>
-                      <td className="p-3 border-b">{trip.totaltime}</td>
-                      <td className="p-3 border-b">{trip.typeofbus}</td>
-                      <td className="p-3 border-b">{trip.distance}</td>
-                      {/* <td className="p-3 border-b">{trip.price}</td> */}
-                      <td className="p-3 border-b">(Hoạt động)</td>
+              {trips.map((trip) => {
+                return (
+                  <tr key={trip.id} className="hover:bg-gray-50">
+                      <td className="p-3 border-b">{trip.id}</td>
+                      <td className="p-3 border-b">{trip.tripCode}</td>
+                      <td className="p-3 border-b">{formatTimestamp(trip.departureTime)}</td>
+                      <td className="p-3 border-b">{formatTimestamp(trip.arrivalTime)}</td>
+                      <td className="p-3 border-b">{trip.baseFare}</td>
                       <td className="p-3 border-b space-x-2">
                         <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
                           onClick={() => {
@@ -112,7 +115,8 @@ const Trip = () => {
                         <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" onClick={() => setIsDelete(true)}>Xóa</button>
                       </td>
                     </tr>
-                ))}
+                )
+              })}
             </tbody>
           </table>
         </div>

@@ -31,3 +31,19 @@ export interface PromotionLine {
     buyN?: number,
     getM?: number,
 }
+
+export interface Trip {
+    id?: number,
+    tripCode: string,
+    departureTime: number,
+    arrivalTime: number,
+    baseFare: number,
+}
+
+export interface Bus {
+    id?: number,
+    type: string,
+    plateNumber: string,
+    brand: string,
+    description: string,
+}

@@ -35,7 +35,7 @@ const Login = () => {
         .then((res) => {
             // alert('log in success')
             dispatch(setAccessToken(res.data.accessToken))
-            navigate('/promotion')
+            navigate('/bus')
         })
         .catch(() => {
             alert('log in fail!')

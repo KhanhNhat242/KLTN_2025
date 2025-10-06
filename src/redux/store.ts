@@ -5,6 +5,7 @@ import busesSlice from './busSlice'
 import currentSelectedSlice from './currentSelectedSlice'
 import buyNGetMSlice from './buyNGetMSlice'
 import percentOffSlice from './percentOffSlice'
+import tripsSlice from './tripSlice'
 
 export const store = configureStore({
     reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
         currentSelectedID: currentSelectedSlice,
         buyNgetMs: buyNGetMSlice,
         percentOffS: percentOffSlice, 
+        trips: tripsSlice,
     },
 })
 

@@ -1,15 +1,8 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
+import type { Bus } from '../interface/Interface'
 
-interface Bus {
-    id?: number,
-    type: string,
-    plateNumber: string,
-    brand: string,
-    descripttion: string,
-}
-
-const promotionSlice = createSlice({
-    name: 'buses',
+const busSlice = createSlice({
+    name: 'bus',
     initialState: [] as Bus[],
     reducers: {
         setBuses: (_, action: PayloadAction<Bus[]>) => {
@@ -18,17 +11,17 @@ const promotionSlice = createSlice({
         add: (state, action: PayloadAction<Bus>) => {
             state.push(action.payload)
         },
-        // update: (state, action: PayloadAction<Promotion>) => {
-        //     const index = state.findIndex((p) => p.code === action.payload.code);
-        //     if (index !== -1) {
-        //         state[index] = action.payload;
-        //     }
-        // },
+        update: (state, action: PayloadAction<Bus>) => {
+            const index = state.findIndex((p) => p.id === action.payload.id);
+            if (index !== -1) {
+                state[index] = action.payload;
+            }
+        },
         remove: (state, action: PayloadAction<number>) => {
             return state.filter(promo => promo.id !== action.payload)
         },
     }
 })
 
-export const { setBuses, add, remove } = promotionSlice.actions
-export default promotionSlice.reducer
+export const { setBuses, add, update, remove } = busSlice.actions
+export default busSlice.reducer

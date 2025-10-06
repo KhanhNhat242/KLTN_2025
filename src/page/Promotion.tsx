@@ -21,12 +21,7 @@ const Promotion = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [isDelete, setIsDelete] = useState<boolean>(false)
     const [isEdit, setIsEdit] = useState<boolean>(false)
-    // const [promotions, setPromotions] = useState<Promotion[]>([])
     const [currentnav, setCurrentnav] = useState<number | undefined>(0)
-    // const [buyngetms, setBuyngetms] = useState([])
-    // const [percentoffs, setPercentoffs] = useState([])
-    // const [num1, setNum1] = useState<number>(0)
-    // const [num2, setNum2] = useState<number>(0)
 
     const token = useSelector((state: RootState) => state.auth.accessToken)
     const dispatch = useDispatch()
