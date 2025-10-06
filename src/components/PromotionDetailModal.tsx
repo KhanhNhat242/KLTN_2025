@@ -1,28 +1,32 @@
 import axios from 'axios'
-import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import type { RootState } from '../redux/store'
+import { add2, update2 } from '../redux/buyNGetMSlice'
+import { add1, update1 } from '../redux/percentOffSlice'
+import type { BuyNGetM, PercentOff, PromotionLine } from '../interface/Interface'
 
 interface Props {
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>,
     isEdit: boolean,
     type: number,
+    selectedLine?: PromotionLine,
 }
 
 interface BuyNGetMProps {
-    n: number,
-    setN: React.Dispatch<React.SetStateAction<number>>,
-    m: number,
-    setM: React.Dispatch<React.SetStateAction<number>>,
+    n: number | undefined,
+    setN: React.Dispatch<React.SetStateAction<number | undefined>>,
+    m: number | undefined,
+    setM: React.Dispatch<React.SetStateAction<number | undefined>>,
 }
 
 interface PercentOffProps {
-    percent: number,
-    setPercent: React.Dispatch<React.SetStateAction<number>>,
-    maxOff: number,
-    setMaxOff: React.Dispatch<React.SetStateAction<number>>,
-    minPrice: number,
-    setMinPrice: React.Dispatch<React.SetStateAction<number>>,
+    percent: number | undefined,
+    setPercent: React.Dispatch<React.SetStateAction<number | undefined>>,
+    maxOff: number | undefined,
+    setMaxOff: React.Dispatch<React.SetStateAction<number | undefined>>,
+    minPrice: number | undefined,
+    setMinPrice: React.Dispatch<React.SetStateAction<number | undefined>>,
 }
 
 const BuyNGetM = ({ n, setN, m, setM }: BuyNGetMProps) => {
@@ -62,26 +66,63 @@ const PercentOff = ({ percent, setPercent, maxOff, setMaxOff, minPrice, setMinPr
     )
 }
 
-const PromotionDetailModal = ({ setIsOpen, isEdit, type }: Props) => {
-    const [n, setN] = useState<number>(0) 
-    const [m, setM] = useState<number>(0) 
-    const [percent, setPercent] = useState<number>(0) 
-    const [maxOff, setMaxOff] = useState<number>(0) 
-    const [minPrice, setMinPrice] = useState<number>(0) 
+const PromotionDetailModal = ({ setIsOpen, isEdit, type, selectedLine }: Props) => {
+    const [n, setN] = useState<number | undefined>(0) 
+    const [m, setM] = useState<number | undefined>(0) 
+    const [percent, setPercent] = useState<number | undefined>(0) 
+    const [maxOff, setMaxOff] = useState<number | undefined>(0) 
+    const [minPrice, setMinPrice] = useState<number | undefined>(0) 
 
     const token = useSelector((state: RootState) => state.auth.accessToken)
     const id = useSelector((state: RootState) => state.currentSelectedID.id)
+    const dispatch = useDispatch()
+
+        useEffect(() => {
+            // console.log(selectedLine)
+
+            if (type === 1 && isEdit) {
+                setPercent(selectedLine?.percent)
+                setMaxOff(selectedLine?.maxOff)
+                setMinPrice(selectedLine?.minPrice)
+            }
+            else if (type === 2 && isEdit) {
+                setN(selectedLine?.buyN)
+                setM(selectedLine?.getM)
+            }
+        }, [])
 
     const handleCreate1 = async () => {
         const ca = new Date()
 
-
+        await axios.post(`https://apigateway.microservices.appf4s.io.vn/services/mspromotion/api/promotions/${id}/percent-off-total`, {
+            "percent": percent,
+            "maxOff": maxOff,
+            "minPrice": minPrice,
+            "promotion": {},
+            "createdAt": ca.toISOString(),
+        }, 
+        {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'accept': '*/*',
+                'Content-Type': 'application/json',
+            }
+        },)
+        .then((res) => {
+            dispatch(add1(res.data))
+            alert('Create success')
+            console.log(res)
+        })
+        .catch((error) => {
+            alert('Error when creating!')
+            console.log(error)
+        })
     }
 
     const handleCreate2 = async () => {
         const ca = new Date()
 
-        console.log(id)
+        // console.log(id)
         await axios.post(`https://apigateway.microservices.appf4s.io.vn/services/mspromotion/api/promotions/${id}/buy-n-get-m-free`, {
             "buyN": n,
             "getM": m,
@@ -96,11 +137,74 @@ const PromotionDetailModal = ({ setIsOpen, isEdit, type }: Props) => {
             }
         },)
         .then((res) => {
+            dispatch(add2(res.data))
             alert('Create success')
             console.log(res)
         })
         .catch((error) => {
             alert('Error when creating!')
+            console.log(error)
+        })
+    }
+
+    const handleEdit1 = async () => {
+        const ca = new Date()
+
+        await axios.put(`https://apigateway.microservices.appf4s.io.vn/services/mspromotion/api/promotions/${id}/percent-off-total/${selectedLine?.id}`, 
+            {
+                "id": selectedLine?.id,
+                "percent": percent,
+                "maxOff": maxOff,
+                "minPrice": minPrice,
+                "createdAt": ca.toISOString(),
+                "promotion": {}
+            },
+            {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'accept': '*/*',
+                    'Content-Type': 'application/json',
+                }
+            }
+        )
+        .then((res) => {
+            dispatch(update1(res.data))
+            alert('Edit success')
+            console.log(res)
+        })
+        .catch((error) => {
+            alert('Error when editing!')
+            console.log(error)
+        })
+    }
+
+    const handleEdit2 = async () => {
+        const ca = new Date()
+        // console.log(selectedLine?.id, selectedLine?.buyN, selectedLine?.getM)
+
+        await axios.put(`https://apigateway.microservices.appf4s.io.vn/services/mspromotion/api/promotions/${id}/buy-n-get-m-free/${selectedLine?.id}`, 
+            {
+                "id": selectedLine?.id,
+                "buyN": n,
+                "getM": m,
+                "createdAt": ca.toISOString(),
+                "promotion": {}
+            },
+            {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'accept': '*/*',
+                    'Content-Type': 'application/json',
+                }
+            }
+        )
+        .then((res) => {
+            dispatch(update2(res.data))
+            alert('Edit success')
+            console.log(res)
+        })
+        .catch((error) => {
+            alert('Error when editing!')
             console.log(error)
         })
     }
@@ -130,6 +234,12 @@ const PromotionDetailModal = ({ setIsOpen, isEdit, type }: Props) => {
                                 }
                                 else if (isEdit === false && type === 1) {
                                     handleCreate1()
+                                }
+                                else if (isEdit === true && type === 1) {
+                                    handleEdit1()
+                                }
+                                else if (isEdit === true && type === 2) {
+                                    handleEdit2()
                                 }
                             }
                         }>

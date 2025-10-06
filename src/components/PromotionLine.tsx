@@ -1,128 +1,127 @@
 import { useState } from 'react'
 import DeleteModal from './DeleteModal'
 import PromotionDetailModal from './PromotionDetailModal'
+import { useSelector } from 'react-redux'
+import type { RootState } from '../redux/store'
+import { type BuyNGetM as BuyNGetMInterface, type PromotionLine} from '../interface/Interface'
+import { type PercentOff as PercentOffInterface} from '../interface/Interface'
 
-interface PercentOff {
-    id: number,
-    percent: number,
-    maxOff: number,
-    minPrice: number,
+interface BuyNGetMProps {
+    buyngetms: BuyNGetMInterface[],
 }
 
-interface BuyNGetM {
-    id: number,
-    buyN: number,
-    getM: number,
+interface PercentOffProps {
+    percentoffs: PercentOffInterface[],
 }
 
-interface Props {
-    buyNGetMS: BuyNGetM[],
-    percentOffs: PercentOff[],
-    num1: number,
-    num2: number,
-}
-
-interface BuyngetmsProps {
-    buyngetms: BuyNGetM[]
-}
-
-interface PercentoffsProps {
-    percentoffs: PercentOff[]
-}
-
-const PercentOff = ({ percentoffs }: PercentoffsProps) => {
+const PercentOff = ({percentoffs}: PercentOffProps) => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [isDelete, setIsDelete] = useState<boolean>(false)
     const [isEdit, setIsEdit] = useState<boolean>(false)
+    const [selectedLine, setSelectedLine] = useState<PromotionLine>()
 
     return (
-        <table className='ml-[100px]'>
-            <thead>
-                <tr>
-                    <th className='px-[10px]'>ID</th>
-                    <th className='px-[10px]'>Phần trăm giảm</th>
-                    <th className='px-[10px]'>Giảm tối đa</th>
-                    <th className='px-[10px]'>Hóa đơn tối thiểu</th>
-                    <th className='px-[10px]'>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {
-                    percentoffs.map((percentoff) => (
-                        <tr>
-                            <td className='px-[10px]'>{percentoff.id}</td>
-                            <td className='px-[10px]'>{percentoff.percent}</td>
-                            <td className='px-[10px]'>{percentoff.maxOff}</td>
-                            <td className='px-[10px]'>{percentoff.minPrice}</td>
-                            <td className="space-x-2">
-                                <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
-                                onClick={() => {
-                                    setIsOpen(true)
-                                    setIsEdit(true)
-                                    console.log(isOpen, isEdit)
-                                }}>Sửa</button>
-                                <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" onClick={() => setIsDelete(true)}>Xóa</button>
-                            </td>
-                        </tr>
-                    ))
-                }
-            </tbody>
-            { isOpen && (isEdit ? <PromotionDetailModal isEdit={true} setIsOpen={setIsOpen} type={1} /> : <PromotionDetailModal isEdit={false} setIsOpen={setIsOpen} type={1} /> ) }
+        <>
+            <table className='ml-[100px]'>
+                <thead>
+                    <tr>
+                        <th className='px-[10px]'>ID</th>
+                        <th className='px-[10px]'>Phần trăm giảm</th>
+                        <th className='px-[10px]'>Giảm tối đa</th>
+                        <th className='px-[10px]'>Hóa đơn tối thiểu</th>
+                        <th className='px-[10px]'>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        percentoffs.map((percentoff) => (
+                            <tr>
+                                <td className='px-[10px]'>{percentoff.id}</td>
+                                <td className='px-[10px]'>{percentoff.percent}</td>
+                                <td className='px-[10px]'>{percentoff.maxOff}</td>
+                                <td className='px-[10px]'>{percentoff.minPrice}</td>
+                                <td className="space-x-2">
+                                    <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
+                                        onClick={() => {
+                                            setSelectedLine(percentoff)
+                                            setIsOpen(true)
+                                            setIsEdit(true)
+                                            console.log(isOpen, isEdit)
+                                    }}>Sửa</button>
+                                    <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" onClick={() => setIsDelete(true)}>Xóa</button>
+                                </td>
+                            </tr>
+                        ))
+                    }
+                </tbody>
+            </table>
+            { isOpen && (isEdit ? <PromotionDetailModal selectedLine={selectedLine} isEdit={true} setIsOpen={setIsOpen} type={1} /> : <PromotionDetailModal isEdit={false} setIsOpen={setIsOpen} type={1} /> ) }
             { isDelete && <DeleteModal setIsDelete={setIsDelete} /> }
-        </table>
+        </>
     )
 }
 
-const BuyNGetM = ({ buyngetms }: BuyngetmsProps) => {
+const BuyNGetM = ({buyngetms}: BuyNGetMProps) => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [isDelete, setIsDelete] = useState<boolean>(false)
     const [isEdit, setIsEdit] = useState<boolean>(false)
+    const [selectedLine, setSelectedLine] = useState<PromotionLine>()
 
     return (
-        <table className='ml-[100px]'>
-            <thead>
-                <tr>
-                    <th className='px-[10px]'>ID</th>
-                    <th className='px-[10px]'>Vé mua</th>
-                    <th className='px-[10px]'>Vé được tặng</th>
-                    <th className='px-[10px]'>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {
-                    buyngetms.map((buyngetm) => (
-                        <tr>
-                            <td className='px-[10px]'>{buyngetm.id}</td>
-                            <td className='px-[10px]'>{buyngetm.buyN}</td>
-                            <td className='px-[10px]'>{buyngetm.getM}</td>
-                            <td className="space-x-2">
-                                <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
-                                onClick={() => {
-                                    setIsOpen(true)
-                                    setIsEdit(true)
-                                }}>Sửa</button>
-                                <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" onClick={() => setIsDelete(true)}>Xóa</button>
-                            </td>
-                        </tr>
-                ))}
-            </tbody>
-            { isOpen && (isEdit ? <PromotionDetailModal isEdit={true} setIsOpen={setIsOpen} type={2} /> : <PromotionDetailModal isEdit={false} setIsOpen={setIsOpen} type={2} /> ) }
+        <>
+            <table className='ml-[100px]'>
+                <thead>
+                    <tr>
+                        <th className='px-[10px]'>ID</th>
+                        <th className='px-[10px]'>Vé mua</th>
+                        <th className='px-[10px]'>Vé được tặng</th>
+                        <th className='px-[10px]'>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        buyngetms.map((buyngetm) => (
+                            <tr>
+                                <td className='px-[10px]'>{buyngetm.id}</td>
+                                <td className='px-[10px]'>{buyngetm.buyN}</td>
+                                <td className='px-[10px]'>{buyngetm.getM}</td>
+                                <td className="space-x-2">
+                                    <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
+                                    onClick={() => {
+                                        setSelectedLine(buyngetm)
+                                        setIsOpen(true)
+                                        setIsEdit(true)
+                                    }}>Sửa</button>
+                                    <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" onClick={() => setIsDelete(true)}>Xóa</button>
+                                </td>
+                            </tr>
+                    ))}
+                </tbody>
+            </table>
+            { isOpen && (isEdit ? <PromotionDetailModal isEdit={true} selectedLine={selectedLine} setIsOpen={setIsOpen} type={2} /> : <PromotionDetailModal isEdit={false} setIsOpen={setIsOpen} type={2} /> ) }
             { isDelete && <DeleteModal setIsDelete={setIsDelete} /> }
-        </table>
+        </>
     )
 }
 
-const PromotionLine = ({ buyNGetMS, percentOffs, num1, num2 }: Props) => {
+const PromotionLine = () => {
     const [count, setCount] = useState<number>(0)
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [type, setType] = useState<number>(0)
+
+    const buyngetms = useSelector((state: RootState) => state.buyNgetMs)
+    const percentoffs = useSelector((state: RootState) => state.percentOffS)
+
+    // useEffect(() => {
+    //     console.log(buyngetms, percentoffs)
+    // })
 
     return (
         <div className='w-full border-t-[#ccc]'>
             <div>
                 <div className='w-[45%] flex flex-row justify-between cursor-pointer py-[5px] hover:bg-gray-50' 
                     onClick={() => {
-                        if ((count === 0 || count === 2) && buyNGetMS !== undefined) {
+                        if (count === 0 || count === 2) {
                             setCount(1)
                         }
                         else if(count === 1) {
@@ -130,7 +129,7 @@ const PromotionLine = ({ buyNGetMS, percentOffs, num1, num2 }: Props) => {
                         }}}>
                     <div>
                         <p className='pl-[40px]'>- Mua N vé tặng M vé</p>
-                        <p className='pl-[60px]'>Số lượng: {num1}</p>
+                        <p className='pl-[60px]'>Số lượng: {buyngetms.length}</p>
                     </div>
                     <button className="h-full ml-[50px] p-[5px] cursor-pointer text-white bg-[#1447E6] rounded-[5px] hover:underline" 
                         onClick={() => {
@@ -139,12 +138,12 @@ const PromotionLine = ({ buyNGetMS, percentOffs, num1, num2 }: Props) => {
                         }}
                     >+ Chi tiết khuyến mãi</button>
                 </div>
-                { (count === 1 && num1 !== 0) && <BuyNGetM buyngetms={buyNGetMS} /> }
+                { (count === 1 && buyngetms.length > 0) && <BuyNGetM buyngetms={buyngetms} /> }
             </div>
             <div>
                 <div className='w-[45%] flex flex-row justify-between cursor-pointer py-[5px] hover:bg-gray-50' 
                     onClick={() => {
-                        if ((count === 0 || count === 1) && percentOffs !== undefined) {
+                        if (count === 0 || count === 1) {
                             setCount(2)
                         }
                         else if(count === 2) {
@@ -152,7 +151,7 @@ const PromotionLine = ({ buyNGetMS, percentOffs, num1, num2 }: Props) => {
                         }}}>
                     <div>
                         <p className='pl-[40px]'>- Chiết khấu theo phần trăm hóa đơn</p>
-                        <p className='pl-[60px]'>Số lượng: {num2}</p>
+                        <p className='pl-[60px]'>Số lượng: {percentoffs.length}</p>
                     </div>
                     <button className="h-full ml-[50px] p-[5px] cursor-pointer text-white bg-[#1447E6] rounded-[5px] hover:underline" 
                         onClick={() => {
@@ -161,7 +160,7 @@ const PromotionLine = ({ buyNGetMS, percentOffs, num1, num2 }: Props) => {
                         }}
                     >+ Chi tiết khuyến mãi</button>
                 </div>
-                { (count === 2 && num2 !== 0) && <PercentOff percentoffs={percentOffs} /> }
+                { (count === 2 && percentoffs.length > 0) && <PercentOff percentoffs={percentoffs} /> }
                 { isOpen && <PromotionDetailModal setIsOpen={setIsOpen} isEdit={false} type={type} /> }
             </div>
         </div>

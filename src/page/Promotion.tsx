@@ -13,17 +13,20 @@ import DeleteMocal from '../components/DeleteModal'
 import { setPromotions } from '../redux/promotionsSlice'
 import type {Promotion as PromotionInterface} from '../interface/Interface'
 import { setCurrentID } from '../redux/currentSelectedSlice'
+import { setBuyNGetMs } from '../redux/buyNGetMSlice'
+import { setPercentOffs } from '../redux/percentOffSlice'
+// import type { PromotionLine as PromotionLineInterface } from '../interface/Interface'
 
 const Promotion = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [isDelete, setIsDelete] = useState<boolean>(false)
     const [isEdit, setIsEdit] = useState<boolean>(false)
     // const [promotions, setPromotions] = useState<Promotion[]>([])
-    const [currentnav, setCurrentnav] = useState<number>(0)
-    const [buyngetms, setBuyngetms] = useState([])
-    const [percentoffs, setPercentoffs] = useState([])
-    const [num1, setNum1] = useState<number>(0)
-    const [num2, setNum2] = useState<number>(0)
+    const [currentnav, setCurrentnav] = useState<number | undefined>(0)
+    // const [buyngetms, setBuyngetms] = useState([])
+    // const [percentoffs, setPercentoffs] = useState([])
+    // const [num1, setNum1] = useState<number>(0)
+    // const [num2, setNum2] = useState<number>(0)
 
     const token = useSelector((state: RootState) => state.auth.accessToken)
     const dispatch = useDispatch()
@@ -67,12 +70,15 @@ const Promotion = () => {
                     },
                 }
             )
-            // console.log('line data', line.data)
-            setNum1(line.data.buyNGetMS.length)
-            setNum2(line.data.percentOffs.length)
+            // console.log('line data', line.data.percentOffs)
+            // console.log('line data', line.data.buyNGetMS)
+            // setNum1(line.data.buyNGetMS.length)
+            // setNum2(line.data.percentOffs.length)
             
-            setBuyngetms(line.data.buyNGetMS)
-            setPercentoffs(line.data.percentOffs)
+            dispatch(setBuyNGetMs(line.data.buyNGetMS))
+            dispatch(setPercentOffs(line.data.percentOffs))
+            // setBuyngetms(line.data.buyNGetMS)
+            // setPercentoffs(line.data.percentOffs)
         }
         catch (err) {
             console.log(err)
@@ -168,7 +174,7 @@ const Promotion = () => {
                                         </tr>
                                         <tr className='border-b'>
                                             <td colSpan={6}>
-                                                {currentnav === promo.id && <PromotionLine buyNGetMS={buyngetms} percentOffs={percentoffs} num1={num1} num2={num2} />}
+                                                {currentnav === promo.id && <PromotionLine />}
                                             </td>
                                         </tr>
                                     </>
@@ -177,7 +183,7 @@ const Promotion = () => {
                     </table>
                 </div>
             </div>
-            { isOpen && (isEdit ? <PromotionModal isEdit={true} setIsOpen={setIsOpen} /> : <PromotionModal isEdit={false} setIsOpen={setIsOpen} /> ) }
+            { isOpen && (isEdit ? <PromotionModal isEdit={true} setIsOpen={setIsOpen} promo={selectedPromo} /> : <PromotionModal isEdit={false} setIsOpen={setIsOpen} /> ) }
             { isDelete && <DeleteMocal setIsDelete={setIsDelete} /> }
         </div>
     )

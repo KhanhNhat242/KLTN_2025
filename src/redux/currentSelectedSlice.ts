@@ -1,7 +1,7 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 interface CurrentSelected {
-    id: number,
+    id: number | undefined,
 }
 
 const initialState: CurrentSelected = {
@@ -12,7 +12,7 @@ const currentSelectedSlice = createSlice({
     name: 'currentSelected',
     initialState,
     reducers: {
-        setCurrentID: (state, action: PayloadAction<number>) => {
+        setCurrentID: (state, action: PayloadAction<number | undefined>) => {
             state.id = action.payload
         },
         clearCurrentID: (state) => {

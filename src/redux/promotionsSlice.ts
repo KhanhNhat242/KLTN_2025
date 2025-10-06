@@ -1,5 +1,4 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import type { RootState } from './store'
 
 interface Promotion {
     id?: number,
@@ -35,6 +34,5 @@ const promotionSlice = createSlice({
     }
 })
 
-export const selectPromotionById = (state: RootState, id: number) => state.promotions.find((promo) => promo.id === id)
 export const { setPromotions, add, update, remove } = promotionSlice.actions
 export default promotionSlice.reducer

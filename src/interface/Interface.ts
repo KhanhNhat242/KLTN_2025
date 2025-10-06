@@ -9,3 +9,25 @@ export interface Promotion {
     usageLimit: number,
     usedCount: number
 }
+
+export interface PercentOff {
+    id: number,
+    percent: number,
+    maxOff: number,
+    minPrice: number,
+}
+
+export interface BuyNGetM {
+    id: number,
+    buyN: number,
+    getM: number,
+}
+
+export interface PromotionLine {
+    id: number,
+    percent?: number,
+    maxOff?: number,
+    minPrice?: number,
+    buyN?: number,
+    getM?: number,
+}
