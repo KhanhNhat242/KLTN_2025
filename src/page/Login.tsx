@@ -5,7 +5,7 @@ import pwdicon from '../assets/pwdicon.png'
 import eyeicon from '../assets/eyeicon.png'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
-import { setAccessToken } from '../redux/authSlice'
+import { setAccessToken, setRefreshToken } from '../redux/authSlice'
 import { useDispatch } from 'react-redux'
 
 const Login = () => {
@@ -35,7 +35,11 @@ const Login = () => {
         .then((res) => {
             // alert('log in success')
             dispatch(setAccessToken(res.data.accessToken))
-            navigate('/bus')
+            dispatch(setRefreshToken(res.data.refreshToken))
+
+            localStorage.setItem('accessToken', res.data.accessToken)
+            localStorage.setItem('refreshToken', res.data.refreshToken)
+            navigate('/station')
         })
         .catch(() => {
             alert('log in fail!')

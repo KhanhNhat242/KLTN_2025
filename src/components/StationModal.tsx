@@ -5,7 +5,7 @@ interface Props {
     isEdit: boolean,
 }
 
-const BusModal = ({ setIsOpen, isEdit }: Props) => {
+const StationModal = ({ setIsOpen, isEdit }: Props) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50" aria-labelledby="dialog-title" role="dialog" aria-modal="true">
         <div className="fixed inset-0 bg-gray-500/75 transition-opacity" onClick={() => setIsOpen(false)}></div>
@@ -14,26 +14,7 @@ const BusModal = ({ setIsOpen, isEdit }: Props) => {
                 <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                     <h3 id="dialog-title" className="text-base text-[20px] mb-[10px] font-bold text-gray">{isEdit ? 'Chỉnh sửa thông tin tuyến xe' : 'Tạo tuyến xe mới'}</h3>
                     <div className='w-full flex flex-col'>
-                        <div className='w-full flex flex-row justify-between my-[5px]'>
-                            <div className='w-[48%]'>
-                                <p>Biển số</p>
-                                <input type="text" className='w-full p-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}/>
-                            </div>
-                        </div>
-                        <div className='w-full flex flex-row justify-between my-[5px]'>
-                            <div className='w-[48%]'>
-                                <p>Hãng xe</p>
-                                <input type="text" className='w-full p-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}/>
-                            </div>
-                            <div className='w-[48%]'>
-                                <p>Loại xe</p>
-                                <select name="" id="" className='w-full p-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}>
-                                    <option value="">STANDARD_BUS_VIP</option>
-                                    <option value="">LIMOUSINE</option>
-                                    <option value="">STANDARD_BUS_NORMAL</option>
-                                </select>
-                            </div>
-                        </div>
+                      
                     </div>
                 </div>
             </div>
@@ -50,4 +31,4 @@ const BusModal = ({ setIsOpen, isEdit }: Props) => {
   )
 }
 
-export default BusModal
+export default StationModal

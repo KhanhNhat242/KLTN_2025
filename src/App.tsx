@@ -7,8 +7,20 @@ import Ticket from './page/Ticket'
 import Promotion from './page/Promotion'
 import BusDetail from './page/BusDetail'
 import Login from './page/Login'
+import Station from './page/Station'
+import { useDispatch } from 'react-redux'
+import { setAccessToken, setRefreshToken } from './redux/authSlice'
 
 function App() {
+  const accessToken = localStorage.getItem('accessToken')
+  const refreshToken = localStorage.getItem('refreshToken')
+
+  const dispatch = useDispatch()
+
+  if (accessToken && refreshToken) {
+    dispatch(setAccessToken(accessToken))
+    dispatch(setRefreshToken(refreshToken))
+  }
 
   return (
     <>
@@ -21,6 +33,7 @@ function App() {
           <Route path='/ticket' element={<Ticket />}/>
           <Route path='/promotion' element={<Promotion />} />
           <Route path='/bus-detail' element={<BusDetail />} />
+          <Route path='/station' element={<Station />} />
         </Routes>
       </Router>
     </>
