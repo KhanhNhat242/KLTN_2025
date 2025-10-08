@@ -12,8 +12,34 @@ import currenticon from '../assets/currenticon.png'
 import soldicon from '../assets/soldicon.png'
 import emptyicon from '../assets/emptyicon.png'
 import SeatMap from '../components/SeatMap'
+import type { Bus } from '../interface/Interface'
+import { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 
 const BusDetail = () => {
+    const [type, setType] = useState<string>('')
+    const [seatnum, setSeatnum] = useState<number>(0)
+    const [isLimousine, setIsLimousine] = useState<boolean>(false)
+
+    const location = useLocation() 
+    const { busdata } = location.state
+
+    useEffect(() => {
+        console.log(busdata)
+        if (busdata.type === 'STANDARD_BUS_VIP') {
+            setType('VIP')
+            setSeatnum(36)
+        }
+        else if (busdata.type === 'STANDARD_BUS_NORMAL') {
+            setType('Thường')
+            setSeatnum(36)
+        }
+        else if (busdata.type === 'LIMOUSINE') {
+            setIsLimousine(true)
+            setType('Limousine')
+            setSeatnum(24)
+        }
+    }, [])
 
     return (
         <div className='w-full flex flex-row'>
@@ -28,30 +54,30 @@ const BusDetail = () => {
                             <h2 className='font-bold pb-[10px]'>Thông tin xe</h2>
                             <p>Hoạt động</p>
                         </div>
-                        <div className='w-full flex flex-row justify-between pt-[10px]'>
+                        {/* <div className='w-full flex flex-row justify-between pt-[10px]'>
                             <p>Tài xế chính:</p>
                             <p className='font-bold'>Nguyễn Văn A</p>
-                        </div>
+                        </div> */}
                         <div className='w-full flex flex-row justify-between'>
                             <p>Biển số:</p>
-                            <p className='font-bold'>51B-12333</p>
+                            <p className='font-bold'>{busdata.plateNumber}</p>
                         </div>
                         <div className='w-full flex flex-row justify-between'>
                             <p>Loại xe:</p>
-                            <p className='font-bold'>Giường nằm</p>
+                            <p className='font-bold'>{type}</p>
                         </div>
                         <div className='w-full flex flex-row justify-between'>
                             <p>Số ghế:</p>
-                            <p className='font-bold'>36</p>
+                            <p className='font-bold'>{seatnum}</p>
                         </div>
                         <div className='w-full flex flex-row justify-between'>
                             <p>Hãng xe</p>
-                            <p className='font-bold'>Thaco</p>
+                            <p className='font-bold'>{busdata.brand}</p>
                         </div>
-                        <div className='w-full flex flex-row justify-between'>
+                        {/* <div className='w-full flex flex-row justify-between'>
                             <p>Ngày cập nhật gần nhất:</p>
                             <p className='font-bold'>12/03/2025</p>
-                        </div>
+                        </div> */}
                         <div className='mt-[10px] p-[10px] bg-gray-100 rounded-[10px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}>
                             <h2 className='text-left font-bold pb-[5px]' style={{borderStyle: 'solid', borderBottomWidth: 1, borderBottomColor: '#ccc'}}>Tiện ích</h2>
                             <div className='flex flex-row pt-[10px]'>
@@ -72,7 +98,7 @@ const BusDetail = () => {
                     <div className='w-[70%] bg-white'>
                         <h2 className='font-bold text-left p-[10px]' style={{borderStyle: 'solid', borderBottomColor: '#ccc', borderBottomWidth: 2}}>Sơ đồ ghế</h2>
                         <div className='w-full p-[10px] flex flex-row'>
-                            <SeatMap isLimousine={false} />
+                            <SeatMap isLimousine={isLimousine} />
                             <div className='w-[50% pl-[20px]'>
                                 <h2 className='h-[40px] font-bold text-left pt-[20px] text-gray'>Trạng thái</h2>
                                 <div className='w-full mt-[30px]'>

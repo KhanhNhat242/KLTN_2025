@@ -18,7 +18,7 @@ const busSlice = createSlice({
             }
         },
         remove: (state, action: PayloadAction<number>) => {
-            return state.filter(promo => promo.id !== action.payload)
+            return state.filter(bus => bus.id !== action.payload)
         },
     }
 })

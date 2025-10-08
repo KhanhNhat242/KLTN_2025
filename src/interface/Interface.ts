@@ -48,6 +48,30 @@ export interface Bus {
     description: string,
 }
 
+export interface SeatMapImg {
+  id: number
+  bucket: string
+  objectKey: string
+  contentType: string
+  size: number
+  createdAt: string
+  updatedAt: string
+  isDeleted: boolean
+  deletedAt: string
+  deletedBy: string
+}
+
+export interface SeatMap {
+  id: number
+  name: string
+  createdAt: string
+  updatedAt: string
+  isDeleted: boolean
+  deletedAt: string
+  deletedBy: string
+  seatMapImg: SeatMapImg
+}
+
 export interface Station {
     id: number,
     addresID: number, 

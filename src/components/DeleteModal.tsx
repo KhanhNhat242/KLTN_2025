@@ -3,7 +3,8 @@ interface Props {
     setIsDelete: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
-const DeleteModal = ({ setIsDelete }: Props) => {
+const DeleteModal = ({ setIsDelete}: Props) => {
+
     return (
         <div className="fixed inset-0 flex items-center justify-center z-50" aria-labelledby="dialog-title" role="dialog" aria-modal="true">
             <div className="fixed inset-0 bg-gray-500/75 transition-opacity" onClick={() => setIsDelete(false)}></div>
@@ -20,7 +21,11 @@ const DeleteModal = ({ setIsDelete }: Props) => {
                     <button onClick={() => setIsDelete(false)} className="p-[8px] justify-center rounded-[10px] bg-[#ccc] cursor-pointer mr-[10px]">
                         Hủy bỏ
                     </button>
-                    <button onClick={() => setIsDelete(false)} className="p-[8px] justify-center rounded-[10px] bg-[#1447E6] text-white cursor-pointer">
+                    <button className="p-[8px] justify-center rounded-[10px] bg-[#1447E6] text-white cursor-pointer"
+                        onClick={() => {
+                            setIsDelete(false)
+                            }
+                        }>
                         Xác nhận
                     </button>
                 </div>

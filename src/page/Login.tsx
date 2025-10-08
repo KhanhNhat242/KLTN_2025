@@ -39,7 +39,7 @@ const Login = () => {
 
             localStorage.setItem('accessToken', res.data.accessToken)
             localStorage.setItem('refreshToken', res.data.refreshToken)
-            navigate('/station')
+            navigate('/bus')
         })
         .catch(() => {
             alert('log in fail!')

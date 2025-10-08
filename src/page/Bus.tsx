@@ -3,22 +3,26 @@ import Header from '../components/Header'
 import HeaderTop from '../components/HeaderTop';
 import Search from '../components/Search';
 import downloadicon from '../assets/downloadicon.png'
-import DeleteMocal from '../components/DeleteModal';
+import DeleteModal from '../components/DeleteModal';
 import BusModal from '../components/BusModal';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '../redux/store';
 import { setBuses } from '../redux/busSlice';
 import axios from 'axios';
+import type { Bus } from '../interface/Interface';
+import { useNavigate } from 'react-router-dom';
 
 const Bus = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [isEdit, setIsEdit] = useState<boolean>(false)
   const [isDelete, setIsDelete] = useState<boolean>(false)
+  const [selectedBus, setSelectedBus] = useState<Bus>()
 
   const token = useSelector((state: RootState) => state.auth.accessToken)
   const dispatch = useDispatch()
   const buses = useSelector((state: RootState) => state.buses)
+  const navigate = useNavigate()
 
   const getData = async () => {
     await axios.get('https://apigateway.microservices.appf4s.io.vn/services/msroute/api/vehicles', {
@@ -34,8 +38,8 @@ const Bus = () => {
         },
     })
     .then((res) => {
-      console.log(res.data)
-        dispatch(setBuses(res.data))
+      // console.log(res.data)
+      dispatch(setBuses(res.data))
     })
     .catch(() => {
         console.log('Get data fail!')
@@ -46,7 +50,7 @@ const Bus = () => {
     }
 
     useEffect(() => {
-        console.log('token:', token)
+        // console.log('token:', token)
         if (token) {
             getData()
         }
@@ -90,7 +94,7 @@ const Bus = () => {
               <tbody>
                 {buses.map((bus) => {
                     return (
-                      <tr key={bus.id} className="hover:bg-gray-50">
+                      <tr key={bus.id} className="cursor-pointer hover:bg-gray-50" onClick={() => navigate('/bus-detail', { state: { busdata: bus } })}>
                         <td className="p-3 border-b">{bus.id}</td>
                         <td className="p-3 border-b">{bus.type}</td>
                         <td className="p-3 border-b">{bus.plateNumber}</td>
@@ -99,6 +103,7 @@ const Bus = () => {
                         <td className="p-3 border-b space-x-2">
                           <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
                             onClick={() => {
+                              setSelectedBus(bus)
                               setIsOpen(true)
                               setIsEdit(true)
                             }}>Sửa</button>
@@ -106,15 +111,14 @@ const Bus = () => {
                         </td>
                       </tr>
                     )
-
                 }
                 )}
               </tbody>
             </table>
           </div>
         </div>
-        {isOpen && (isEdit ? <BusModal isEdit={true} setIsOpen={setIsOpen} /> : <BusModal isEdit={false} setIsOpen={setIsOpen} /> ) }
-        {isDelete && <DeleteMocal setIsDelete={setIsDelete} />}
+        {isOpen && (isEdit ? <BusModal isEdit={true} setIsOpen={setIsOpen} bus={selectedBus} /> : <BusModal isEdit={false} setIsOpen={setIsOpen} /> ) }
+        {isDelete && <DeleteModal setIsDelete={setIsDelete}/>}
     </div>
   )
 }
