@@ -49,51 +49,60 @@ export interface Bus {
 }
 
 export interface Station {
-    id: number,
-    addresID: number, 
-    name: string , 
-    description: string, 
-    active: boolean,
+  id: number;
+  addresID: number;
+  name: string;
+  description: string;
+  active: boolean;
+  address: Address | null;
+  fullAddress?: string;
 }
 
 export interface Address {
-    id: number,
-    streetAddress: string,
-    wardID: number,
+  id: number;
+  streetAddress: string | null;
+  ward: Ward | null;
 }
 
 export interface Ward {
-    id: number,
-    districtID: number, 
-    wardCode: number, 
-    name: string, 
-    nameEN: string, 
-    fullName: string, 
-    fullNameEN: string, 
-    codeName: string,
-    administrativeUnitID: number,
+  id: number;
+  addressID: number;
+  districtID: number;
+  wardCode: number;
+  name: string | null;
+  nameEN: string;
+  fullName: string;
+  fullNameEN: string;
+  codeName: string;
+  administrativeUnitID: number;
+  district: District | null;
 }
 
 export interface District {
-    id: number, 
-    provinceID: number, 
-    districtCode: number, 
-    name: string, 
-    nameEN: string, 
-    fullName: string, 
-    fullNameEN: string, 
-    codeName: string,
-    administrativeUnitID: number,
+  id: number;
+  provinceID: number;
+  districtCode: number;
+  name: string | null;
+  nameEN: string;
+  fullName: string;
+  fullNameEN: string;
+  codeName: string;
+  administrativeUnitID: number;
+  province: Province | null;
 }
 
 export interface Province {
     id: number, 
     provinceCode: number, 
-    name: string, 
+    name: string | null, 
     nameEN: string, 
     fullName: string, 
     fullNameEN: string, 
     codeName: string,
     administrativeUnitID: number, 
     administrativeRegionID: number,
+}
+
+export interface StationResponse {
+  content: Station[];
 }
