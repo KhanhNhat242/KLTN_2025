@@ -94,8 +94,8 @@ const Bus = () => {
               <tbody>
                 {buses.map((bus) => {
                     return (
-                      <tr key={bus.id} className="cursor-pointer hover:bg-gray-50" onClick={() => navigate('/bus-detail', { state: { busdata: bus } })}>
-                        <td className="p-3 border-b">{bus.id}</td>
+                      <tr key={bus.id} className="cursor-pointer hover:bg-gray-50">
+                        <td className="p-3 border-b"  onClick={() => navigate('/bus-detail', { state: { busdata: bus } })}>{bus.id}</td>
                         <td className="p-3 border-b">{bus.type}</td>
                         <td className="p-3 border-b">{bus.plateNumber}</td>
                         <td className="p-3 border-b">{bus.brand}</td>

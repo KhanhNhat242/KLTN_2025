@@ -74,50 +74,32 @@ export interface SeatMap {
 
 export interface Station {
     id: number,
-    addresID: number, 
     name: string , 
     description: string, 
     active: boolean,
+    address: Address,
 }
 
 export interface Address {
     id: number,
-    streetAddress: string,
-    wardID: number,
+    streetAddress?: string,
+    ward?: Ward,
+}
+
+export interface Province {
+    id: number,
+    provinceCode: number,
+    name: string,
+}
+
+export interface District {
+    id: number,
+    districtCode: number,
+    name: string,
 }
 
 export interface Ward {
     id: number,
-    districtID: number, 
-    wardCode: number, 
-    name: string, 
-    nameEN: string, 
-    fullName: string, 
-    fullNameEN: string, 
-    codeName: string,
-    administrativeUnitID: number,
-}
-
-export interface District {
-    id: number, 
-    provinceID: number, 
-    districtCode: number, 
-    name: string, 
-    nameEN: string, 
-    fullName: string, 
-    fullNameEN: string, 
-    codeName: string,
-    administrativeUnitID: number,
-}
-
-export interface Province {
-    id: number, 
-    provinceCode: number, 
-    name: string, 
-    nameEN: string, 
-    fullName: string, 
-    fullNameEN: string, 
-    codeName: string,
-    administrativeUnitID: number, 
-    administrativeRegionID: number,
+    wardCode: number,
+    name: string,
 }

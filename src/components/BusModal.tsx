@@ -21,35 +21,35 @@ const BusModal = ({ setIsOpen, isEdit, bus }: Props) => {
     const dispatch = useDispatch()
 
     const handleCreate = async () => {
-        const now = new Date().toISOString()
+        // const now = new Date().toISOString()
 
-        const res = await axios.post('https://apigateway.microservices.appf4s.io.vn/services/msroute/api/seat-maps', 
-            { 
-                "name": "seat-map-success", 
-                "createdAt": now,
-                "updatedAt": now,
-                "isDeleted": true,
-                "deletedAt": "2025-10-07T17:25:14.216Z",
-                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                "seatMapImg": { "id": 1,
-                    "bucket": "string",
-                    "objectKey": "string",
-                    "contentType": "string",
-                    "size": 0,
-                    "createdAt": "2025-10-07T17:25:14.216Z",
-                    "updatedAt": "2025-10-07T17:25:14.216Z",
-                    "isDeleted": true,
-                    "deletedAt": "2025-10-07T17:25:14.216Z",
-                    "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6" } },
-                { 
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'accept': '*/*',
-                    'Content-Type': 'application/json',
-                } 
-                },
-             )
-        const seatmapid = res.data.id
+        // const res = await axios.post('https://apigateway.microservices.appf4s.io.vn/services/msroute/api/seat-maps', 
+        //     { 
+        //         "name": "seat-map-success", 
+        //         "createdAt": now,
+        //         "updatedAt": now,
+        //         "isDeleted": true,
+        //         "deletedAt": "2025-10-07T17:25:14.216Z",
+        //         "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        //         "seatMapImg": { "id": 1,
+        //             "bucket": "string",
+        //             "objectKey": "string",
+        //             "contentType": "string",
+        //             "size": 0,
+        //             "createdAt": "2025-10-07T17:25:14.216Z",
+        //             "updatedAt": "2025-10-07T17:25:14.216Z",
+        //             "isDeleted": true,
+        //             "deletedAt": "2025-10-07T17:25:14.216Z",
+        //             "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6" } },
+        //         { 
+        //         headers: {
+        //             'Authorization': `Bearer ${token}`,
+        //             'accept': '*/*',
+        //             'Content-Type': 'application/json',
+        //         } 
+        //         },
+        //      )
+        // const seatmapid = res.data.id
 
         console.log(type, plateNumber, brand, description)
         await axios.post('https://apigateway.microservices.appf4s.io.vn/services/msroute/api/vehicles', 

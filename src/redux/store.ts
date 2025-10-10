@@ -7,6 +7,7 @@ import buyNGetMSlice from './buyNGetMSlice'
 import percentOffSlice from './percentOffSlice'
 import tripsSlice from './tripSlice'
 import stationSlice from './stationSlice'
+import addressSlice from './addressSlice'
 
 export const store = configureStore({
     reducer: {
@@ -18,6 +19,7 @@ export const store = configureStore({
         percentOffS: percentOffSlice, 
         trips: tripsSlice,
         stations: stationSlice,
+        addresses: addressSlice,
     },
 })
 

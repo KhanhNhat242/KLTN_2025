@@ -10,15 +10,19 @@ import { useDispatch, useSelector } from 'react-redux'
 import type { RootState } from '../redux/store'
 import axios from 'axios'
 import { setStations } from '../redux/stationSlice'
+import type { Address } from '../interface/Interface'
+import { add, setAddresses } from '../redux/addressSlice'
 
 const Station = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [isEdit, setIsEdit] = useState<boolean>(false)
     const [isDelete, setIsDelete] = useState<boolean>(false)
+    const [addressIDArr, setAddressIDArr] = useState<Number[]>([])
 
     const token = useSelector((state: RootState) => state.auth.accessToken)
     const dispatch = useDispatch()
     const stations = useSelector((state: RootState) => state.stations)
+    const addresses = useSelector((state: RootState) => state.addresses)
 
     const getData = async () => {
         await axios.get('https://apigateway.microservices.appf4s.io.vn/services/msroute/api/stations', {
@@ -46,6 +50,7 @@ const Station = () => {
         if (token) {
             getData()
         }
+        console.log(addresses)
     }, [token])
 
     return (
@@ -77,28 +82,32 @@ const Station = () => {
                     <tr>
                         <th className="p-3 border-b">Mã trạm</th>
                         <th className="p-3 border-b">Tên trạm</th>
+                        <th className="p-3 border-b">Địa chỉ</th>
                         <th className="p-3 border-b">Mô tả</th>
                         <th className="p-3 border-b">Trạng thái</th>
                         <th className="p-3 border-b">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {stations.map((station) => {
+                    {stations.map((station) => {  
+                        setAddressIDArr([...addressIDArr, station.address.id])
+                        
                         return (
-                        <tr key={station.id} className="hover:bg-gray-50">
-                            <td className="p-3 border-b">{station.id}</td>
-                            <td className="p-3 border-b">{station.name}</td>
-                            <td className="p-3 border-b">{station.description}</td>
-                            <td className="p-3 border-b">{station.active ? "Đang hoạt động" : "Ngưng hoạt động"}</td>
-                            <td className="p-3 border-b space-x-2">
-                                <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
-                                    onClick={() => {
-                                        setIsOpen(true)
-                                        setIsEdit(true)
-                                    }}>Sửa</button>
-                                <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" onClick={() => setIsDelete(true)}>Xóa</button>
-                            </td>
-                        </tr>
+                            <tr key={station.id} className="hover:bg-gray-50">
+                                <td className="p-3 border-b">{station.id}</td>
+                                <td className="p-3 border-b">{station.name}</td>
+                                <td className="p-3 border-b">{station.address.id}</td>
+                                <td className="p-3 border-b">{station.description}</td>
+                                <td className="p-3 border-b">{station.active ? "Đang hoạt động" : "Ngưng hoạt động"}</td>
+                                <td className="p-3 border-b space-x-2">
+                                    <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
+                                        onClick={() => {
+                                            setIsOpen(true)
+                                            setIsEdit(true)
+                                        }}>Sửa</button>
+                                    <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" onClick={() => setIsDelete(true)}>Xóa</button>
+                                </td>
+                            </tr>
                         )
 
                     }
