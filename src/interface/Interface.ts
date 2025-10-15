@@ -78,12 +78,12 @@ export interface Station {
     description: string, 
     active: boolean,
     address: Address,
+    streetAddress?: string,
 }
 
 export interface Address {
     id: number,
-    streetAddress?: string,
-    ward?: Ward,
+    streetAddress: string,
 }
 
 export interface Province {

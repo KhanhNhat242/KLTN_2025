@@ -3,6 +3,7 @@ import type { District, Province, Ward } from '../interface/Interface'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
 import type { RootState } from '../redux/store'
+import { add } from '../redux/stationSlice'
 
 interface Props {
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>,
@@ -13,13 +14,16 @@ const StationModal = ({ setIsOpen, isEdit }: Props) => {
     const [name, setName] = useState<string>('')
     const [isActive, setIsActive] = useState<string>('')
     const [description, setDescription] = useState<string>('')
+    // const [currentProvince, setCurrentProvince] = useState<Province>()
+    // const [currentDistrict, setCurrentDistrict] = useState<District>()
+    // const [currentWard, setCurrentWard] = useState<Ward>()
     const [provinces, setProvinces] = useState<Province[]>([])
     const [districts, setDistricts] = useState<District[]>([])
     const [wards, setWards] = useState<Ward[]>([])
     const [street, setStreet] = useState<string>('')
     const [currentPID, setCurrentPID] = useState<number>(0)
     const [currentDID, setCurrentDID] = useState<number>(0)
-    const [currentWName, setCurrentWName] = useState<string>('')
+    const [currentWID, setCurrentWID] = useState<number>(0)
 
     const token = useSelector((state: RootState) => state.auth.accessToken)
     const dispatch = useDispatch()
@@ -85,10 +89,127 @@ const StationModal = ({ setIsOpen, isEdit }: Props) => {
     }
 
     const handleCreate = async () => {
-        // const now = new Date().toISOString()
+        const now = new Date().toISOString()
 
-        console.log(currentWName, currentDID, currentPID)
+        let active = true
+        if (isActive === 'NOT_ACTIVE') {
+            active = false
+        }
+        else if (isActive === 'ACTIVE') {
+            active = true
+        }
 
+        console.log(name, active, description, street)
+        const cp = provinces.find((p) => p.id === currentPID)
+        const cd = districts.find((d) => d.id === currentDID)
+        const cw = wards.find((w) => w.id === currentWID)
+        console.log(cp, cd, cw)
+
+        const res = await axios.post('https://apigateway.microservices.appf4s.io.vn/services/msroute/api/addresses', {
+            "streetAddress": `${street} ${cw?.name} ${cd?.name} ${cp?.name}`,
+            "latitude": 0,
+            "longitude": 0,
+            "createdAt": now,
+            "updatedAt": now,
+            "isDeleted": true,
+            "deletedAt": "2025-10-15T09:26:59.887Z",
+            "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            "ward": {
+                "id": cw?.id,
+                "wardCode": cw?.wardCode,
+                "name": cw?.name,
+                "nameEn": "string",
+                "fullName": "string",
+                "fullNameEn": "string",
+                "codeName": "string",
+                "administrativeUnitId": 0,
+                "createdAt": "2025-10-15T09:26:59.887Z",
+                "updatedAt": "2025-10-15T09:26:59.887Z",
+                "isDeleted": true,
+                "deletedAt": "2025-10-15T09:26:59.887Z",
+                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                "district": {
+                    "id": cd?.id,
+                    "districtCode": cd?.districtCode,
+                    "name": cd?.name,
+                    "nameEn": "string",
+                    "fullName": "string",
+                    "fullNameEn": "string",
+                    "codeName": "string",
+                    "administrativeUnitId": 0,
+                    "createdAt": "2025-10-15T09:26:59.887Z",
+                    "updatedAt": "2025-10-15T09:26:59.887Z",
+                    "isDeleted": true,
+                    "deletedAt": "2025-10-15T09:26:59.887Z",
+                    "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    "province": {
+                        "id": cp?.id,
+                        "provinceCode": cp?.provinceCode,
+                        "name": cp?.name,
+                        "nameEn": "string",
+                        "fullName": "string",
+                        "fullNameEn": "string",
+                        "codeName": "string",
+                        "administrativeUnitId": 0,
+                        "administrativeRegionId": 0,
+                        "createdAt": "2025-10-15T09:26:59.887Z",
+                        "updatedAt": "2025-10-15T09:26:59.887Z",
+                        "isDeleted": true,
+                        "deletedAt": "2025-10-15T09:26:59.887Z",
+                        "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                    }
+                }
+            }
+        }, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'accept': '*/*',
+                'Content-Type': 'application/json',
+            }  
+        })
+
+        await axios.post('https://apigateway.microservices.appf4s.io.vn/services/msroute/api/stations', {
+            "name": name,
+            "phoneNumber": "0123456666",
+            "description": description,
+            "active": active,
+            "createdAt": "2025-10-15T09:21:57.774Z",
+            "updatedAt": "2025-10-15T09:21:57.774Z",
+            "isDeleted": true,
+            "deletedAt": "2025-10-15T09:21:57.774Z",
+            "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            "address": {
+                "id": res.data.id,
+                "streetAddress": res.data.streetAddress,
+            },
+            "stationImg": {
+                "id": 1,
+                "bucket": "string",
+                "objectKey": "string",
+                "contentType": "string",
+                "size": 0,
+                "createdAt": "2025-10-15T09:21:57.774Z",
+                "updatedAt": "2025-10-15T09:21:57.774Z",
+                "isDeleted": true,
+                "deletedAt": "2025-10-15T09:21:57.774Z",
+                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            }
+        }, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'accept': '*/*',
+                'Content-Type': 'application/json',
+            }  
+        })
+        .then((res) => {
+            console.log(res.data)
+            dispatch(add(res.data))
+            alert('Create success')
+        })
+        .catch((error) => {
+            alert('Error when creating!')
+            console.log(error)
+        })
     }
 
     useEffect(() => {
@@ -119,14 +240,14 @@ const StationModal = ({ setIsOpen, isEdit }: Props) => {
                                 <div className='w-[48%]'>
                                     <p>Trạng thái</p>
                                     <select defaultValue={isActive} onChange={(e) => setIsActive(e.target.value)} name="" id="" className='w-full p-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}>
-                                        <option value='ACTIVE'>Đang hoạt động</option>
+                                        <option value='ACTIVE' defaultChecked>Đang hoạt động</option>
                                         <option value='NOT_ACTIVE'>Ngưng hoạt động</option>
                                     </select>
                                 </div>
                             </div>
                             <div className='w-full justify-between my-[5px]'>
                                 <p>Mô tả</p>
-                                <textarea value={description} onChange={(e) => setDescription(e.target.value)} name="" id="" className='w-full' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}></textarea>
+                                <textarea value={description} onChange={(e) => setDescription(e.target.value)} name="" id="" className='w-full p-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}></textarea>
                             </div>
                             <div className='w-full justify-between my-[5px]'>
                                 <p>Địa chỉ:</p>
@@ -159,7 +280,7 @@ const StationModal = ({ setIsOpen, isEdit }: Props) => {
                                     <div className='w-[48%] flex flex-row items-center'>
                                         <p>Phường</p>
                                         <select name="" id="" className='w-full ml-[5px] p-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}
-                                            onChange={(e) => setCurrentWName(e.target.value)}
+                                            onChange={(e) => setCurrentWID(Number(e.target.value))}
                                         >
                                             <option value="">Tất cả</option>
                                             {

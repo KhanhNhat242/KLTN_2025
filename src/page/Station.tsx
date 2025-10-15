@@ -9,20 +9,18 @@ import StationModal from '../components/StationModal'
 import { useDispatch, useSelector } from 'react-redux'
 import type { RootState } from '../redux/store'
 import axios from 'axios'
-import { setStations } from '../redux/stationSlice'
-import type { Address } from '../interface/Interface'
-import { add, setAddresses } from '../redux/addressSlice'
+import { setStations, update } from '../redux/stationSlice'
+import type { Address, Station } from '../interface/Interface'
 
 const Station = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [isEdit, setIsEdit] = useState<boolean>(false)
     const [isDelete, setIsDelete] = useState<boolean>(false)
-    const [addressIDArr, setAddressIDArr] = useState<Number[]>([])
+    const [addresses, setAddresses] = useState<Address[]>([])
 
     const token = useSelector((state: RootState) => state.auth.accessToken)
     const dispatch = useDispatch()
     const stations = useSelector((state: RootState) => state.stations)
-    const addresses = useSelector((state: RootState) => state.addresses)
 
     const getData = async () => {
         await axios.get('https://apigateway.microservices.appf4s.io.vn/services/msroute/api/stations', {
@@ -38,7 +36,7 @@ const Station = () => {
             },
         })
         .then((res) => {
-            console.log(res.data)
+            // console.log(res.data)
             dispatch(setStations(res.data))
         })
         .catch(() => {
@@ -46,12 +44,85 @@ const Station = () => {
         })
     }
 
+    const getAddress = async (id: number) => {
+        const res = await axios.get(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/addresses/${id}`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                accept: '*/*',
+                'Content-Type': 'application/json',
+                'X-XSRF-TOKEN': '41866a2d-cdc1-4547-9eef-f6d3464f7b6b',
+            },
+        })
+        // console.log(res.data)
+        setAddresses(prev => [...prev, res.data])
+    }
+
+    const getAddresses = async (ids: number[]) => {
+        try {
+            // Gọi tất cả API song song, chờ tất cả xong rồi mới set state
+                const responses = await Promise.all(
+                    ids.map(id =>
+                        axios.get(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/addresses/${id}`,
+                            {
+                                headers: {
+                                    Authorization: `Bearer ${token}`,
+                                    accept: '*/*',
+                                    'Content-Type': 'application/json',
+                                    'X-XSRF-TOKEN': '41866a2d-cdc1-4547-9eef-f6d3464f7b6b',
+                                },
+                            }
+                        )
+                    )
+                )
+                const data = responses.map(res => res.data)
+                setAddresses(data)
+                // console.log(addresses)
+        } catch (err) {
+            console.error('Get addresses failed', err)
+        }
+    }
+
     useEffect(() => {
         if (token) {
             getData()
         }
-        console.log(addresses)
     }, [token])
+
+    useEffect(() => {
+        if (stations.length > 0 && stations.length <= 20) {
+            const ids = stations.map(item => item.address.id)
+            // setAddressIDArr(ids)
+            getAddresses(ids)
+        }
+        else if (stations.length > 20) {
+            const lastStation = stations[stations.length - 1]
+            const isDup = stations.some((s) => s.id === lastStation.address.id)
+            if (!isDup) {
+                getAddress(lastStation.address.id)
+            }
+        }
+    }, [stations])
+
+    useEffect(() => {
+        if (addresses.length > 0 && stations.length > 0) {
+            stations.forEach(s => {
+                const match = addresses.find(a => a.id === s.address.id)
+                if (match) {
+                    dispatch(
+                        update({
+                            id: s.id,
+                            name: s.name,
+                            description: s.description,
+                            active: s.active,
+                            address: s.address,
+                            streetAddress: match.streetAddress,
+                        })
+                    )
+                }
+            })
+        }
+    }, [addresses])
 
     return (
         <div className='w-full h-full flex flex-row justify-start'>
@@ -89,14 +160,12 @@ const Station = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {stations.map((station) => {  
-                        setAddressIDArr([...addressIDArr, station.address.id])
-                        
+                    {stations.map((station) => {                          
                         return (
                             <tr key={station.id} className="hover:bg-gray-50">
                                 <td className="p-3 border-b">{station.id}</td>
                                 <td className="p-3 border-b">{station.name}</td>
-                                <td className="p-3 border-b">{station.address.id}</td>
+                                <td className="p-3 border-b">{station.streetAddress}</td>
                                 <td className="p-3 border-b">{station.description}</td>
                                 <td className="p-3 border-b">{station.active ? "Đang hoạt động" : "Ngưng hoạt động"}</td>
                                 <td className="p-3 border-b space-x-2">
