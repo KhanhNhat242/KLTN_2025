@@ -1,25 +1,26 @@
 import React, { useEffect, useState } from 'react'
-import type { District, Province, Ward } from '../interface/Interface'
+import type { District, Province, Station, Ward } from '../interface/Interface'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
 import type { RootState } from '../redux/store'
-import { add } from '../redux/stationSlice'
+import { add, update } from '../redux/stationSlice'
 
 interface Props {
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>,
     isEdit: boolean,
+    station?: Station,
 }
 
-const StationModal = ({ setIsOpen, isEdit }: Props) => {
+const StationModal = ({ setIsOpen, isEdit, station }: Props) => {
     const [name, setName] = useState<string>('')
     const [isActive, setIsActive] = useState<string>('')
     const [description, setDescription] = useState<string>('')
-    // const [currentProvince, setCurrentProvince] = useState<Province>()
-    // const [currentDistrict, setCurrentDistrict] = useState<District>()
-    // const [currentWard, setCurrentWard] = useState<Ward>()
     const [provinces, setProvinces] = useState<Province[]>([])
     const [districts, setDistricts] = useState<District[]>([])
     const [wards, setWards] = useState<Ward[]>([])
+    const [province, setProvince] = useState<string>('')
+    const [district, setDistrict] = useState<string>('')
+    const [ward, setWard] = useState<string>('')
     const [street, setStreet] = useState<string>('')
     const [currentPID, setCurrentPID] = useState<number>(0)
     const [currentDID, setCurrentDID] = useState<number>(0)
@@ -88,18 +89,54 @@ const StationModal = ({ setIsOpen, isEdit }: Props) => {
         }
     }
 
-    const handleCreate = async () => {
+    const getAddress = async () => {
+        const res = await axios.get(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/addresses/${station?.address.id}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'accept': '*/*',
+                'Content-Type': 'application/json',
+            } 
+        })
+        // console.log('wardid', res.data.ward.id)
+        
+        const wardID = res.data.ward.id
+        const resWard = await axios.get(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/wards/${wardID}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'accept': '*/*',
+                'Content-Type': 'application/json',
+            } 
+        })
+        // console.log('wardname', resWard.data.name)
+        
+        const districtID = resWard.data.district.id
+        const resDistrict = await axios(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/districts/${districtID}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'accept': '*/*',
+                'Content-Type': 'application/json',
+            } 
+        })
+        // console.log('districtname', resDistrict.data.name)
+
+        const provinceID = resDistrict.data.province.id
+        const resProvince = await axios(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/provinces/${provinceID}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'accept': '*/*',
+                'Content-Type': 'application/json',
+            } 
+        })
+        // console.log('provincename', resProvince.data.name)
+
+        setWard(resWard.data.name)
+        setDistrict(resDistrict.data.name)
+        setProvince(resProvince.data.name)
+    }
+
+    const createAddress = async () => {
         const now = new Date().toISOString()
-
-        let active = true
-        if (isActive === 'NOT_ACTIVE') {
-            active = false
-        }
-        else if (isActive === 'ACTIVE') {
-            active = true
-        }
-
-        console.log(name, active, description, street)
+        
         const cp = provinces.find((p) => p.id === currentPID)
         const cd = districts.find((d) => d.id === currentDID)
         const cw = wards.find((w) => w.id === currentWID)
@@ -167,20 +204,38 @@ const StationModal = ({ setIsOpen, isEdit }: Props) => {
                 'Content-Type': 'application/json',
             }  
         })
+        return res.data
+    }
+
+    const handleCreate = async () => {
+        const now = new Date().toISOString()
+
+        let active = true
+        if (isActive === 'NOT_ACTIVE') {
+            active = false
+        }
+        else if (isActive === 'ACTIVE') {
+            active = true
+        }
+
+        console.log(name, active, description, street)
+
+
+        const res = await createAddress()
+        console.log(res)
 
         await axios.post('https://apigateway.microservices.appf4s.io.vn/services/msroute/api/stations', {
             "name": name,
             "phoneNumber": "0123456666",
             "description": description,
             "active": active,
-            "createdAt": "2025-10-15T09:21:57.774Z",
-            "updatedAt": "2025-10-15T09:21:57.774Z",
+            "createdAt": now,
+            "updatedAt": now,
             "isDeleted": true,
             "deletedAt": "2025-10-15T09:21:57.774Z",
             "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
             "address": {
-                "id": res.data.id,
-                "streetAddress": res.data.streetAddress,
+                "id": res.id,
             },
             "stationImg": {
                 "id": 1,
@@ -212,8 +267,91 @@ const StationModal = ({ setIsOpen, isEdit }: Props) => {
         })
     }
 
+    const handleEdit = async () => {
+        const now = new Date().toISOString()
+
+        let active = true
+        if (isActive === 'NOT_ACTIVE') {
+            active = false
+        }
+        else if (isActive === 'ACTIVE') {
+            active = true
+        }
+
+        const cp = provinces.find((p) => p.id === currentPID)
+
+        console.log(province, cp)
+        if (cp === undefined) {
+            await axios.put(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/stations/${station?.id}`, {
+                "id": station?.id,
+                "name": name,
+                "phoneNumber": "0123456666",
+                "description": description,
+                "active": active,
+                "createdAt": now,
+                "updatedAt": now,
+                "isDeleted": true,
+                "deletedAt": "2025-10-15T09:21:57.774Z",
+                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                "address": {
+                    "id": station?.address.id,
+                },
+                "stationImg": {
+                    "id": 1,
+                    "bucket": "string",
+                    "objectKey": "string",
+                    "contentType": "string",
+                    "size": 0,
+                    "createdAt": "2025-10-15T09:21:57.774Z",
+                    "updatedAt": "2025-10-15T09:21:57.774Z",
+                    "isDeleted": true,
+                    "deletedAt": "2025-10-15T09:21:57.774Z",
+                    "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                }, 
+            }, {
+                headers: {
+                'Authorization': `Bearer ${token}`,
+                'accept': '*/*',
+                'Content-Type': 'application/json',
+            }})
+            .then((res) => {
+                console.log(res.data)
+                dispatch(update(res.data))
+                alert('Update success')
+            })
+            .catch((error) => {
+                alert('Error when updating!')
+                console.log(error)
+            })
+        }
+        // else if (cp !== undefined) {
+        //     const res = await createAddress()
+        //     console.log(res)
+        //     dispatch(update(res))
+        //     alert('Update success')
+        // }
+    }
+
     useEffect(() => {
         getProvinces()
+        console.log(station)
+        if (station && isEdit) {
+            setName(station.name)
+            setDescription(station.description)
+
+            if (station.streetAddress) {
+                setStreet(station.streetAddress)
+            }
+
+            if (station.active) {
+                setIsActive('ACTIVE')
+            }
+            else {
+                setIsActive('NOT_ACTIVE')
+            }
+
+            getAddress()
+        }
     }, [])
 
     useEffect(() => {
@@ -255,8 +393,8 @@ const StationModal = ({ setIsOpen, isEdit }: Props) => {
                                     <p className='mr-[7px]'>Tỉnh</p>
                                     <select name="" id="" className='w-full ml-[5px] p-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}
                                         onChange={(e) => setCurrentPID(Number(e.target.value))}>
-                                        <option value="">Tất cả</option>
-                                        {
+                                        <option value="">{isEdit ? province : 'Tất cả'}</option>
+                                        { 
                                             provinces.sort((a, b) => a.name.localeCompare(b.name)).map((province) => (
                                                 <option key={province.id} value={province.id}>{province.name}</option>
                                             ))
@@ -269,8 +407,8 @@ const StationModal = ({ setIsOpen, isEdit }: Props) => {
                                         <select name="" id="" className='w-full ml-[5px] p-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}
                                             onChange={(e) => setCurrentDID(Number(e.target.value))}
                                         >
-                                            <option value="">Tất cả</option>
-                                            {
+                                            <option value="">{isEdit ? district : 'Tất cả'}</option>
+                                            { 
                                                 districts.sort((a, b) => a.name.localeCompare(b.name)).map((district) => (
                                                     <option key={district.id} value={district.id}>{district.name}</option>
                                                 ))
@@ -282,8 +420,8 @@ const StationModal = ({ setIsOpen, isEdit }: Props) => {
                                         <select name="" id="" className='w-full ml-[5px] p-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}
                                             onChange={(e) => setCurrentWID(Number(e.target.value))}
                                         >
-                                            <option value="">Tất cả</option>
-                                            {
+                                            <option value="">{isEdit ? ward : 'Tất cả'}</option>
+                                            { 
                                                 wards.sort((a, b) => a.name.localeCompare(b.name)).map((ward) => (
                                                     <option key={ward.id} value={ward.id}>{ward.name}</option>
                                                 ))
@@ -308,6 +446,9 @@ const StationModal = ({ setIsOpen, isEdit }: Props) => {
                             setIsOpen(false)
                             if (!isEdit) {
                                 handleCreate()
+                            }
+                            else if (isEdit){
+                                handleEdit()
                             }
                         }}>
                         Xác nhận

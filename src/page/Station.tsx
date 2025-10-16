@@ -17,6 +17,7 @@ const Station = () => {
     const [isEdit, setIsEdit] = useState<boolean>(false)
     const [isDelete, setIsDelete] = useState<boolean>(false)
     const [addresses, setAddresses] = useState<Address[]>([])
+    const [selectedStation, setSelectedStation] = useState<Station>()
 
     const token = useSelector((state: RootState) => state.auth.accessToken)
     const dispatch = useDispatch()
@@ -171,6 +172,7 @@ const Station = () => {
                                 <td className="p-3 border-b space-x-2">
                                     <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
                                         onClick={() => {
+                                            setSelectedStation(station)
                                             setIsOpen(true)
                                             setIsEdit(true)
                                         }}>Sửa</button>
@@ -185,7 +187,7 @@ const Station = () => {
                 </table>
             </div>
             </div>
-            {isOpen && (isEdit ? <StationModal isEdit={true} setIsOpen={setIsOpen} /> : <StationModal isEdit={false} setIsOpen={setIsOpen} /> ) }
+            {isOpen && (isEdit ? <StationModal isEdit={true} setIsOpen={setIsOpen} station={selectedStation} /> : <StationModal isEdit={false} setIsOpen={setIsOpen} /> ) }
             {isDelete && <DeleteModal setIsDelete={setIsDelete} />}
         </div>
     )

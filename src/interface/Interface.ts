@@ -103,3 +103,10 @@ export interface Ward {
     wardCode: number,
     name: string,
 }
+
+export interface Route {
+    id: number,
+    routeCode: string,
+    origin: Station,
+    destination: Station,
+}
