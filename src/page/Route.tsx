@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import { setRoutes } from '../redux/routeSlice'
 import type { RootState } from '../redux/store'
+import DeleteModal from '../components/DeleteModal'
+import RouteModal from '../components/RouteModal'
 
 const Route = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -28,7 +30,7 @@ const Route = () => {
             },
         })
         .then((res) => {
-            console.log(res.data)
+            // console.log(res.data)
             dispatch(setRoutes(res.data))
         })
         .catch(() => {
@@ -60,7 +62,7 @@ const Route = () => {
                 onClick={() => {
                     setIsEdit(false)
                     setIsOpen(true)
-                }}>+ Tạo tuyến xe mới</button>
+                }}>+ Tạo tuyến mới</button>
             </div>
             </div>
             <div className='mt-[20px]'>
@@ -98,8 +100,8 @@ const Route = () => {
                 </table>
             </div>
             </div>
-            {/* {isOpen && (isEdit ? <BusModal isEdit={true} setIsOpen={setIsOpen} bus={selectedBus} /> : <BusModal isEdit={false} setIsOpen={setIsOpen} /> ) }
-            {isDelete && <DeleteModal setIsDelete={setIsDelete}/>} */}
+            {isOpen && (isEdit ? <RouteModal isEdit={true} setIsOpen={setIsOpen} /> : <RouteModal isEdit={false} setIsOpen={setIsOpen} /> ) }
+            {isDelete && <DeleteModal setIsDelete={setIsDelete}/>}
         </div>
     )
 }
