@@ -335,6 +335,7 @@ const RouteModal = ({ setIsOpen, isEdit }: Props) => {
                         </button>
                         <button className="p-[8px] justify-center rounded-[10px] bg-[#1447E6] text-white cursor-pointer"
                            onClick={() => {
+                            setIsOpen(false)
                             if (!isEdit) {
                                 handleCreate()
                             }

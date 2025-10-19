@@ -67,7 +67,7 @@ const Trip = () => {
       <Header />
       <div className='w-full p-[10px]'>
         <HeaderTop />
-        <h2 className='text-[20px] text-left font-bold mt-[10px] mb-[10px]'>Danh sách tuyến xe</h2>
+        <h2 className='text-[20px] text-left font-bold mt-[10px] mb-[10px]'>Danh sách chuyến xe</h2>
         <div className='w-full flex flex-row justify-between'>
           <div className='flex flex-row'>
             <Search placeholder='Tìm trong danh sách tuyến' />
@@ -82,7 +82,7 @@ const Trip = () => {
               onClick={() => {
                 setIsOpen(true)
                 setIsEdit(false)
-              }}>+ Tạo tuyến xe mới</button>
+              }}>+ Tạo chuyến xe mới</button>
           </div>
         </div>
         <div className='mt-[20px]'>
@@ -103,8 +103,8 @@ const Trip = () => {
                   <tr key={trip.id} className="hover:bg-gray-50">
                       <td className="p-3 border-b">{trip.id}</td>
                       <td className="p-3 border-b">{trip.tripCode}</td>
-                      <td className="p-3 border-b">{formatTimestamp(trip.departureTime)}</td>
-                      <td className="p-3 border-b">{formatTimestamp(trip.arrivalTime)}</td>
+                      <td className="p-3 border-b">{formatTimestamp(Number(trip.departureTime))}</td>
+                      <td className="p-3 border-b">{formatTimestamp(Number(trip.arrivalTime))}</td>
                       <td className="p-3 border-b">{trip.baseFare}</td>
                       <td className="p-3 border-b space-x-2">
                         <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 

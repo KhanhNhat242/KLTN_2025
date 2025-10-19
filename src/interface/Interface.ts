@@ -35,9 +35,10 @@ export interface PromotionLine {
 export interface Trip {
     id?: number,
     tripCode: string,
-    departureTime: number,
-    arrivalTime: number,
-    baseFare: number,
+    departureTime: number | string,
+    arrivalTime: number | string,
+    distance: number,
+    route: Route,
 }
 
 export interface Bus {
@@ -109,4 +110,24 @@ export interface Route {
     routeCode: string,
     origin: Station,
     destination: Station,
+}
+
+export interface Staff {
+    id: number,
+    name: string,
+    age: number,
+    gender: string,
+    phoneNumber: string,
+    status: string,
+}
+export interface Driver {
+    id: number,
+    licenseClass: string,
+    yearsExperience: number,
+    staff: Staff,
+}
+
+export interface Attendant {
+    id: number,
+    staff: Staff,
 }
