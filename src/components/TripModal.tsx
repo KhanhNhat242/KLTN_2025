@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from 'react'
-import type { Province, Route } from '../interface/Interface'
+import type { Bus, Province, Route, Trip } from '../interface/Interface'
 import axios from 'axios'
 import type { RootState } from '../redux/store'
 import { useDispatch, useSelector } from 'react-redux'
+import { add, update } from '../redux/tripSlice'
 
 interface Props {
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>,
     isEdit: boolean,
+    trip?: Trip,
 }
 
-const TripModal = ({ setIsOpen, isEdit }: Props) => {
+const TripModal = ({ setIsOpen, isEdit, trip }: Props) => {
     const [provinces, setProvinces] = useState<Province[]>([])
+    const [buses, setBuses] = useState<Bus[]>([])
     const [currentPStart, setCurrentPStart] = useState<number>(0)
     const [currentPEnd, setCurrentPEnd] = useState<number>(0)
     const [routes, setRoutes] = useState<Route[]>([])
@@ -20,6 +23,9 @@ const TripModal = ({ setIsOpen, isEdit }: Props) => {
     const [eTime, setETime] = useState<string>('')
     const [distance, setDistance] = useState<number>(0)
     const [route, setRoute] = useState<Route>()
+    const [bus, setBus] = useState<Bus>()
+    const [pStart, setPStart] = useState<string>('')
+    const [pEnd, setPEnd] = useState<string>('')
 
     const token = useSelector((state: RootState) => state.auth.accessToken)
     const dispatch = useDispatch()
@@ -52,7 +58,7 @@ const TripModal = ({ setIsOpen, isEdit }: Props) => {
                 }  
             })
             .then((res) => {
-                console.log(res.data)
+                // console.log(res.data)
                 setRoutes(res.data)
             })
             .catch((error) => {
@@ -60,6 +66,35 @@ const TripModal = ({ setIsOpen, isEdit }: Props) => {
                 console.log(error)
             })
         }
+    }
+
+    const getVehicles = async (type: string) => {
+        await axios.get(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/vehicles?type.in=${type}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'accept': '*/*',
+                'Content-Type': 'application/json',
+            }  
+        })
+        .then((res) => {
+            console.log(res.data)
+            setBuses(res.data)
+        })
+        .catch((error) => {
+            alert('Error when get buses!')
+            console.log(error)
+        })
+    }
+
+    const toDatetimeLocalString = (timestamp: number) => {
+        const date = new Date(timestamp * 1000);
+        const pad = (n: number) => n.toString().padStart(2, '0');
+        const year = date.getFullYear();
+        const month = pad(date.getMonth() + 1);
+        const day = pad(date.getDate());
+        const hours = pad(date.getHours());
+        const minutes = pad(date.getMinutes());
+        return `${year}-${month}-${day}T${hours}:${minutes}`;
     }
 
     const handleCreate = async () => {
@@ -251,12 +286,12 @@ const TripModal = ({ setIsOpen, isEdit }: Props) => {
                 }
             },
             "vehicle": {
-                "id": 1554,
-                "type": "STANDARD_BUS_VIP",
+                "id": bus?.id,
+                "type": bus?.type,
                 "typeFactor": 0,
-                "plateNumber": "string",
-                "brand": "string",
-                "description": "string",
+                "plateNumber": bus?.plateNumber,
+                "brand": bus?.brand,
+                "description": bus?.description,
                 "status": "ACTIVE",
                 "createdAt": "2025-10-19T07:13:00.994Z",
                 "updatedAt": "2025-10-19T07:13:00.994Z",
@@ -340,8 +375,7 @@ const TripModal = ({ setIsOpen, isEdit }: Props) => {
                 "deletedAt": "2025-10-19T07:13:00.994Z",
                 "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
                 }
-            }
-            
+            }  
         }, {
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -350,8 +384,8 @@ const TripModal = ({ setIsOpen, isEdit }: Props) => {
             }  
         })
         .then((res) => {
-            console.log(res.data)
-            // dispatch(add(res.data))
+            // console.log(res.data)
+            dispatch(add(res.data))
             alert('Create success')
         })
         .catch((error) => {
@@ -360,8 +394,317 @@ const TripModal = ({ setIsOpen, isEdit }: Props) => {
         })
     }
 
+    const handleEdit = async () => {
+        const now = new Date().toISOString()
+        const st = new Date(sTime).toISOString()
+        const et = new Date(eTime).toISOString()
+        console.log(code, distance, currentRID, sTime, eTime, route)
+
+        await axios.put(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/trips/${trip?.id}`, {
+            "id": trip?.id,
+            "tripCode": code,
+            "departureTime": st,
+            "arrivalTime": et,
+            "baseFare": 0,
+            "createdAt": "2025-10-19T07:13:00.993Z",
+            "updatedAt": now,
+            "isDeleted": true,
+            "deletedAt": "2025-10-19T07:13:00.993Z",
+            "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            "route": {
+                "id": route?.id,
+                "routeCode": route?.routeCode,
+                "distanceKm": distance,
+                "createdAt": "2025-10-19T07:13:00.993Z",
+                "updatedAt": "2025-10-19T07:13:00.993Z",
+                "isDeleted": true,
+                "deletedAt": "2025-10-19T07:13:00.993Z",
+                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                "origin": {
+                "id": route?.origin.id,
+                "name": route?.origin.name,
+                "phoneNumber": "string",
+                "description": route?.origin.description,
+                "active": true,
+                "createdAt": "2025-10-19T07:13:00.993Z",
+                "updatedAt": "2025-10-19T07:13:00.993Z",
+                "isDeleted": true,
+                "deletedAt": "2025-10-19T07:13:00.993Z",
+                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                "address": {
+                    "id": route?.origin.address.id,
+                    "streetAddress": route?.origin.streetAddress,
+                    "latitude": 0,
+                    "longitude": 0,
+                    "createdAt": "2025-10-19T07:13:00.993Z",
+                    "updatedAt": "2025-10-19T07:13:00.993Z",
+                    "isDeleted": true,
+                    "deletedAt": "2025-10-19T07:13:00.993Z",
+                    "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    "ward": {
+                    "id": 0,
+                    "wardCode": "string",
+                    "name": "string",
+                    "nameEn": "string",
+                    "fullName": "string",
+                    "fullNameEn": "string",
+                    "codeName": "string",
+                    "administrativeUnitId": 0,
+                    "createdAt": "2025-10-19T07:13:00.993Z",
+                    "updatedAt": "2025-10-19T07:13:00.993Z",
+                    "isDeleted": true,
+                    "deletedAt": "2025-10-19T07:13:00.993Z",
+                    "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    "district": {
+                        "id": 0,
+                        "districtCode": "string",
+                        "name": "string",
+                        "nameEn": "string",
+                        "fullName": "string",
+                        "fullNameEn": "string",
+                        "codeName": "string",
+                        "administrativeUnitId": 0,
+                        "createdAt": "2025-10-19T07:13:00.993Z",
+                        "updatedAt": "2025-10-19T07:13:00.993Z",
+                        "isDeleted": true,
+                        "deletedAt": "2025-10-19T07:13:00.993Z",
+                        "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                        "province": {
+                        "id": 0,
+                        "provinceCode": "string",
+                        "name": "string",
+                        "nameEn": "string",
+                        "fullName": "string",
+                        "fullNameEn": "string",
+                        "codeName": "string",
+                        "administrativeUnitId": 0,
+                        "administrativeRegionId": 0,
+                        "createdAt": "2025-10-19T07:13:00.994Z",
+                        "updatedAt": "2025-10-19T07:13:00.994Z",
+                        "isDeleted": true,
+                        "deletedAt": "2025-10-19T07:13:00.994Z",
+                        "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                        }
+                    }
+                    }
+                },
+                "stationImg": {
+                    "id": 0,
+                    "bucket": "string",
+                    "objectKey": "string",
+                    "contentType": "string",
+                    "size": 0,
+                    "createdAt": "2025-10-19T07:13:00.994Z",
+                    "updatedAt": "2025-10-19T07:13:00.994Z",
+                    "isDeleted": true,
+                    "deletedAt": "2025-10-19T07:13:00.994Z",
+                    "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                }
+                },
+                "destination": {
+                "id": route?.destination.id,
+                "name": route?.destination.name,
+                "phoneNumber": "string",
+                "description": route?.destination.description,
+                "active": true,
+                "createdAt": "2025-10-19T07:13:00.994Z",
+                "updatedAt": "2025-10-19T07:13:00.994Z",
+                "isDeleted": true,
+                "deletedAt": "2025-10-19T07:13:00.994Z",
+                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                "address": {
+                    "id": route?.destination.address.id,
+                    "streetAddress": route?.destination.streetAddress,
+                    "latitude": 0,
+                    "longitude": 0,
+                    "createdAt": "2025-10-19T07:13:00.994Z",
+                    "updatedAt": "2025-10-19T07:13:00.994Z",
+                    "isDeleted": true,
+                    "deletedAt": "2025-10-19T07:13:00.994Z",
+                    "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    "ward": {
+                    "id": 0,
+                    "wardCode": "string",
+                    "name": "string",
+                    "nameEn": "string",
+                    "fullName": "string",
+                    "fullNameEn": "string",
+                    "codeName": "string",
+                    "administrativeUnitId": 0,
+                    "createdAt": "2025-10-19T07:13:00.994Z",
+                    "updatedAt": "2025-10-19T07:13:00.994Z",
+                    "isDeleted": true,
+                    "deletedAt": "2025-10-19T07:13:00.994Z",
+                    "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    "district": {
+                        "id": 0,
+                        "districtCode": "string",
+                        "name": "string",
+                        "nameEn": "string",
+                        "fullName": "string",
+                        "fullNameEn": "string",
+                        "codeName": "string",
+                        "administrativeUnitId": 0,
+                        "createdAt": "2025-10-19T07:13:00.994Z",
+                        "updatedAt": "2025-10-19T07:13:00.994Z",
+                        "isDeleted": true,
+                        "deletedAt": "2025-10-19T07:13:00.994Z",
+                        "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                        "province": {
+                        "id": 0,
+                        "provinceCode": "string",
+                        "name": "string",
+                        "nameEn": "string",
+                        "fullName": "string",
+                        "fullNameEn": "string",
+                        "codeName": "string",
+                        "administrativeUnitId": 0,
+                        "administrativeRegionId": 0,
+                        "createdAt": "2025-10-19T07:13:00.994Z",
+                        "updatedAt": "2025-10-19T07:13:00.994Z",
+                        "isDeleted": true,
+                        "deletedAt": "2025-10-19T07:13:00.994Z",
+                        "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                        }
+                    }
+                    }
+                },
+                "stationImg": {
+                    "id": 0,
+                    "bucket": "string",
+                    "objectKey": "string",
+                    "contentType": "string",
+                    "size": 0,
+                    "createdAt": "2025-10-19T07:13:00.994Z",
+                    "updatedAt": "2025-10-19T07:13:00.994Z",
+                    "isDeleted": true,
+                    "deletedAt": "2025-10-19T07:13:00.994Z",
+                    "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                }
+                }
+            },
+            "vehicle": {
+                "id": bus?.id,
+                "type": bus?.type,
+                "typeFactor": 0,
+                "plateNumber": bus?.plateNumber,
+                "brand": bus?.brand,
+                "description": bus?.description,
+                "status": "ACTIVE",
+                "createdAt": "2025-10-19T07:13:00.994Z",
+                "updatedAt": "2025-10-19T07:13:00.994Z",
+                "isDeleted": true,
+                "deletedAt": "2025-10-19T07:13:00.994Z",
+                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                "seatMap": {
+                "id": 0,
+                "name": "string",
+                "createdAt": "2025-10-19T07:13:00.994Z",
+                "updatedAt": "2025-10-19T07:13:00.994Z",
+                "isDeleted": true,
+                "deletedAt": "2025-10-19T07:13:00.994Z",
+                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                "seatMapImg": {
+                    "id": 0,
+                    "bucket": "string",
+                    "objectKey": "string",
+                    "contentType": "string",
+                    "size": 0,
+                    "createdAt": "2025-10-19T07:13:00.994Z",
+                    "updatedAt": "2025-10-19T07:13:00.994Z",
+                    "isDeleted": true,
+                    "deletedAt": "2025-10-19T07:13:00.994Z",
+                    "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                }
+                },
+                "vehicleImg": {
+                "id": 0,
+                "bucket": "string",
+                "objectKey": "string",
+                "contentType": "string",
+                "size": 0,
+                "createdAt": "2025-10-19T07:13:00.994Z",
+                "updatedAt": "2025-10-19T07:13:00.994Z",
+                "isDeleted": true,
+                "deletedAt": "2025-10-19T07:13:00.994Z",
+                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                }
+            },
+            "driver": {
+                "id": 1528,
+                "licenseClass": "string",
+                "yearsExperience": 0,
+                "createdAt": "2025-10-19T07:13:00.994Z",
+                "updatedAt": "2025-10-19T07:13:00.994Z",
+                "isDeleted": true,
+                "deletedAt": "2025-10-19T07:13:00.994Z",
+                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                "staff": {
+                "id": 0,
+                "name": "string",
+                "age": 0,
+                "gender": "MALE",
+                "phoneNumber": "string",
+                "status": "ACTIVE",
+                "createdAt": "2025-10-19T07:13:00.994Z",
+                "updatedAt": "2025-10-19T07:13:00.994Z",
+                "isDeleted": true,
+                "deletedAt": "2025-10-19T07:13:00.994Z",
+                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                }
+            },
+            "attendant": {
+                "id": 1538,
+                "createdAt": "2025-10-19T07:13:00.994Z",
+                "updatedAt": "2025-10-19T07:13:00.994Z",
+                "isDeleted": true,
+                "deletedAt": "2025-10-19T07:13:00.994Z",
+                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                "staff": {
+                "id": 0,
+                "name": "string",
+                "age": 0,
+                "gender": "MALE",
+                "phoneNumber": "string",
+                "status": "ACTIVE",
+                "createdAt": "2025-10-19T07:13:00.994Z",
+                "updatedAt": "2025-10-19T07:13:00.994Z",
+                "isDeleted": true,
+                "deletedAt": "2025-10-19T07:13:00.994Z",
+                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                }
+            }  
+        }, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'accept': '*/*',
+                'Content-Type': 'application/json',
+            } 
+        })
+        .then((res) => {
+            // console.log(res.data)
+            dispatch(update(res.data))
+            alert('Update success')
+        })
+        .catch((error) => {
+            alert('Error when update!')
+            console.log(error)
+        })
+    }
+
     useEffect(() => {
         getProvinces()
+        if (isEdit && trip) {
+            console.log(trip)
+            setCode(trip?.tripCode)
+            setDistance(trip.distance)
+            setPStart(trip.route.origin.name)
+            setPEnd(trip.route.destination.name)
+            setSTime(toDatetimeLocalString(Number(trip.departureTime)))
+            setETime(toDatetimeLocalString(Number(trip.arrivalTime)))
+            setRoute(trip.route)
+            setBus(trip.vehicle)
+        }
     }, [])
 
     useEffect(() => {
@@ -419,13 +762,42 @@ const TripModal = ({ setIsOpen, isEdit }: Props) => {
                                     setCurrentRID(Number(e.target.value))
                                 }
                                 }>
-                                <option value="">Chọn bến xe</option>
+                                <option value="">{isEdit ? `Từ ${pStart} đến ${pEnd}` : 'Chọn bến xe'}</option>
                                 { 
                                     routes.map((route) => (
                                         <option key={route.id} value={route.id}>Từ {route.origin.name} đến {route.destination.name}</option>
                                     ))
                                 }
                             </select>
+                            <div className='w-full flex flex-row justify-between my-[5px]'>
+                                <div className='w-[48%]'>
+                                    <p>Loại xe</p>
+                                    <select className='w-full p-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}
+                                        onChange={(e) => {
+                                            getVehicles(e.target.value)
+                                        }}>
+                                        <option>{isEdit ? trip?.vehicle.type : 'Chọn loại xe'}</option>
+                                        <option value='STANDARD_BUS_NORMAL'>STANDARD_BUS_NORMAL</option>
+                                        <option value='STANDARD_BUS_VIP'>STANDARD_BUS_VIP</option>
+                                        <option value='LIMOUSINE'>LIMOUSINE</option>
+                                    </select>
+                                </div>
+                                <div className='w-[48%]'>
+                                    <p>Xe</p>
+                                    <select className='w-full p-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}
+                                        onChange={(e) => {
+                                            const selected = buses.find(o => o.id === Number(e.target.value))
+                                            if (selected) setBus(selected)
+                                        }}>
+                                        <option>{isEdit ? trip?.vehicle.plateNumber : 'Chọn xe'}</option>
+                                        {
+                                            buses.map((bus) => (
+                                                <option value={bus.id}>{bus.plateNumber}</option>
+                                            ))
+                                        }
+                                    </select>
+                                </div>
+                            </div>
                             <div className='w-full flex flex-row justify-between my-[5px]'>
                                 <div className='w-[48%]'>
                                     <p>Thời gian bắt đầu</p>
@@ -448,6 +820,9 @@ const TripModal = ({ setIsOpen, isEdit }: Props) => {
                             setIsOpen(false)
                             if (!isEdit) {
                                 handleCreate()
+                            }
+                            else if (isEdit) {
+                                handleEdit()
                             }
                         }}>
                         Xác nhận

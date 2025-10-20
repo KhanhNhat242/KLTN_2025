@@ -39,6 +39,7 @@ export interface Trip {
     arrivalTime: number | string,
     distance: number,
     route: Route,
+    baseFare?: number,
 }
 
 export interface Bus {
