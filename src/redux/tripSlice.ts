@@ -9,7 +9,7 @@ const tripSlice = createSlice({
             return action.payload 
         },
         add: (state, action: PayloadAction<Trip>) => {
-            state.push(action.payload)
+            state.unshift(action.payload)
         },
         update: (state, action: PayloadAction<Trip>) => {
             const index = state.findIndex((p) => p.id === action.payload.id);

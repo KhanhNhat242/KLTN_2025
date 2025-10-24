@@ -9,6 +9,8 @@ import tripsSlice from './tripSlice'
 import stationSlice from './stationSlice'
 import addressSlice from './addressSlice'
 import routeSlice from './routeSlice'
+import ticketSlice from './ticketSlice'
+import seatListSlice from './seatListSlice'
 
 export const store = configureStore({
     reducer: {
@@ -22,6 +24,8 @@ export const store = configureStore({
         stations: stationSlice,
         addresses: addressSlice,
         routes: routeSlice,
+        tickets: ticketSlice,
+        seatList: seatListSlice,
     },
 })
 

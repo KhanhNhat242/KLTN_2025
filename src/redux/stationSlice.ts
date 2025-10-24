@@ -9,7 +9,7 @@ const stationSlice = createSlice({
             return action.payload 
         },
         add: (state, action: PayloadAction<Station>) => {
-            state.push(action.payload)
+            state.unshift(action.payload)
         },
         update: (state, action: PayloadAction<Station>) => {
             const index = state.findIndex((p) => p.id === action.payload.id);

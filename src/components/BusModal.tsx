@@ -199,7 +199,7 @@ const BusModal = ({ setIsOpen, isEdit, bus }: Props) => {
                                 </div>
                                 <div className='w-[30%]'>
                                     <p>Loại xe</p>
-                                    <select defaultValue={type} onChange={(e) => setType(e.target.value)} name="" id="" className='w-full p-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}>
+                                    <select defaultValue={type} onChange={(e) => setType(e.target.value)} className='w-full p-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}>
                                         <option value="STANDARD_BUS_VIP">STANDARD_BUS_VIP</option>
                                         <option value="LIMOUSINE">LIMOUSINE</option>
                                         <option value="STANDARD_BUS_NORMAL">STANDARD_BUS_NORMAL</option>
@@ -208,7 +208,7 @@ const BusModal = ({ setIsOpen, isEdit, bus }: Props) => {
                             </div>
                             <div className='w-full justify-between my-[5px]'>
                                 <p>Mô tả</p>
-                                <textarea value={description} onChange={(e) => setDescription(e.target.value)} name="" id="" className='w-full' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}></textarea>
+                                <textarea value={description} onChange={(e) => setDescription(e.target.value)} className='w-full' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}></textarea>
                             </div>
                         </div>
                     </div>

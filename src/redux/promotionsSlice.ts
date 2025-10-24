@@ -20,7 +20,7 @@ const promotionSlice = createSlice({
             return action.payload 
         },
         add: (state, action: PayloadAction<Promotion>) => {
-            state.push(action.payload)
+            state.unshift(action.payload)
         },
         update: (state, action: PayloadAction<Promotion>) => {
             const index = state.findIndex((p) => p.code === action.payload.code);

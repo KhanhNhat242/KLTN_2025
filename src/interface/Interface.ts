@@ -40,6 +40,7 @@ export interface Trip {
     distance: number,
     route: Route,
     baseFare?: number,
+    vehicle: Bus,
 }
 
 export interface Bus {
@@ -131,4 +132,30 @@ export interface Driver {
 export interface Attendant {
     id: number,
     staff: Staff,
+}
+
+export interface Ticket {
+    id: number,
+    ticketCode: string,
+    price: number,
+    timeFrom: number, 
+    timeTo: number,
+    checkedIn: boolean,
+    tripId: number,
+    routeId: number,
+    seatId: number,
+    booking: Booking,
+}
+
+export interface Booking {
+    id: number,
+    bookingCode: string,
+    status: string,
+    quantity: number,
+    totalAmount: number,
+    bookedAt: number,
+    expireat: number,
+    timeoutMinute: number,
+    customerId: string,
+    tripId: number,
 }

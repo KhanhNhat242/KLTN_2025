@@ -9,6 +9,7 @@ import BusDetail from './page/BusDetail'
 import Login from './page/Login'
 import Station from './page/Station'
 import Routee from './page/Route'
+import Payment from './page/Payment'
 import { useDispatch } from 'react-redux'
 import { setAccessToken, setRefreshToken } from './redux/authSlice'
 
@@ -36,6 +37,7 @@ function App() {
           <Route path='/bus-detail' element={<BusDetail />} />
           <Route path='/station' element={<Station />} />
           <Route path='/route' element={<Routee />} />
+          <Route path='/payment' element={<Payment />} />
         </Routes>
       </Router>
     </>

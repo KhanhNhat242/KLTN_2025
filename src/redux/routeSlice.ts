@@ -9,7 +9,7 @@ const routeSlice = createSlice({
             return action.payload 
         },
         add: (state, action: PayloadAction<Route>) => {
-            state.push(action.payload)
+            state.unshift(action.payload)
         },
         update: (state, action: PayloadAction<Route>) => {
             const index = state.findIndex((r) => r.id === action.payload.id);

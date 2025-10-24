@@ -15,12 +15,12 @@ const Trip = () => {
     const navigate = useNavigate()
 
     return (
-    <div className='w-full flex flex-col items-start pl-[30px]'>
-        <p className='p-[5px] cursor-pointer' onClick={() => navigate('/route')}>Tuyến xe</p>
-        <p className='p-[5px] cursor-pointer' onClick={() => navigate('/bus')}>Xe & Sơ đồ ghế</p>
-        <p className='p-[5px] cursor-pointer' onClick={() => navigate('/station')}>Trạm đón/trả</p>
-        <p className='p-[5px] cursor-pointer' onClick={() => navigate('/trip')}>Lịch trình (Trips)</p>
-    </div>
+        <div className='w-full flex flex-col items-start pl-[30px]'>
+            <p className='p-[5px] cursor-pointer' onClick={() => navigate('/route')}>Tuyến xe</p>
+            <p className='p-[5px] cursor-pointer' onClick={() => navigate('/bus')}>Xe & Sơ đồ ghế</p>
+            <p className='p-[5px] cursor-pointer' onClick={() => navigate('/station')}>Trạm đón/trả</p>
+            <p className='p-[5px] cursor-pointer' onClick={() => navigate('/trip')}>Lịch trình (Trips)</p>
+        </div>
 )
 }
 
@@ -56,7 +56,7 @@ const Header = () => {
                     <img src={downcollapseicon} />
                 </div>
                 <div className='w-full flex flex-row justify-between items-center p-[10px] cursor-pointer'>
-                    <div className='flex flex-row'>
+                    <div className='flex flex-row' onClick={() => navigate('/payment')}>
                         <img src={paymenticon} className='mr-[10px]' />
                         <p>Thanh toán</p>
                     </div>
