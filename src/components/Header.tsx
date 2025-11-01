@@ -32,7 +32,7 @@ const Header = () => {
         <div className='w-[20%] h-[100vh] flex flex-col justify-start items-start bg-white ml-[10px]'>
             <img src={mainlogo} alt="admin-logo" className='w-[50%] h-[50px] p-[10px]' />
             <div className='w-full'>
-                <div className='w-full flex flex-row items-center p-[10px] cursor-pointer'>
+                <div className='w-full flex flex-row items-center p-[10px] cursor-pointer' onClick={() => navigate('/')}>
                     <img src={dashboardicon} className='mr-[10px]' />
                     <p>Tổng quát</p>
                 </div>

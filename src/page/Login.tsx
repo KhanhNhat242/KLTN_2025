@@ -5,7 +5,7 @@ import pwdicon from '../assets/pwdicon.png'
 import eyeicon from '../assets/eyeicon.png'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
-import { setAccessToken, setRefreshToken } from '../redux/authSlice'
+import { setAccessToken, setIsLogin, setRefreshToken } from '../redux/authSlice'
 import { useDispatch } from 'react-redux'
 
 const Login = () => {
@@ -18,6 +18,7 @@ const Login = () => {
 
     const login = async () => {
         // e.preventDefault()
+        // console.log(username, pwd)
 
         await axios.post('https://apigateway.microservices.appf4s.io.vn/services/msuser/api/auth/login', 
             {
@@ -36,10 +37,11 @@ const Login = () => {
             // alert('log in success')
             dispatch(setAccessToken(res.data.accessToken))
             dispatch(setRefreshToken(res.data.refreshToken))
+            // dispatch(setIsLogin(true))
 
             localStorage.setItem('accessToken', res.data.accessToken)
             localStorage.setItem('refreshToken', res.data.refreshToken)
-            navigate('/trip')
+            navigate('/')
         })
         .catch(() => {
             alert('log in fail!')

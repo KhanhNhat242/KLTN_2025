@@ -14,31 +14,55 @@ import emptyicon from '../assets/emptyicon.png'
 import SeatMap from '../components/SeatMap'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import { useSelector } from 'react-redux'
+import type { RootState } from '../redux/store'
+import type { Bus } from '../interface/Interface'
 
 const BusDetail = () => {
     const [type, setType] = useState<string>('')
     const [seatnum, setSeatnum] = useState<number>(0)
     const [isLimousine, setIsLimousine] = useState<boolean>(false)
+    const [bus, setBus] = useState<Bus>()
 
     const location = useLocation() 
-    const { busdata, tripdata } = location.state
+    const { busid, tripdata } = location.state
     const navigate = useNavigate()
+    const token = useSelector((state: RootState) => state.auth.accessToken)
 
+    const getVehicle = async () => {
+        await axios.get(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/vehicles/${busid}/detail`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'accept': '*/*',
+                'Content-Type': 'application/json',
+            }  
+        })
+        .then((res) => {
+            // console.log(res.data)
+            setBus(res.data.vehicle)
+            if (res.data.vehicle.type === 'STANDARD_BUS_VIP') {
+                setType('VIP')
+                setSeatnum(36)
+            }
+            else if (res.data.vehicle.type === 'STANDARD_BUS_NORMAL') {
+                setType('Thường')
+                setSeatnum(36)
+            }
+            else if (res.data.vehicle.type === 'LIMOUSINE') {
+                setIsLimousine(true)
+                setType('Limousine')
+                setSeatnum(24)
+            }
+        })
+        .catch(() => {
+            console.log('Get data fail!')
+        })
+    }
+    
     useEffect(() => {
-        // console.log(busdata, tripdata)
-        if (busdata.type === 'STANDARD_BUS_VIP') {
-            setType('VIP')
-            setSeatnum(36)
-        }
-        else if (busdata.type === 'STANDARD_BUS_NORMAL') {
-            setType('Thường')
-            setSeatnum(36)
-        }
-        else if (busdata.type === 'LIMOUSINE') {
-            setIsLimousine(true)
-            setType('Limousine')
-            setSeatnum(24)
-        }
+        getVehicle()
+        console.log(busid, tripdata, bus?.type)
     }, [])
 
     return (
@@ -60,7 +84,7 @@ const BusDetail = () => {
                         </div> */}
                         <div className='w-full flex flex-row justify-between'>
                             <p>Biển số:</p>
-                            <p className='font-bold'>{busdata.plateNumber}</p>
+                            <p className='font-bold'>{bus?.plateNumber}</p>
                         </div>
                         <div className='w-full flex flex-row justify-between'>
                             <p>Loại xe:</p>
@@ -72,7 +96,7 @@ const BusDetail = () => {
                         </div>
                         <div className='w-full flex flex-row justify-between'>
                             <p>Hãng xe</p>
-                            <p className='font-bold'>{busdata.brand}</p>
+                            <p className='font-bold'>{bus?.brand}</p>
                         </div>
                         {/* <div className='w-full flex flex-row justify-between'>
                             <p>Ngày cập nhật gần nhất:</p>

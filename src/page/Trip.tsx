@@ -60,18 +60,18 @@ const Trip = () => {
     const getData = async () => {
       await axios.get('https://apigateway.microservices.appf4s.io.vn/services/msroute/api/trips', {
         params: {
-              'page': '0',
-              'size': '40',
-          },
-          headers: {
-              'Authorization': `Bearer ${token}`,
-              'accept': '*/*',
-              'Content-Type': 'application/json',
-              'X-XSRF-TOKEN': '41866a2d-cdc1-4547-9eef-f6d3464f7b6b',
-          },
+            'page': '0',
+            'size': '40',
+        },
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'accept': '*/*',
+            'Content-Type': 'application/json',
+            'X-XSRF-TOKEN': '41866a2d-cdc1-4547-9eef-f6d3464f7b6b',
+        },
       })
       .then((res) => {
-        console.log(res.data)
+        // console.log(res.data)
         dispatch(setTrips(res.data))
       })
       .catch(() => {
@@ -82,6 +82,10 @@ const Trip = () => {
     const handleFilter = async () => {
       if (currentPStart !== 0 && currentPEnd !== 0) {
         await axios.get(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/trips?originProvinceCode.equals=${currentPStart}&destinationProvinceCode.equals=${currentPEnd}`, {
+          params: {
+              'page': '0',
+              'size': '500',
+          },
           headers: {
               'Authorization': `Bearer ${token}`,
               'accept': '*/*',
@@ -90,7 +94,7 @@ const Trip = () => {
           },
         })
       .then((res) => {
-        // console.log(res.data)
+        console.log(res.data)
         dispatch(setTrips(res.data))
       })
       .catch(() => {
@@ -168,7 +172,7 @@ const Trip = () => {
               <tbody>
                 {trips.map((trip) => {
                   return (
-                    <tr key={trip.id} className="hover:bg-gray-50 cursor-pointer" onClick={() => navigate('/bus-detail', { state: { busdata: trip.vehicle, tripdata: trip } })}>
+                    <tr key={trip.id} className="hover:bg-gray-50 cursor-pointer" onClick={() => navigate('/bus-detail', { state: { busid: trip.vehicle.id, tripdata: trip } })}>
                         <td className="p-3 border-b">{trip.id}</td>
                         <td className="p-3 border-b">{trip.tripCode}</td>
                         <td className="p-3 border-b">{formatTimestamp(Number(trip.departureTime))}</td>
