@@ -49,6 +49,7 @@ export interface Bus {
     plateNumber: string,
     brand: string,
     description: string,
+    typeFactor: number,
 }
 
 export interface SeatMapImg {
@@ -87,6 +88,7 @@ export interface Station {
 export interface Address {
     id: number,
     streetAddress: string,
+    ward: Ward,
 }
 
 export interface Province {
@@ -99,12 +101,14 @@ export interface District {
     id: number,
     districtCode: number,
     name: string,
+    province: Province,
 }
 
 export interface Ward {
     id: number,
     wardCode: number,
     name: string,
+    district: District,
 }
 
 export interface Route {
@@ -112,6 +116,7 @@ export interface Route {
     routeCode: string,
     origin: Station,
     destination: Station,
+    baseFare: number,
 }
 
 export interface Staff {
@@ -145,6 +150,8 @@ export interface Ticket {
     routeId: number,
     seatId: number,
     booking: Booking,
+    trip?: Trip,
+    vehicle?: Bus,
 }
 
 export interface Booking {

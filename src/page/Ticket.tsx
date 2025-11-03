@@ -9,12 +9,17 @@ import TicketModal from '../components/TicketModal';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '../redux/store';
 import axios from 'axios';
-import { setTickets } from '../redux/ticketSlice';
+import { setTickets, updateTrip, updateVehicle } from '../redux/ticketSlice';
+import type { Bus, Ticket, Trip } from '../interface/Interface';
 
 const Ticket = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [isEdit, setIsEdit] = useState<boolean>(false)
   const [isDelete, setIsDelete] = useState<boolean>(false)
+  const [currentTripID, setCurrentTripID] = useState<number[]>([])
+  const [currentVehicleID, setCurrentVehicleID] = useState<number[]>([])
+  const [trips, setTrips] = useState<Trip[]>([])
+  const [vehicles, setVehicles] = useState<Bus[]>([])
 
   const token = useSelector((state: RootState) => state.auth.accessToken)
   const dispatch = useDispatch()
@@ -31,11 +36,11 @@ const Ticket = () => {
       const minutes = String(date.getMinutes()).padStart(2, '0')
       const seconds = String(date.getSeconds()).padStart(2, '0')
 
-      return `${hours}:${minutes}:${seconds} ngày ${day}/${month}/${year}`
+      return `${hours}:${minutes}:${seconds} - ${day}/${month}/${year}`
   }
 
   const getTickets = async () => {
-    axios.get('https://apigateway.microservices.appf4s.io.vn/services/msbooking/api/tickets', {
+    await axios.get('https://apigateway.microservices.appf4s.io.vn/services/msbooking/api/tickets', {
       headers: {
             'Authorization': `Bearer ${token}`,
             'accept': '*/*',
@@ -44,17 +49,88 @@ const Ticket = () => {
         },
     })
     .then((res) => {
-      console.log(res.data)
+      // console.log(res.data)
       dispatch(setTickets(res.data))
+      const ta = res.data
+      setCurrentTripID(ta.map((t: Ticket) => t.tripId))
     })
     .catch(() => {
-      console.log('Get data fail!')
+      console.log('Get tickets fail!')
     })
   }  
+
+  const getTrip = async (id: number) => {
+    // console.log(id)
+    await axios.get(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/trips/${id}/detail`, {
+      headers: {
+            'Authorization': `Bearer ${token}`,
+            'accept': '*/*',
+            'Content-Type': 'application/json',
+            'X-XSRF-TOKEN': '41866a2d-cdc1-4547-9eef-f6d3464f7b6b',
+        },
+    })
+    .then((res) => {
+      // console.log(res.data.detailVM.vehicle)
+      // console.log(res.data.tripDTO)
+      if (res.data?.tripDTO) {
+        setTrips((prev) => [...prev, res.data.tripDTO])
+      }
+    })
+    .catch(() => {
+      console.log('Get trip fail!')
+    })
+  }
+
+  const getVehicle = async (id: number) => {
+    // console.log(id)
+    if (!isNaN(id)) {
+      await axios.get(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/vehicles/${id}`, {
+        headers: {
+              'Authorization': `Bearer ${token}`,
+              'accept': '*/*',
+              'Content-Type': 'application/json',
+              'X-XSRF-TOKEN': '41866a2d-cdc1-4547-9eef-f6d3464f7b6b',
+          },
+      })
+      .then((res) => {
+        // console.log(res.data)
+        if (res.data) {
+          setVehicles((prev) => [...prev, res.data])
+        }
+      })
+      .catch(() => {
+        console.log('Get vehicle fail!')
+      })
+    }
+  }
 
   useEffect(() => {
     getTickets()
   }, [])
+
+  useEffect(() => {
+      // console.log(currentTripID)
+      currentTripID.forEach((c) => getTrip(c))
+  }, [currentTripID])
+
+  useEffect(() => {
+    // console.log(trips)
+    trips.forEach((t) => {
+      dispatch(updateTrip({ id: Number(t.id), trip: t }))
+    })
+    // console.log(tickets)
+    setCurrentVehicleID(tickets.map((t) => Number(t.trip?.vehicle.id)))
+    // console.log(currentVehicleID)
+    currentVehicleID.forEach((c) => getVehicle(c))
+  }, [trips])
+
+  useEffect(() => {
+    // console.log(vehicles)
+    vehicles.forEach((v) => {
+      dispatch(updateVehicle({ id: Number(v.id), vehicle: v }))
+    })
+    console.log(tickets)
+  }, [vehicles])
 
   return (
     <div className='w-full h-full flex flex-row justify-start'>
@@ -84,32 +160,34 @@ const Ticket = () => {
               <thead className="bg-gray-100">
                 <tr>
                   <th className="p-3 border-b">Mã vé</th>
-                  <th className="p-3 border-b">CODE</th>
-                  <th className="p-3 border-b">Giá vé</th>
+                  <th className="p-3 border-b">Tuyến</th>
+                  <th className="p-3 border-b">Loại xe</th>
+                  <th className="p-3 border-b">Giá vé cơ bản</th>
+                  <th className="p-3 border-b">Giá vé áp dụng</th>
                   <th className="p-3 border-b">Bắt đầu</th>
                   <th className="p-3 border-b">Kết thúc</th>
-                  <th className="p-3 border-b">Check-in</th>
                   <th className="p-3 border-b">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {tickets.map((ticket) => (
-                  <tr key={ticket.id} className="hover:bg-gray-50">
-                    <td className="p-3 border-b">{ticket.id}</td>
-                    <td className="p-3 border-b">{ticket.ticketCode}</td>
-                    <td className="p-3 border-b">{ticket.price}</td>
-                    <td className="p-3 border-b">{formatTimestamp(Number(ticket.timeFrom))}</td>
-                    <td className="p-3 border-b">{formatTimestamp(Number(ticket.timeTo))}</td>
-                    <td className="p-3 border-b">{ticket.checkedIn === true ? 'Đã check-in' : 'Chưa check-in'}</td>
-                    <td className="p-3 border-b space-x-2">
-                      <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
-                        onClick={() => {
-                          setIsOpen(true)
-                          setIsEdit(true)
-                        }}>Sửa</button>
-                      <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" onClick={() => setIsDelete(true)}>Xóa</button>
-                    </td>
-                  </tr>
+                    <tr key={ticket.id} className="cursor-pointer hover:bg-gray-50">
+                      <td className="p-3 border-b">{ticket.id}</td>
+                      <td className="p-3 border-b">{`${ticket.trip?.route.origin.address.ward.district.province.name} - ${ticket.trip?.route.destination.address.ward.district.province.name}`}</td>
+                      <td className="p-3 border-b">{ticket.trip?.vehicle.type}</td>
+                      <td className="p-3 border-b">{`${Number(ticket.trip?.route.baseFare) * 1000} VND`}</td>
+                      <td className="p-3 border-b">{`${(Number(ticket.trip?.route.baseFare) * Number(ticket.trip?.vehicle.typeFactor) * 1000).toFixed(0)} VND`}</td>
+                      <td className="p-3 border-b">{formatTimestamp(Number(ticket.timeFrom))}</td>
+                      <td className="p-3 border-b">{formatTimestamp(Number(ticket.timeTo))}</td>
+                      <td className="p-3 border-b space-x-2">
+                        <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
+                          onClick={() => {
+                            setIsOpen(true)
+                            setIsEdit(true)
+                          }}>Sửa</button>
+                        <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" onClick={() => setIsDelete(true)}>Xóa</button>
+                      </td>
+                    </tr>
                 ))}
               </tbody>
             </table>

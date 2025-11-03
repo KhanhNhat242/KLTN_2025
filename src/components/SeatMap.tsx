@@ -18,7 +18,7 @@ const SeatMap = ({ isLimousine }: Props) => {
     }, [seatList])
 
     return (
-        <div className={`pt-[10px] pl-[10px] pb-[10px] pr-[20px] flex flex-row ${isLimousine ? 'w-[30%]' : 'w-[40%]' }`} style={{borderStyle: 'solid', borderRightColor: '#000', borderRightWidth: 2}}>
+        <div className={`pt-[10px] pl-[10px] pb-[10px] pr-[20px] flex flex-row ${isLimousine ? 'w-[60%]' : 'w-[70%]' }`} style={{borderStyle: 'solid', borderRightColor: '#000', borderRightWidth: 2}}>
             <div className='w-[50%] flex flex-col pr-[10px]' style={{borderStyle: 'solid', borderRightColor: '#ccc', borderRightWidth: 2}}>
                 <div className='w-full mb-[10px] flex flex-row justify-between items-center'>
                     <img src={drivericon} className='size-[40px]' />

@@ -37,7 +37,7 @@ const Login = () => {
             // alert('log in success')
             dispatch(setAccessToken(res.data.accessToken))
             dispatch(setRefreshToken(res.data.refreshToken))
-            // dispatch(setIsLogin(true))
+            dispatch(setIsLogin(true))
 
             localStorage.setItem('accessToken', res.data.accessToken)
             localStorage.setItem('refreshToken', res.data.refreshToken)

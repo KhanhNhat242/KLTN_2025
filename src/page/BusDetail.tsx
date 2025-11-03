@@ -13,7 +13,7 @@ import soldicon from '../assets/soldicon.png'
 import emptyicon from '../assets/emptyicon.png'
 import SeatMap from '../components/SeatMap'
 import { useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import axios from 'axios'
 import { useSelector } from 'react-redux'
 import type { RootState } from '../redux/store'
@@ -27,7 +27,6 @@ const BusDetail = () => {
 
     const location = useLocation() 
     const { busid, tripdata } = location.state
-    const navigate = useNavigate()
     const token = useSelector((state: RootState) => state.auth.accessToken)
 
     const getVehicle = async () => {
@@ -142,7 +141,7 @@ const BusDetail = () => {
                                     </div>
                                 </div>
                                 <button className='px-[10px] py-[5px] cursor-pointer text-white bg-[#1447E6] rounded-[10px]'
-                                    onClick={() => navigate('/payment', { state: { tripdata: tripdata } })}
+                                    // onClick={() => navigate('/payment', { state: { tripdata: tripdata } })}
                                 >Xác nhận</button>
                             </div>
                         </div>

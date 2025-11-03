@@ -165,7 +165,7 @@ const Trip = () => {
                   <th className="p-3 border-b">Thời gian kết thúc</th>
                   <th className="p-3 border-b">Nơi đi</th>
                   <th className="p-3 border-b">Nơi đến</th>
-                  <th className="p-3 border-b">Giá vé cơ bản</th>
+                  {/* <th className="p-3 border-b">Giá vé cơ bản</th> */}
                   <th className="p-3 border-b">Actions</th>
                 </tr>
               </thead>
@@ -179,7 +179,7 @@ const Trip = () => {
                         <td className="p-3 border-b">{formatTimestamp(Number(trip.arrivalTime))}</td>
                         <td className="p-3 border-b">{trip.route.origin.name}</td>
                         <td className="p-3 border-b">{trip.route.destination.name}</td>
-                        <td className="p-3 border-b">{trip.baseFare}</td>
+                        {/* <td className="p-3 border-b">{trip.baseFare}</td> */}
                         <td className="p-3 border-b space-x-2">
                           <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
                             onClick={() => {

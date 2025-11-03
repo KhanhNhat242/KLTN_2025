@@ -9,7 +9,7 @@ const SearchTrip = () => {
     const [provinces, setProvinces] = useState<Province[]>([])
     const [currentPStart, setCurrentPStart] = useState<number>(0)
     const [currentPEnd, setCurrentPEnd] = useState<number>(0)
-    const [datetime, setDatetime] = useState<string>('')
+    const [date, setDate] = useState<string>('')
 
     const token = useSelector((state: RootState) => state.auth.accessToken)
     const dispatch = useDispatch()
@@ -33,13 +33,15 @@ const SearchTrip = () => {
     }
 
     const handleSearch = async () => {
-        const dt = new Date(datetime).toISOString()
-        console.log(currentPStart, currentPEnd, dt)
+        // const dt = new Date(datetime).toISOString()
+        console.log(currentPStart, currentPEnd, date)
+        const st = `${date}T00:00:00.000Z`
+        const et = `${date}T23:59:59.000Z`
 
-        await axios.get(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/trips?departureTime.greaterThanOrEqual=${dt}&originProvinceCode.equals=${currentPStart}&destinationProvinceCode.equals=${currentPEnd}`, {
+        await axios.get(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/trips?departureTime.greaterThan=${st}&departureTime.lessThan=${et}&originProvinceCode.equals=${currentPStart}&destinationProvinceCode.equals=${currentPEnd}`, {
             params: {
                 'page': '0',
-                'size': '500',
+                'size': '200',
             },
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -48,15 +50,13 @@ const SearchTrip = () => {
             }  
         })
         .then((res) => {
-            // console.log(res.data)
+            console.log(res.data)
             dispatch(setTrips(res.data))
         })
         .catch((error) => {
             alert('Error when search trip!')
             console.log(error)
         })
-
-        // navigate('/trip')
     }
     
     useEffect(() => {
@@ -98,7 +98,7 @@ const SearchTrip = () => {
                 </div>
                 <div className="w-[20%] flex flex-col items-start justify-end">
                     <p>Ngày đi</p>
-                    <input value={datetime} onChange={(e) => setDatetime(e.target.value)} type="datetime-local" className='w-full p-[15px] rounded-[5px] mt-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}} />
+                    <input value={date} onChange={(e) => setDate(e.target.value)} type="date" className='w-full p-[15px] rounded-[5px] mt-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}} />
                 </div>
                 <div className="w-[25%] h-full flex flex-row items-end">
                     <button className='w-full h-[60%] p-[10px] cursor-pointer text-white bg-[#1447E6] rounded-[10px]' onClick={() => handleSearch()}>Tìm kiếm</button>
