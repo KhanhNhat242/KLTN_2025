@@ -11,6 +11,7 @@ import addressSlice from './addressSlice'
 import routeSlice from './routeSlice'
 import ticketSlice from './ticketSlice'
 import seatListSlice from './seatListSlice'
+import scheduleSlice from './scheduleSlice'
 
 export const store = configureStore({
     reducer: {
@@ -26,6 +27,7 @@ export const store = configureStore({
         routes: routeSlice,
         tickets: ticketSlice,
         seatList: seatListSlice,
+        schedule: scheduleSlice,
     },
 })
 

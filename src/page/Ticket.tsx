@@ -70,6 +70,7 @@ const Ticket = () => {
         },
     })
     .then((res) => {
+      // console.log(res.data)
       // console.log(res.data.detailVM.vehicle)
       // console.log(res.data.tripDTO)
       if (res.data?.tripDTO) {
@@ -137,7 +138,7 @@ const Ticket = () => {
       <Header />
       <div className='w-full p-[10px]'>
         <HeaderTop />
-        <h2 className='text-[20px] text-left font-bold mt-[10px] mb-[10px]'>Danh sách vé</h2>
+        <h2 className='text-[20px] text-left font-bold mt-[10px] mb-[10px]'>Quản lý bảng giá</h2>
         <div className='w-full flex flex-row justify-between'>
           <div className='flex flex-row'>
             <Search placeholder='Tìm trong danh sách tuyến' />
@@ -162,7 +163,7 @@ const Ticket = () => {
                   <th className="p-3 border-b">Mã vé</th>
                   <th className="p-3 border-b">Tuyến</th>
                   <th className="p-3 border-b">Loại xe</th>
-                  <th className="p-3 border-b">Giá vé cơ bản</th>
+                  {/* <th className="p-3 border-b">Giá vé cơ bản</th> */}
                   <th className="p-3 border-b">Giá vé áp dụng</th>
                   <th className="p-3 border-b">Bắt đầu</th>
                   <th className="p-3 border-b">Kết thúc</th>
@@ -175,8 +176,8 @@ const Ticket = () => {
                       <td className="p-3 border-b">{ticket.id}</td>
                       <td className="p-3 border-b">{`${ticket.trip?.route.origin.address.ward.district.province.name} - ${ticket.trip?.route.destination.address.ward.district.province.name}`}</td>
                       <td className="p-3 border-b">{ticket.trip?.vehicle.type}</td>
-                      <td className="p-3 border-b">{`${Number(ticket.trip?.route.baseFare) * 1000} VND`}</td>
-                      <td className="p-3 border-b">{`${(Number(ticket.trip?.route.baseFare) * Number(ticket.trip?.vehicle.typeFactor) * 1000).toFixed(0)} VND`}</td>
+                      {/* <td className="p-3 border-b">{(Number(ticket.trip?.route.baseFare) * 1000).toLocaleString('it-IT', {style : 'currency', currency : 'VND'})}</td> */}
+                      <td className="p-3 border-b">{(Number(ticket.trip?.route.baseFare) * Number(ticket.trip?.vehicle.typeFactor) * 1000).toLocaleString('it-IT', {style : 'currency', currency : 'VND'})}</td>
                       <td className="p-3 border-b">{formatTimestamp(Number(ticket.timeFrom))}</td>
                       <td className="p-3 border-b">{formatTimestamp(Number(ticket.timeTo))}</td>
                       <td className="p-3 border-b space-x-2">

@@ -166,3 +166,20 @@ export interface Booking {
     customerId: string,
     tripId: number,
 }
+
+export interface OccasionRule {
+    id: number,
+    occasion: string,
+    occasionFactor: number,
+}
+
+export interface Schedule {
+    id: number,
+    scheduleCode: string,
+    startDate: number[],
+    endDate: number[],
+    daysOfWeek: string,
+    active: boolean,
+    occasionRule: OccasionRule,
+    route: Route,
+}

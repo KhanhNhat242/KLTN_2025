@@ -21,7 +21,7 @@ const Route = () => {
     const routes = useSelector((state: RootState) => state.routes)
 
     const getRoutes = async () => {
-        await axios.get('https://apigateway.microservices.appf4s.io.vn/services/msroute/api/routes?page=0&size=40', {
+        await axios.get('https://apigateway.microservices.appf4s.io.vn/services/msroute/api/routes?page=0&size=100', {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'accept': '*/*',
@@ -70,7 +70,7 @@ const Route = () => {
                 <thead className="bg-gray-100">
                     <tr>
                         <th className="p-3 border-b">Mã tuyến</th>
-                        <th className="p-3 border-b">CODE</th>
+                        <th className="p-3 border-b">Giá cơ bản</th>
                         <th className="p-3 border-b">Điểm đón</th>
                         <th className="p-3 border-b">Điểm trả</th>
                         <th className="p-3 border-b">Actions</th>
@@ -78,10 +78,11 @@ const Route = () => {
                 </thead>
                 <tbody>
                     {routes.map((route) => {
+                        if ((route.id >= 1000))
                         return (
                         <tr key={route.id} className="cursor-pointer hover:bg-gray-50">
                             <td className="p-3 border-b">{route.id}</td>
-                            <td className="p-3 border-b">{route.routeCode}</td>
+                            <td className="p-3 border-b">{route.baseFare}</td>
                             <td className="p-3 border-b">{route.origin.name}</td>
                             <td className="p-3 border-b">{route.destination.name}</td>
                             <td className="p-3 border-b space-x-2">

@@ -78,10 +78,12 @@ const SearchTrip = () => {
                         onChange={(e) => {
                             setCurrentPStart(Number(e.target.value))
                         }}>
+                        <option>Chọn điểm đi</option>
                         { 
-                            provinces.sort((a, b) => a.name.localeCompare(b.name)).map((province) => (
-                                <option key={province.id} value={province.provinceCode}>{province.name}</option>
-                            ))
+                            provinces.sort((a, b) => a.name.localeCompare(b.name)).map((province) => {
+                                if (province.id >= 1500)
+                                return <option key={province.id} value={province.provinceCode}>{province.name}</option>
+                            })
                         } 
                     </select>
                 </div>
@@ -89,10 +91,12 @@ const SearchTrip = () => {
                     <p>Điểm đến</p>
                     <select className='w-full p-[15px] rounded-[5px] mt-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}
                         onChange={(e) => setCurrentPEnd(Number(e.target.value))}>
+                        <option>Chọn điểm đến</option>
                         { 
-                            provinces.sort((a, b) => a.name.localeCompare(b.name)).map((province) => (
-                                <option key={province.id} value={province.provinceCode}>{province.name}</option>
-                            ))
+                            provinces.sort((a, b) => a.name.localeCompare(b.name)).map((province) => {
+                                if (province.id >= 1500)
+                                return <option key={province.id} value={province.provinceCode}>{province.name}</option>
+                            })
                         }
                     </select>
                 </div>

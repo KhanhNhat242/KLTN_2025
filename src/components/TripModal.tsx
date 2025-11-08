@@ -26,6 +26,7 @@ const TripModal = ({ setIsOpen, isEdit, trip }: Props) => {
     const [bus, setBus] = useState<Bus>()
     const [pStart, setPStart] = useState<string>('')
     const [pEnd, setPEnd] = useState<string>('')
+    const [vehicle, setVehicle] = useState<Bus>()
 
     const token = useSelector((state: RootState) => state.auth.accessToken)
     const dispatch = useDispatch()
@@ -43,7 +44,7 @@ const TripModal = ({ setIsOpen, isEdit, trip }: Props) => {
             setProvinces(res.data)
         })
         .catch((error) => {
-            alert('Error when get provinces!')
+            console.log('Error when get provinces!')
             console.log(error)
         })
     }
@@ -77,11 +78,29 @@ const TripModal = ({ setIsOpen, isEdit, trip }: Props) => {
             }  
         })
         .then((res) => {
-            console.log(res.data)
+            // console.log(res.data)
             setBuses(res.data)
         })
         .catch((error) => {
             alert('Error when get buses!')
+            console.log(error)
+        })
+    }
+
+    const getVehicle = async () => {
+        await axios.get(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/vehicles/${trip?.vehicle.id}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'accept': '*/*',
+                'Content-Type': 'application/json',
+            }  
+        })
+        .then((res) => {
+            console.log(res.data)
+            setVehicle(res.data)
+        })
+        .catch((error) => {
+            alert('Error when get vehicle!')
             console.log(error)
         })
     }
@@ -705,6 +724,7 @@ const TripModal = ({ setIsOpen, isEdit, trip }: Props) => {
             setRoute(trip.route)
             setBus(trip.vehicle)
         }
+        if (isEdit) getVehicle()
     }, [])
 
     useEffect(() => {
@@ -717,7 +737,7 @@ const TripModal = ({ setIsOpen, isEdit, trip }: Props) => {
             <div className="w-[30%] relative bg-white rounded-lg shadow-xl transform transition-all">
                 <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                        <h3 id="dialog-title" className="text-base text-[20px] mb-[10px] font-bold text-gray">{isEdit ? 'Chỉnh sửa thông tin chuyến xe' : 'Tạo chuyến xe mới'}</h3>
+                        <h3 id="dialog-title" className="text-base text-[20px] mb-[10px] font-bold text-gray">{isEdit ? 'Chỉnh sửa thông tin lịch trình' : 'Tạo lịch trình mới'}</h3>
                         <div className='w-full flex flex-col'>
                             <div className='w-full flex flex-row justify-between my-[5px]'>
                                 <div className='w-[48%]'>
@@ -736,10 +756,11 @@ const TripModal = ({ setIsOpen, isEdit, trip }: Props) => {
                                         onChange={(e) => setCurrentPStart(Number(e.target.value))}>
                                         <option value="">Chọn tỉnh</option>
                                         { 
-                                            provinces.sort((a, b) => a.name.localeCompare(b.name)).map((province) => (
-                                                <option key={province.id} value={province.provinceCode}>{province.name}</option>
-                                            ))
-                                        }
+                                            provinces.sort((a, b) => a.name.localeCompare(b.name)).map((province) => {
+                                                if (province.id >= 1500)
+                                                return <option key={province.id} value={province.provinceCode}>{province.name}</option>
+                                            })
+                                        } 
                                     </select>
                                 </div>
                                 <div className='w-[48%]'>
@@ -748,10 +769,11 @@ const TripModal = ({ setIsOpen, isEdit, trip }: Props) => {
                                         onChange={(e) => setCurrentPEnd(Number(e.target.value))}>
                                         <option value="">Chọn tỉnh</option>
                                         { 
-                                            provinces.sort((a, b) => a.name.localeCompare(b.name)).map((province) => (
-                                                <option key={province.id} value={province.provinceCode}>{province.name}</option>
-                                            ))
-                                        }
+                                            provinces.sort((a, b) => a.name.localeCompare(b.name)).map((province) => {
+                                                if (province.id >= 1500)
+                                                return <option key={province.id} value={province.provinceCode}>{province.name}</option>
+                                            })
+                                        } 
                                     </select>
                                 </div>
                             </div>
@@ -776,7 +798,7 @@ const TripModal = ({ setIsOpen, isEdit, trip }: Props) => {
                                         onChange={(e) => {
                                             getVehicles(e.target.value)
                                         }}>
-                                        <option>{isEdit ? trip?.vehicle.type : 'Chọn loại xe'}</option>
+                                        <option>{isEdit ? vehicle?.type : 'Chọn loại xe'}</option>
                                         <option value='STANDARD_BUS_NORMAL'>STANDARD_BUS_NORMAL</option>
                                         <option value='STANDARD_BUS_VIP'>STANDARD_BUS_VIP</option>
                                         <option value='LIMOUSINE'>LIMOUSINE</option>
@@ -789,7 +811,7 @@ const TripModal = ({ setIsOpen, isEdit, trip }: Props) => {
                                             const selected = buses.find(o => o.id === Number(e.target.value))
                                             if (selected) setBus(selected)
                                         }}>
-                                        <option>{isEdit ? trip?.vehicle.plateNumber : 'Chọn xe'}</option>
+                                        <option>{isEdit ? vehicle?.plateNumber : 'Chọn xe'}</option>
                                         {
                                             buses.map((bus) => (
                                                 <option value={bus.id}>{bus.plateNumber}</option>

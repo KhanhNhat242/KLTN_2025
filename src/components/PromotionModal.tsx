@@ -14,23 +14,28 @@ interface Props {
 const PromotionModal = ({ setIsOpen, isEdit, promo }: Props) => {
     const [code, setCode] = useState<string>('')
     const [description, setDescription] = useState<string>('')
-    const [startDate, setStartDate] = useState<Date | null>(new Date())
-    const [endDate, setEndDate] = useState<Date | null>(new Date())
+    const [startDate, setStartDate] = useState<string>('')
+    const [endDate, setEndDate] = useState<string>('')
     const [num, setNum] = useState<number>(0)
     const [count, setCount] = useState<number>(0)
 
     const token = useSelector((state: RootState) => state.auth.accessToken)
     const dispatch = useDispatch()
 
-    const formatDate = (date: Date | null) => {
-        if (!date) return ''
-        return date.toISOString().split('T')[0] // lấy phần YYYY-MM-DD
+    const formatDate = (dateArr: number[]): string => {
+        const [year, month, day] = dateArr;
+
+        const mm = String(month).padStart(2, "0");
+        const dd = String(day).padStart(2, "0");
+
+        return `${year}-${mm}-${dd}`;
     }
 
     const handleCreate = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
 
-        console.log('create', code, description, formatDate(startDate), formatDate(endDate), num, count)
+        // console.log('create', code, description, formatDate(startDate), formatDate(endDate), num, count)
+        console.log('create', code, description, startDate, endDate, num, count)
         const ca = new Date()
         const ua = new Date()
 
@@ -38,8 +43,8 @@ const PromotionModal = ({ setIsOpen, isEdit, promo }: Props) => {
             {
                 'code': code,
                 'description': description,
-                'startDate': formatDate(startDate),
-                'endDate': formatDate(endDate),
+                'startDate': startDate,
+                'endDate': endDate,
                 'usageLimit': num,
                 'usedCount': count,
                 'createdAt': ca.toISOString(),
@@ -59,7 +64,7 @@ const PromotionModal = ({ setIsOpen, isEdit, promo }: Props) => {
         .then((res) => {
             dispatch(add(res.data))
             alert('Create success')
-            console.log(res)
+            // console.log(res)
         })
         .catch((error) => {
             alert('Error when creating!')
@@ -73,15 +78,15 @@ const PromotionModal = ({ setIsOpen, isEdit, promo }: Props) => {
         const ca = new Date()
         const ua = new Date()
 
-        console.log('edit', code, description, formatDate(startDate), formatDate(endDate), num, count)
+        console.log('edit', code, description, startDate, endDate, num, count)
 
-        await axios.put(`https://apigateway.microservices.appf4s.io.vn/services/mspromotion/api/promotions/${promo.id}`,
+        await axios.put(`https://apigateway.microservices.appf4s.io.vn/services/mspromotion/api/promotions/${promo?.id}`,
             {
                 'id': promo?.id,
                 'code': code,
                 'description': description,
-                'startDate': formatDate(startDate),
-                'endDate': formatDate(endDate),
+                'startDate': startDate,
+                'endDate': endDate,
                 'usageLimit': num,
                 'usedCount': count,
                 'createdAt': ca.toISOString(),
@@ -100,7 +105,7 @@ const PromotionModal = ({ setIsOpen, isEdit, promo }: Props) => {
         .then((res) => {
             dispatch(update(res.data))
             alert('Edit success')
-            console.log(res)
+            // console.log(res)
         })
         .catch((error) => {
             alert('Error when editing!')
@@ -109,20 +114,14 @@ const PromotionModal = ({ setIsOpen, isEdit, promo }: Props) => {
     }
 
     useEffect(() => {
-        console.log(promo)
-
-        if (promo) {
-            const sd = new Date(promo.startDate[0], promo.startDate[1] - 1, promo.startDate[2] + 1)
-            const ed = new Date(promo.endDate[0], promo.endDate[1] - 1, promo.endDate[2] + 1)
-
-            if (isEdit) {
-                setCode(promo?.code)
-                setDescription(promo?.description)
-                setStartDate(sd)
-                setEndDate(ed)
-                setNum(promo?.usageLimit)
-                setCount(promo?.usedCount)
-            }
+        // console.log(promo)
+        if (isEdit && promo) {
+            setCode(promo?.code)
+            setDescription(promo?.description)
+            setStartDate(formatDate(promo.startDate))
+            setEndDate(formatDate(promo.endDate))
+            setNum(promo?.usageLimit)
+            setCount(promo?.usedCount)
         }
     }, [])
 
@@ -147,11 +146,13 @@ const PromotionModal = ({ setIsOpen, isEdit, promo }: Props) => {
                                 <div className='w-full flex flex-row justify-between'>
                                     <div className='w-[48%]'>
                                         <p>Ngày bắt đầu</p>
-                                        <input value={formatDate(startDate)} onChange={(e) => setStartDate(e.target.valueAsDate ? new Date(e.target.value) : null)} type="date" name="" id=""  className='w-full px-[5px] py-[3px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}} />
+                                        {/* <input value={formatDate(startDate)} onChange={(e) => setStartDate(e.target.valueAsDate ? new Date(e.target.value) : null)} type="date" name="" id=""  className='w-full px-[5px] py-[3px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}} /> */}
+                                        <input value={startDate} onChange={(e) => setStartDate(e.target.value)} type="date" name="" id=""  className='w-full px-[5px] py-[3px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}} />
                                     </div>
                                     <div className='w-[48%]'>
                                         <p>Ngày kết thúc</p>
-                                        <input value={formatDate(endDate)} onChange={(e) => setEndDate(e.target.valueAsDate  ? new Date(e.target.value) : null)} type="date" name="" id=""  className='w-full px-[5px] py-[3px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}} />
+                                        {/* <input value={formatDate(endDate)} onChange={(e) => setEndDate(e.target.valueAsDate  ? new Date(e.target.value) : null)} type="date" name="" id=""  className='w-full px-[5px] py-[3px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}} /> */}
+                                        <input value={endDate} onChange={(e) => setEndDate(e.target.value)} type="date" name="" id=""  className='w-full px-[5px] py-[3px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}} />
                                     </div>
                                 </div>
                                 <div className='w-full flex flex-row justify-between my-[10px]'>

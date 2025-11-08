@@ -20,8 +20,20 @@ const Trip = () => {
             <p className='p-[5px] cursor-pointer' onClick={() => navigate('/bus')}>Xe & Sơ đồ ghế</p>
             <p className='p-[5px] cursor-pointer' onClick={() => navigate('/station')}>Trạm đón/trả</p>
             <p className='p-[5px] cursor-pointer' onClick={() => navigate('/trip')}>Lịch trình (Trips)</p>
+            <p className='p-[5px] cursor-pointer' onClick={() => navigate('/schedule')}>Lịch trình (Chu kỳ)</p>
         </div>
-)
+    )
+}
+
+const Ticket = () => {
+    const navigate = useNavigate()
+
+    return (
+        <div className='w-full flex flex-col items-start pl-[30px]'>
+            <p className='p-[5px] cursor-pointer' onClick={() => navigate('/ticket')}>Bảng giá</p>
+            <p className='p-[5px] cursor-pointer' onClick={() => navigate('/bus')}>Giá vé theo thời điểm</p>
+        </div>
+    )
 }
 
 const Header = () => {
@@ -44,10 +56,14 @@ const Header = () => {
                     <img src={count === 2 ? upcollapseicon : downcollapseicon} />
                 </div>
                 {count === 2 && <Trip />}
-                <div className='w-full flex flex-row items-center p-[10px] cursor-pointer' onClick={() => navigate('/ticket')}>
-                    <img src={ticketicon} className='mr-[10px]' />
-                    <p>Quản lý vé</p>
+                <div className='w-full flex flex-row justify-between items-center p-[10px] cursor-pointer'  onClick={() => count === 3 ? setCount(0) : setCount(3)}>
+                    <div className='flex flex-row'>
+                        <img src={ticketicon} className='mr-[10px]' />
+                        <p>Quản lý vé</p>
+                    </div>
+                    <img src={count === 3 ? upcollapseicon : downcollapseicon} />
                 </div>
+                {count === 3 && <Ticket />}
                 <div className='w-full flex flex-row justify-between items-center p-[10px] cursor-pointer'>
                     <div className='flex flex-row'>
                         <img src={customericon} className='mr-[10px]' />

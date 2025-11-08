@@ -1,7 +1,6 @@
 import Header from '../components/Header'
 import HeaderTop from '../components/HeaderTop'
 import Search from '../components/Search'
-import Filter from '../components/Filter'
 import downloadicon from '../assets/downloadicon.png'
 import { useEffect, useState } from 'react'
 import PromotionModal from '../components/PromotionModal'
@@ -11,7 +10,7 @@ import { type RootState } from '../redux/store'
 import { useDispatch, useSelector } from 'react-redux'
 import DeleteMocal from '../components/DeleteModal'
 import { setPromotions } from '../redux/promotionsSlice'
-import type {Promotion as PromotionInterface} from '../interface/Interface'
+import type {Promotion, Promotion as PromotionInterface} from '../interface/Interface'
 import { setCurrentID } from '../redux/currentSelectedSlice'
 import { setBuyNGetMs } from '../redux/buyNGetMSlice'
 import { setPercentOffs } from '../redux/percentOffSlice'
@@ -22,6 +21,8 @@ const Promotion = () => {
     const [isDelete, setIsDelete] = useState<boolean>(false)
     const [isEdit, setIsEdit] = useState<boolean>(false)
     const [currentnav, setCurrentnav] = useState<number | undefined>(0)
+    const [currentFilter, setCurrentFilter] = useState<string>('all')
+    const [promotionsFilter, setPromotionsFilter] = useState<Promotion[]>([])
 
     const token = useSelector((state: RootState) => state.auth.accessToken)
     const dispatch = useDispatch()
@@ -80,6 +81,59 @@ const Promotion = () => {
         }
     }
 
+    const handleFilter = async () => {
+        const date = new Date()
+        const cd = date.toISOString().split("T")[0]
+        if (currentFilter === 'happening') {
+            await axios.get(`https://apigateway.microservices.appf4s.io.vn/services/mspromotion/api/promotions?startDate.equals=${cd}`,{
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'accept': '*/*',
+                    'Content-Type': 'application/json',
+                    'X-XSRF-TOKEN': '41866a2d-cdc1-4547-9eef-f6d3464f7b6b',
+                },
+            })
+            .then((res) => {
+                setPromotionsFilter(res.data)
+            })
+            .catch(() => {
+                console.log('Filter fail!')
+            })
+        }
+        else if (currentFilter === 'ended') {
+            await axios.get(`https://apigateway.microservices.appf4s.io.vn/services/mspromotion/api/promotions?endDate.lessThan=${cd}`,{
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'accept': '*/*',
+                    'Content-Type': 'application/json',
+                    'X-XSRF-TOKEN': '41866a2d-cdc1-4547-9eef-f6d3464f7b6b',
+                },
+            })
+            .then((res) => {
+                setPromotionsFilter(res.data)
+            })
+            .catch(() => {
+                console.log('Filter fail!')
+            })
+        }
+        else if (currentFilter === 'notStarted') {
+            await axios.get(`https://apigateway.microservices.appf4s.io.vn/services/mspromotion/api/promotions?startDate.greaterThan=${cd}`,{
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'accept': '*/*',
+                    'Content-Type': 'application/json',
+                    'X-XSRF-TOKEN': '41866a2d-cdc1-4547-9eef-f6d3464f7b6b',
+                },
+            })
+            .then((res) => {
+                setPromotionsFilter(res.data)
+            })
+            .catch(() => {
+                console.log('Filter fail!')
+            })
+        }    
+    }
+
     useEffect(() => {
         // console.log('token:', accesstoken)
         if (token) {
@@ -97,16 +151,26 @@ const Promotion = () => {
 
     }, [currentnav, token])
 
+    useEffect(() => {
+        handleFilter()
+    }, [currentFilter])
+
     return (
         <div className='w-full flex flex-row'>
             <Header />
             <div className='w-full p-[10px]'>
                 <HeaderTop />
-                <h2 className='text-[20px] text-left font-bold mt-[10px] mb-[10px]'>Danh sách khuyến mãi</h2>
+                <h2 className='text-[20px] text-left font-bold mt-[10px] mb-[10px]'>Quản lý khuyến mãi</h2>
                 <div className='w-full flex flex-row justify-between'>
                     <div className='flex flex-row'>
                         <Search placeholder='Tìm trong danh sách tuyến' />
-                        <Filter type='promotion' />
+                        <select className='flex flex-row items-center rounded-[10px] p-[10px] ml-[10px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}
+                            onChange={(e) => setCurrentFilter(e.target.value)}>
+                            <option value="all">Tất cả</option>
+                            <option value="happening">Đang diễn ra</option>
+                            <option value="ended">Đã kết thúc</option>
+                            <option value="notStarted">Chưa diễn ra</option>
+                        </select>
                     </div>
                     <div className='flex flex-row'>
                         <button className='p-[10px] flex flex-row items-center mx-[10px] rounded-[10px] cursor-pointer' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}>
@@ -136,7 +200,7 @@ const Promotion = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {promotions.map((promo) => {
+                            {currentFilter === 'all' ? promotions.map((promo) => {
                                 return (
                                     <>
                                         <tr key={promo.id} className="hover:bg-gray-50 border-b-[#ccc] cursor-pointer" 
@@ -147,9 +211,7 @@ const Promotion = () => {
                                                 }
                                                 else if (currentnav === promo.id) {
                                                     setCurrentnav(0)       
-                                                }
-                                            }}
-                                        >
+                                                }}}>
                                             <td className="p-3">{promo.id}</td>
                                             <td className="p-3">{promo.code}</td>
                                             <td className="p-3">{promo.description}</td>
@@ -173,7 +235,43 @@ const Promotion = () => {
                                             </td>
                                         </tr>
                                     </>
-                            ) })}
+                            )}) : promotionsFilter.map((promo) => {
+                                return (
+                                    <>
+                                        <tr key={promo.id} className="hover:bg-gray-50 border-b-[#ccc] cursor-pointer" 
+                                            onClick={() => {
+                                                if (currentnav === 0) {
+                                                    setCurrentnav(promo.id)
+                                                    dispatch(setCurrentID(promo.id))
+                                                }
+                                                else if (currentnav === promo.id) {
+                                                    setCurrentnav(0)       
+                                                }}}>
+                                            <td className="p-3">{promo.id}</td>
+                                            <td className="p-3">{promo.code}</td>
+                                            <td className="p-3">{promo.description}</td>
+                                            <td className="p-3">{`${promo.startDate[2]}/${promo.startDate[1]}/${promo.startDate[0]}`}</td>
+                                            <td className="p-3">{`${promo.endDate[2]}/${promo.endDate[1]}/${promo.endDate[0]}`}</td>
+                                            <td>{promo.usageLimit}</td>
+                                            <td>{promo.usedCount}</td>
+                                            <td className="p-3 space-x-2">
+                                                <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
+                                                onClick={() => {
+                                                    setSelectedPromo(promo)
+                                                    setIsOpen(true)
+                                                    setIsEdit(true)
+                                                }}>Sửa</button>
+                                                <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" onClick={() => setIsDelete(true)}>Xóa</button>
+                                            </td>
+                                        </tr>
+                                        <tr className='border-b'>
+                                            <td colSpan={6}>
+                                                {currentnav === promo.id && <PromotionLine />}
+                                            </td>
+                                        </tr>
+                                    </>
+                            )})
+                        }
                         </tbody>
                     </table>
                 </div>

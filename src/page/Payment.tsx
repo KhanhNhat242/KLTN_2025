@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import Header from '../components/Header'
 import HeaderTop from '../components/HeaderTop'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import type { RootState } from '../redux/store'
 import type { Bus } from '../interface/Interface'
@@ -16,11 +16,13 @@ const Payment = () => {
     const [vehicle, setVehicle] = useState<Bus>()
     const [isLimousine, setIsLimousine] = useState<boolean>(false)
     const [type, setType] = useState<string>('')
+    const [price, setPrice] = useState<number>(1)
 
     const location = useLocation() 
     const { tripData, vehicleID } = location.state
     const seatList = useSelector((state: RootState) => state.seatList)
     const token = useSelector((state: RootState) => state.auth.accessToken)
+    const navigate = useNavigate()
 
     const getVehicle = async () => {
         await axios.get(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/vehicles/${vehicleID}`, {
@@ -31,7 +33,7 @@ const Payment = () => {
             }  
         })
         .then((res) => {
-            console.log(res.data)
+            // console.log(res.data)
             setVehicle(res.data)
             if (res.data.type === 'LIMOUSINE') {
                 setIsLimousine(true)
@@ -63,14 +65,25 @@ const Payment = () => {
         return `${hours}:${minutes}:${seconds} ngày ${day}/${month}/${year}`
     }
 
+    const handlePrice = () => {
+        console.log(vehicle)
+        setPrice(Number(vehicle?.typeFactor) * tripData.route.baseFare * 1000)
+    }
+
     const handlePayment = async () => {
         alert('Thanh toán thành công')
+        navigate('/')
     }
 
     useEffect(() => {
-        console.log(tripData, vehicleID)
+        // console.log(vehicleID)
         getVehicle()
     }, [])
+    
+    useEffect(() => {
+        handlePrice()
+        console.log(price)
+    }, [vehicle])
 
     return (
         <div className='w-full h-full flex flex-row justify-start'>
@@ -160,25 +173,26 @@ const Payment = () => {
                         <div className='w-full bg-white flex flex-col items-start p-[10px] mt-[10px]'>
                             <h2 className='font-bold text-[20px] p-[10px]'>Thông tin hóa đơn</h2>
                             <div className='w-full flex flex-col p-[10px]' style={{borderTopColor: '#ccc', borderTopStyle: 'solid', borderTopWidth: '1px'}}>
-                                <div className='w-full flex flex-row justify-between mt-[5px]'>
+                                {/* <div className='w-full flex flex-row justify-between mt-[5px]'>
                                     <p>Tạm tính</p>
                                     <p className='font-bold'>600000</p>
                                 </div>
                                 <div className='w-full flex flex-row items-center justify-between'>
                                     <p>Khuyến mãi</p>
                                     <input type="text" className='w-[30%] px-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}} />
-                                    {/* <select className='w-[30%] p-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}>
+                                    <select className='w-[30%] p-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}>
                                         <option value="">ứdfgử</option>
                                         <option value="">ửdtgwẻ</option>
                                         <option value="">ưêtgư</option>
-                                    </select> */}
-                                </div>
-                                <div className='w-full h-full flex flex-col justify-between mt-[10px] pt-[10px]' style={{borderTopStyle: 'solid', borderTopWidth: 1, borderTopColor: '#000'}} >
+                                    </select>
+                                </div> */}
+                                {/* <div className='w-full h-full flex flex-col justify-between items-end mt-[10px] pt-[10px]' style={{borderTopStyle: 'solid', borderTopWidth: 1, borderTopColor: '#000'}} > */}
+                                <div className='w-full h-full flex flex-col justify-between items-end mt-[10px] pt-[10px]' >
                                     <div className='w-full flex flex-row justify-between'>
                                         <p>Tổng tiền</p>
-                                        <p className='font-bold'>600000</p>
+                                        <p className='font-bold'>{(price * seatList.length).toLocaleString('it-IT', {style : 'currency', currency : 'VND'})}</p>
                                     </div>
-                                    <button className='p-[10px] cursor-pointer text-white bg-[#1447E6] rounded-[10px]'
+                                    <button className='w-[30%] mt-[10px] p-[10px] cursor-pointer text-white bg-[#1447E6] rounded-[10px]'
                                         onClick={() => handlePayment()}
                                     >Thanh toán</button>
                                 </div>
