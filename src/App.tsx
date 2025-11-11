@@ -13,7 +13,7 @@ import Payment from './page/Payment'
 import { useDispatch } from 'react-redux'
 import { setAccessToken, setRefreshToken } from './redux/authSlice'
 import Schedule from './page/Schedule'
-import TicketOccasion from './page/TicketOccasion'
+import TicketPrice from './page/TicketPrice'
 
 function App() {
   const accessToken = localStorage.getItem('accessToken')
@@ -41,7 +41,7 @@ function App() {
           <Route path='/route' element={<Routee />} />
           <Route path='/payment' element={<Payment />} />
           <Route path='/schedule' element={<Schedule />} />
-          <Route path='/ticket-occasion' element={<TicketOccasion />} />
+          <Route path='/ticket-price' element={<TicketPrice />} />
         </Routes>
       </Router>
     </>

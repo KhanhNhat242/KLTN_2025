@@ -93,6 +93,7 @@ const Bus = () => {
               </thead>
               <tbody>
                 {buses.map((bus) => {
+                    if (bus.id >= 1540)
                     return (
                       <tr key={bus.id} className="cursor-pointer hover:bg-gray-50">
                         <td className="p-3 border-b"  onClick={() => navigate('/bus-detail', { state: { busdata: bus } })}>{bus.id}</td>
@@ -107,7 +108,12 @@ const Bus = () => {
                               setIsOpen(true)
                               setIsEdit(true)
                             }}>Sửa</button>
-                          <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" onClick={() => setIsDelete(true)}>Xóa</button>
+                            <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
+                                onClick={() => {
+                                  setSelectedBus(bus)
+                                  setIsDelete(true)
+                                }
+                                }>Xóa</button>
                         </td>
                       </tr>
                     )
@@ -118,7 +124,7 @@ const Bus = () => {
           </div>
         </div>
         {isOpen && (isEdit ? <BusModal isEdit={true} setIsOpen={setIsOpen} bus={selectedBus} /> : <BusModal isEdit={false} setIsOpen={setIsOpen} /> ) }
-        {isDelete && <DeleteModal setIsDelete={setIsDelete}/>}
+        {isDelete && <DeleteModal setIsDelete={setIsDelete} vehicle={selectedBus} />}
     </div>
   )
 }

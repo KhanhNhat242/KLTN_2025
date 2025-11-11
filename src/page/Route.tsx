@@ -10,11 +10,13 @@ import { setRoutes } from '../redux/routeSlice'
 import type { RootState } from '../redux/store'
 import DeleteModal from '../components/DeleteModal'
 import RouteModal from '../components/RouteModal'
+import type { Route } from '../interface/Interface'
 
 const Route = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [isEdit, setIsEdit] = useState<boolean>(false)
     const [isDelete, setIsDelete] = useState<boolean>(false)
+    const [selectedRoute, setSelectedRoute] = useState<Route>()
 
     const token = useSelector((state: RootState) => state.auth.accessToken)
     const dispatch = useDispatch()
@@ -70,6 +72,7 @@ const Route = () => {
                 <thead className="bg-gray-100">
                     <tr>
                         <th className="p-3 border-b">Mã tuyến</th>
+                        <th className="p-3 border-b">CODE</th>
                         <th className="p-3 border-b">Giá cơ bản</th>
                         <th className="p-3 border-b">Điểm đón</th>
                         <th className="p-3 border-b">Điểm trả</th>
@@ -82,6 +85,7 @@ const Route = () => {
                         return (
                         <tr key={route.id} className="cursor-pointer hover:bg-gray-50">
                             <td className="p-3 border-b">{route.id}</td>
+                            <td className="p-3 border-b">{route.routeCode}</td>
                             <td className="p-3 border-b">{route.baseFare}</td>
                             <td className="p-3 border-b">{route.origin.name}</td>
                             <td className="p-3 border-b">{route.destination.name}</td>
@@ -91,7 +95,12 @@ const Route = () => {
                                     setIsOpen(true)
                                     setIsEdit(true)
                                 }}>Sửa</button>
-                            <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" onClick={() => setIsDelete(true)}>Xóa</button>
+                                <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
+                                        onClick={() => {
+                                            setSelectedRoute(route)
+                                            setIsDelete(true)
+                                        }
+                                        }>Xóa</button>
                             </td>
                         </tr>
                         )
@@ -102,7 +111,7 @@ const Route = () => {
             </div>
             </div>
             {isOpen && (isEdit ? <RouteModal isEdit={true} setIsOpen={setIsOpen} /> : <RouteModal isEdit={false} setIsOpen={setIsOpen} /> ) }
-            {isDelete && <DeleteModal setIsDelete={setIsDelete}/>}
+            {isDelete && <DeleteModal setIsDelete={setIsDelete} route={selectedRoute}/>}
         </div>
     )
 }

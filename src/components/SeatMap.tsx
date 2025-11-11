@@ -26,26 +26,26 @@ const SeatMap = ({ isLimousine }: Props) => {
                 </div>
                 <div className='w-full flex flex-row justify-between'>
                     <div className='flex flex-col'>
-                        <Seat value='A01' status={0} />
-                        <Seat value='A02' status={0} />
-                        <Seat value='A03' status={0} />
-                        <Seat value='A04' status={0} />
-                        <Seat value='D01' status={0} />
+                        <Seat value='1A01' status={0} />
+                        <Seat value='1A02' status={0} />
+                        <Seat value='1A03' status={0} />
+                        <Seat value='1A04' status={0} />
+                        <Seat value='1D01' status={0} />
                     </div>
                     <div className='flex flex-col'>
-                        <Seat value='B01' status={0} />
-                        <Seat value='B02' status={0} />
-                        <Seat value='B03' status={0} />
-                        <Seat value='B04' status={0} />
-                        <Seat value='D02' status={0} />
-                        <Seat value='D04' status={0} />
+                        <Seat value='1B01' status={0} />
+                        <Seat value='1B02' status={0} />
+                        <Seat value='1B03' status={0} />
+                        <Seat value='1B04' status={0} />
+                        <Seat value='1D02' status={0} />
+                        <Seat value='1E04' status={0} />
                     </div>
                     <div className={`flex flex-col ${isLimousine && 'hidden'}`}>
-                        <Seat value='C01' status={0} />
-                        <Seat value='C02' status={0} />
-                        <Seat value='C03' status={0} />
-                        <Seat value='C04' status={0} />
-                        <Seat value='D03' status={0} />
+                        <Seat value='1C01' status={0} />
+                        <Seat value='1C02' status={0} />
+                        <Seat value='1C03' status={0} />
+                        <Seat value='1C04' status={0} />
+                        <Seat value='1D03' status={0} />
                     </div>
                 </div>
             </div>
@@ -53,26 +53,28 @@ const SeatMap = ({ isLimousine }: Props) => {
                 <h2 className='h-[40px] font-bold text-right mb-[10px] pt-[10px] text-gray'>Tầng trên</h2>
                 <div className='w-full flex flex-row justify-between'>
                     <div className='flex flex-col'>
-                        <Seat value='A11' status={0} />
-                        <Seat value='A12' status={0} />
-                        <Seat value='A13' status={0} />
-                        <Seat value='A14' status={0} />
-                        <Seat value='D11' status={0} />
+                        <Seat value='2A01' status={0} />
+                        <Seat value='2A02' status={0} />
+                        <Seat value='2A03' status={0} />
+                        <Seat value='2A04' status={0} />
+                        <Seat value='D04' status={0} />
+                        <Seat value='2E01' status={0} />
                     </div>
                     <div className='flex flex-col'>
-                        <Seat value='B11' status={0} />
-                        <Seat value='B12' status={0} />
-                        <Seat value='B13' status={0} />
-                        <Seat value='B14' status={0} />
-                        <Seat value='D02' status={0} />
-                        <Seat value='D04' status={0} />
+                        <Seat value='2B01' status={0} />
+                        <Seat value='2B02' status={0} />
+                        <Seat value='2B03' status={0} />
+                        <Seat value='2B04' status={0} />
+                        <Seat value='2D02' status={0} />
+                        <Seat value='2E02' status={0} />
                     </div>
                     <div className={`flex flex-col ${isLimousine && 'hidden'}`}>
-                        <Seat value='C11' status={0} />
-                        <Seat value='C12' status={0} />
-                        <Seat value='C13' status={0} />
-                        <Seat value='C14' status={0} />
-                        <Seat value='D03' status={0} />
+                        <Seat value='2C01' status={0} />
+                        <Seat value='2C02' status={0} />
+                        <Seat value='2C03' status={0} />
+                        <Seat value='2C04' status={0} />
+                        <Seat value='D04' status={0} />
+                        <Seat value='2E03' status={0} />
                     </div>
                 </div>
             </div>

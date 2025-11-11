@@ -91,7 +91,6 @@ const Schedule = () => {
                         <th className="p-3 border-b">Chu kỳ</th>
                         <th className="p-3 border-b">Giá theo thời điểm</th>
                         <th className="p-3 border-b">Tuyến</th>
-                        <th className="p-3 border-b">Trạng thái</th>
                         <th className="p-3 border-b">Actions</th>
                         </tr>
                     </thead>
@@ -107,7 +106,6 @@ const Schedule = () => {
                                 <td className="p-3 border-b">{convertDays(s.daysOfWeek).join(', ')}</td>
                                 <td className="p-3 border-b">{s.occasionRule.occasionFactor}</td>
                                 <td className="p-3 border-b">{`${s.route.origin.name} - ${s.route.destination.name}`}</td>
-                                <td className="p-3 border-b">{s.active ? 'Đang hoạt động' : 'Ngưng hoạt động'}</td>
                                 <td className="p-3 border-b space-x-2">
                                 <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
                                     onClick={() => {
@@ -115,7 +113,12 @@ const Schedule = () => {
                                         setIsOpen(true)
                                         setIsEdit(true)
                                     }}>Sửa</button>
-                                <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" onClick={() => setIsDelete(true)}>Xóa</button>
+                                    <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
+                                        onClick={() => {
+                                            setSelectedSchedule(s)
+                                            setIsDelete(true)
+                                        }
+                                        }>Xóa</button>
                                 </td>
                             </tr>
                         )
@@ -125,7 +128,7 @@ const Schedule = () => {
                 </div>
             </div>
             {isOpen && (isEdit ? <ScheduleModal isEdit={true} setIsOpen={setIsOpen} schedule={selectedSchedule} /> : <ScheduleModal isEdit={false} setIsOpen={setIsOpen} /> ) }
-            {isDelete && <DeleteModal setIsDelete={setIsDelete} />}
+            {isDelete && <DeleteModal setIsDelete={setIsDelete} schedule={selectedSchedule} />}
         </div>
     )
 }

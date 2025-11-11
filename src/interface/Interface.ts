@@ -7,7 +7,8 @@ export interface Promotion {
     buyNGetMS: [],
     percentOffs: [],
     usageLimit: number,
-    usedCount: number
+    usedCount: number,
+    isDeleted: boolean,
 }
 
 export interface PercentOff {
@@ -15,12 +16,14 @@ export interface PercentOff {
     percent: number,
     maxOff: number,
     minPrice: number,
+    isDeleted: boolean,
 }
 
 export interface BuyNGetM {
     id: number,
     buyN: number,
     getM: number,
+    isDeleted: boolean,
 }
 
 export interface PromotionLine {
@@ -33,23 +36,25 @@ export interface PromotionLine {
 }
 
 export interface Trip {
-    id?: number,
+    id: number,
     tripCode: string,
     departureTime: number | string,
     arrivalTime: number | string,
     distance: number,
     route: Route,
-    baseFare?: number,
     vehicle: Bus,
+    occasionFactor: number,
+    isDeleted: boolean,
 }
 
 export interface Bus {
-    id?: number,
+    id: number,
     type: string,
     plateNumber: string,
     brand: string,
     description: string,
     typeFactor: number,
+    isDeleted: boolean,
 }
 
 export interface SeatMapImg {
@@ -83,12 +88,14 @@ export interface Station {
     active: boolean,
     address: Address,
     streetAddress?: string,
+    isDeleted: boolean,
 }
 
 export interface Address {
     id: number,
     streetAddress: string,
     ward: Ward,
+    isDeleted: boolean,
 }
 
 export interface Province {
@@ -117,6 +124,7 @@ export interface Route {
     origin: Station,
     destination: Station,
     baseFare: number,
+    isDeleted: boolean,
 }
 
 export interface Staff {
@@ -126,17 +134,20 @@ export interface Staff {
     gender: string,
     phoneNumber: string,
     status: string,
+    isDeleted: boolean,
 }
 export interface Driver {
     id: number,
     licenseClass: string,
     yearsExperience: number,
     staff: Staff,
+    isDeleted: boolean,
 }
 
 export interface Attendant {
     id: number,
     staff: Staff,
+    isDeleted: boolean,
 }
 
 export interface Ticket {
@@ -152,6 +163,7 @@ export interface Ticket {
     booking: Booking,
     trip?: Trip,
     vehicle?: Bus,
+    isDeleted: boolean,
 }
 
 export interface Booking {
@@ -165,12 +177,14 @@ export interface Booking {
     timeoutMinute: number,
     customerId: string,
     tripId: number,
+    isDeleted: boolean,
 }
 
 export interface OccasionRule {
     id: number,
     occasion: string,
     occasionFactor: number,
+    isDeleted: boolean,
 }
 
 export interface Schedule {
@@ -182,4 +196,5 @@ export interface Schedule {
     active: boolean,
     occasionRule: OccasionRule,
     route: Route,
+    isDeleted: boolean,
 }

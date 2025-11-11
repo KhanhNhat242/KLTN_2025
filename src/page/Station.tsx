@@ -27,7 +27,7 @@ const Station = () => {
         await axios.get('https://apigateway.microservices.appf4s.io.vn/services/msroute/api/stations', {
             params: {
                 'page': '0',
-                'size': '20',
+                'size': '50',
             },
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -37,7 +37,7 @@ const Station = () => {
             },
         })
         .then((res) => {
-            // console.log(res.data)
+            console.log(res.data)
             dispatch(setStations(res.data))
         })
         .catch(() => {
@@ -56,7 +56,7 @@ const Station = () => {
             },
         })
         // console.log(res.data)
-        setAddresses(prev => [...prev, res.data])
+        setAddresses([res.data, ...addresses])
     }
 
     const getAddresses = async (ids: number[]) => {
@@ -84,6 +84,52 @@ const Station = () => {
         }
     }
 
+    const handleDelete = async (station: Station) => {
+        const now = new Date().toISOString()
+
+        await axios.put(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/stations/${station?.id}`, {
+            "id": station?.id,
+            "name": station.name,
+            "phoneNumber": "0123456666",
+            "description": station.description,
+            "active": station.active,
+            "createdAt": now,
+            "updatedAt": now,
+            "isDeleted": true,
+            "deletedAt": now,
+            "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            "address": {
+                "id": station?.address.id,
+            },
+            "stationImg": {
+                "id": 1,
+                "bucket": "string",
+                "objectKey": "string",
+                "contentType": "string",
+                "size": 0,
+                "createdAt": "2025-10-15T09:21:57.774Z",
+                "updatedAt": "2025-10-15T09:21:57.774Z",
+                "isDeleted": true,
+                "deletedAt": "2025-10-15T09:21:57.774Z",
+                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            }, 
+        }, {
+            headers: {
+            'Authorization': `Bearer ${token}`,
+            'accept': '*/*',
+            'Content-Type': 'application/json',
+        }})
+        .then((res) => {
+            console.log(res.data)
+            // dispatch(remove(res.data.id))
+            // alert('delete success')
+        })
+        .catch((error) => {
+            alert('Error when deleting!')
+            console.log(error)
+        })
+    }
+
     useEffect(() => {
         if (token) {
             getData()
@@ -91,17 +137,19 @@ const Station = () => {
     }, [token])
 
     useEffect(() => {
-        if (stations.length > 0 && stations.length <= 20) {
+        if (stations.length > 0 && stations.length <= 50) {
             const ids = stations.map(item => item.address.id)
             // setAddressIDArr(ids)
             getAddresses(ids)
         }
-        else if (stations.length > 20) {
-            const lastStation = stations[stations.length - 1]
-            const isDup = stations.some((s) => s.id === lastStation.address.id)
-            if (!isDup) {
-                getAddress(lastStation.address.id)
-            }
+        else if (stations.length > 50) {
+            const lastStation = stations[0]
+            console.log(lastStation)
+            getAddress(lastStation.address.id)
+            // const isDup = stations.some((s) => s.id === lastStation.address.id)
+            // if (!isDup) {
+            //     getAddress(lastStation.address.id)
+            // }
         }
     }, [stations])
 
@@ -118,6 +166,7 @@ const Station = () => {
                             active: s.active,
                             address: s.address,
                             streetAddress: match.streetAddress,
+                            isDeleted: false,
                         })
                     )
                 }
@@ -130,7 +179,7 @@ const Station = () => {
         <Header />
         <div className='w-full p-[10px]'>
             <HeaderTop />
-            <h2 className='text-[20px] text-left font-bold mt-[10px] mb-[10px]'>Danh sách trạm</h2>
+            <h2 className='text-[20px] text-left font-bold mt-[10px] mb-[10px]'>Quản lý trạm</h2>
             <div className='w-full flex flex-row justify-between'>
             <div className='flex flex-row'>
                 <Search placeholder='Tìm trong danh sách tuyến' />
@@ -161,14 +210,15 @@ const Station = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {stations.map((station) => {                          
-                        return (
+                    {stations.filter(station => station.id >= 1500 && station.isDeleted === false).map((station) => 
+                        // if (station.id >= 1500 && station.isDeleted === false)                        
+                         (
                             <tr key={station.id} className="hover:bg-gray-50">
                                 <td className="p-3 border-b">{station.id}</td>
                                 <td className="p-3 border-b">{station.name}</td>
                                 <td className="p-3 border-b">{station.streetAddress}</td>
                                 <td className="p-3 border-b">{station.description}</td>
-                                <td className="p-3 border-b">{station.active ? "Đang hoạt động" : "Ngưng hoạt động"}</td>
+                                <td className="p-3 border-b">{station.isDeleted}</td>
                                 <td className="p-3 border-b space-x-2">
                                     <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
                                         onClick={() => {
@@ -176,19 +226,23 @@ const Station = () => {
                                             setIsOpen(true)
                                             setIsEdit(true)
                                         }}>Sửa</button>
-                                    <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" onClick={() => setIsDelete(true)}>Xóa</button>
+                                    <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
+                                        onClick={() => {
+                                            setSelectedStation(station)
+                                            handleDelete(station)
+                                            setIsDelete(true)
+                                        }
+                                        }>Xóa</button>
                                 </td>
                             </tr>
                         )
-
-                    }
                     )}
                 </tbody>
                 </table>
             </div>
             </div>
             {isOpen && (isEdit ? <StationModal isEdit={true} setIsOpen={setIsOpen} station={selectedStation} /> : <StationModal isEdit={false} setIsOpen={setIsOpen} /> ) }
-            {isDelete && <DeleteModal setIsDelete={setIsDelete} />}
+            {isDelete && <DeleteModal setIsDelete={setIsDelete} station={selectedStation} />}
         </div>
     )
 }

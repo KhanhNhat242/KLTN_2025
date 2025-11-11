@@ -1,16 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-
-interface Promotion {
-    id?: number,
-    code: string,
-    description: string,
-    startDate: string,
-    endDate: string,
-    buyNGetMS: [],
-    percentOffs: [],
-    usageLimit: number,
-    usedCount: number
-}
+import type { Promotion } from '../interface/Interface';
 
 const promotionSlice = createSlice({
     name: 'promotions',
@@ -29,7 +18,11 @@ const promotionSlice = createSlice({
             }
         },
         remove: (state, action: PayloadAction<number>) => {
-            return state.filter(promo => promo.id !== action.payload)
+            const index = state.findIndex((s) => s.id === action.payload);
+            if (index !== -1) {
+                state[index].isDeleted = true;
+                state.splice(index, 1);
+            }
         },
     }
 })

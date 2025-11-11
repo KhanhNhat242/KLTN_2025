@@ -48,7 +48,7 @@ const StationModal = ({ setIsOpen, isEdit, station }: Props) => {
     }
 
     const getDistricts = async () => {
-        console.log(currentPID)
+        // console.log(currentPID)
         if (currentPID !== 0) {
             await axios.get(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/districts?provinceId.equals=${currentPID}`, {
                 headers: {
@@ -220,7 +220,6 @@ const StationModal = ({ setIsOpen, isEdit, station }: Props) => {
 
         console.log(name, active, description, street)
 
-
         const res = await createAddress()
         console.log(res)
 
@@ -236,6 +235,60 @@ const StationModal = ({ setIsOpen, isEdit, station }: Props) => {
             "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
             "address": {
                 "id": res.id,
+                "streetAddress": res.streetAddress,
+                "latitude": 0,
+                "longitude": 0,
+                "createdAt": "2025-11-11T16:32:20.101Z",
+                "updatedAt": "2025-11-11T16:32:20.101Z",
+                "isDeleted": true,
+                "deletedAt": "2025-11-11T16:32:20.101Z",
+                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                "ward": {
+                "id": 0,
+                "wardCode": "string",
+                "name": "string",
+                "nameEn": "string",
+                "fullName": "string",
+                "fullNameEn": "string",
+                "codeName": "string",
+                "administrativeUnitId": 0,
+                "createdAt": "2025-11-11T16:32:20.101Z",
+                "updatedAt": "2025-11-11T16:32:20.101Z",
+                "isDeleted": true,
+                "deletedAt": "2025-11-11T16:32:20.101Z",
+                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                "district": {
+                    "id": 0,
+                    "districtCode": "string",
+                    "name": "string",
+                    "nameEn": "string",
+                    "fullName": "string",
+                    "fullNameEn": "string",
+                    "codeName": "string",
+                    "administrativeUnitId": 0,
+                    "createdAt": "2025-11-11T16:32:20.101Z",
+                    "updatedAt": "2025-11-11T16:32:20.101Z",
+                    "isDeleted": true,
+                    "deletedAt": "2025-11-11T16:32:20.101Z",
+                    "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    "province": {
+                    "id": 0,
+                    "provinceCode": "string",
+                    "name": "string",
+                    "nameEn": "string",
+                    "fullName": "string",
+                    "fullNameEn": "string",
+                    "codeName": "string",
+                    "administrativeUnitId": 0,
+                    "administrativeRegionId": 0,
+                    "createdAt": "2025-11-11T16:32:20.101Z",
+                    "updatedAt": "2025-11-11T16:32:20.101Z",
+                    "isDeleted": true,
+                    "deletedAt": "2025-11-11T16:32:20.101Z",
+                    "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                    }
+                }
+                }
             },
             "stationImg": {
                 "id": 1,
@@ -290,7 +343,7 @@ const StationModal = ({ setIsOpen, isEdit, station }: Props) => {
                 "active": active,
                 "createdAt": now,
                 "updatedAt": now,
-                "isDeleted": true,
+                "isDeleted": false,
                 "deletedAt": "2025-10-15T09:21:57.774Z",
                 "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
                 "address": {

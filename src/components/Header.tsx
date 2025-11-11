@@ -17,7 +17,7 @@ const Trip = () => {
     return (
         <div className='w-full flex flex-col items-start pl-[30px]'>
             <p className='p-[5px] cursor-pointer' onClick={() => navigate('/route')}>Tuyến xe</p>
-            <p className='p-[5px] cursor-pointer' onClick={() => navigate('/bus')}>Xe & Sơ đồ ghế</p>
+            <p className='p-[5px] cursor-pointer' onClick={() => navigate('/bus')}>Danh sách xe</p>
             <p className='p-[5px] cursor-pointer' onClick={() => navigate('/station')}>Trạm đón/trả</p>
             <p className='p-[5px] cursor-pointer' onClick={() => navigate('/trip')}>Lịch trình (Trips)</p>
             <p className='p-[5px] cursor-pointer' onClick={() => navigate('/schedule')}>Lịch trình (Chu kỳ)</p>
@@ -30,8 +30,8 @@ const Ticket = () => {
 
     return (
         <div className='w-full flex flex-col items-start pl-[30px]'>
-            <p className='p-[5px] cursor-pointer' onClick={() => navigate('/ticket')}>Bảng giá</p>
-            <p className='p-[5px] cursor-pointer' onClick={() => navigate('/bus')}>Giá vé theo thời điểm</p>
+            <p className='p-[5px] cursor-pointer' onClick={() => navigate('/ticket-price')}>Quản lý bảng giá vé</p>
+            <p className='p-[5px] cursor-pointer' onClick={() => navigate('/ticket')}>Quản lý vé (Hóa đơn)</p>
         </div>
     )
 }

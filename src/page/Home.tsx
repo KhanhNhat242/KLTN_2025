@@ -58,6 +58,21 @@ const Home = () => {
                     trips.filter((t) => Number(formatTimestampCompare(Number(t.departureTime)).hour) >= 18 && Number(formatTimestampCompare(Number(t.departureTime)).hour) < 24)
                 )
             }
+            else if (currentSelect === 5) {
+                const now = new Date()
+                setTripsFilter(
+                    trips.filter((t) => now.getHours() >= Number(formatTimestampCompare(Number(t.departureTime)).hour) && now.getHours() <= Number(formatTimestampCompare(Number(t.arrivalTime)).hour)))
+            }
+            else if (currentSelect === 6) {
+                const now = new Date()
+                setTripsFilter(
+                    trips.filter((t) => now.getHours() > Number(formatTimestampCompare(Number(t.arrivalTime)).hour)))
+            }
+            else if (currentSelect === 7) {
+                const now = new Date()
+                setTripsFilter(
+                    trips.filter((t) => now.getHours() < Number(formatTimestampCompare(Number(t.departureTime)).hour)))
+            }
         }
     }
 
@@ -122,7 +137,7 @@ const Home = () => {
                 }
                 </div>
             </div>
-            <div className="w-[25vw] h-[30vh] mt-[10px] flex flex-col p-[10px] shadow-lg shadow-gray-500/50 rounded-[10px]">
+            <div className="w-[25vw] h-[40vh] mt-[10px] flex flex-col p-[10px] shadow-lg shadow-gray-500/50 rounded-[10px]">
                 <div className="w-full flex flex-row justify-between items-center mb-[10px]">
                     <h2 className="font-bold text-[20px]">Bộ lọc tìm kiếm</h2>
                     <div className="flex flex-row items-center cursor-pointer hover:text-[#1447E6]" onClick={() => setCurrentSelect(0)}>
@@ -149,14 +164,21 @@ const Home = () => {
                         <p className="ml-[5px] text-[18px]">Buổi tối 18:00 - 00:00</p>
                     </div>
                 </div>
-                {/* <div className="w-full flex flex-col items-start mt-[10px]">
-                    <h2 className="font-medium text-[18px]">Loại xe</h2>
-                    <div className="w-full flex flex-row">
-                        <p className="px-[10px] py-[5px] rounded-[5px]" style={{borderColor: '#ccc', borderStyle: 'solid', borderWidth: '1px'}}>Thường</p>
-                        <p className="px-[10px] py-[5px] rounded-[5px] mx-[10px]" style={{borderColor: '#ccc', borderStyle: 'solid', borderWidth: '1px'}}>VIP</p>
-                        <p className="px-[10px] py-[5px] rounded-[5px]" style={{borderColor: '#ccc', borderStyle: 'solid', borderWidth: '1px'}}>Limousine</p>
+                <div className="w-full flex flex-col items-start">
+                    <p className="font-medium text-[18px]">Trạng thái</p>
+                    <div className="w-full flex flex-row items-center">
+                        <input type="radio" name="time" className="size-[15px] cursor-pointer hover:color-[#1447E6]" checked={currentSelect === 5} value={5} onChange={(e) => setCurrentSelect(Number(e.target.value))} />
+                        <p className="ml-[5px] text-[18px]">Đang diễn ra</p>
                     </div>
-                </div> */}
+                    <div className="w-full flex flex-row items-center">
+                        <input type="radio" name="time" className="size-[15px] cursor-pointer hover:color-[#1447E6]" checked={currentSelect === 6} value={6} onChange={(e) => setCurrentSelect(Number(e.target.value))} />
+                        <p className="ml-[5px] text-[18px]">Đã kết thúc</p>
+                    </div>
+                    <div className="w-full flex flex-row items-center">
+                        <input type="radio" name="time" className="size-[15px] cursor-pointer hover:color-[#1447E6]" checked={currentSelect === 7} value={7} onChange={(e) => setCurrentSelect(Number(e.target.value))} />
+                        <p className="ml-[5px] text-[18px]">Chưa bắt đầu</p>
+                    </div>
+                </div>
             </div>
         </div>
     )

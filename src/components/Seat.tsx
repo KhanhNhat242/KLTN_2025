@@ -15,7 +15,7 @@ const Seat = ({ status, value }: Props) => {
     const dispatch = useDispatch()
 
     return (
-        <div className={`h-[60px] p-[5px] mt-[10px] rounded-t-[10px] cursor-pointer ${type === 1 && currentBg}`} style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#000'}} 
+        <div className={`h-[70px] p-[5px] mt-[10px] rounded-t-[10px] cursor-pointer ${type === 1 && currentBg}`} style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#000'}} 
             onClick={() => {
                 if (type === 1) {
                     setType(0) 

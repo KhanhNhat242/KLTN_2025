@@ -17,8 +17,15 @@ const buyNGetMSlice = createSlice({
                 state[index] = action.payload;
             }
         },
+        remove: (state, action: PayloadAction<number>) => {
+            const index = state.findIndex((s) => s.id === action.payload);
+            if (index !== -1) {
+                state[index].isDeleted = true;
+                state.splice(index, 1);
+            }
+        },
     }
 })
 
-export const { setBuyNGetMs, add2, update2 } = buyNGetMSlice.actions
+export const { setBuyNGetMs, add2, update2, remove } = buyNGetMSlice.actions
 export default buyNGetMSlice.reducer

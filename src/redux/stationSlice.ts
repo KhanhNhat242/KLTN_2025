@@ -18,7 +18,11 @@ const stationSlice = createSlice({
             }
         },
         remove: (state, action: PayloadAction<number>) => {
-            return state.filter(promo => promo.id !== action.payload)
+            const index = state.findIndex((s) => s.id === action.payload);
+            if (index !== -1) {
+                state[index].isDeleted = true;
+                state.splice(index, 1);
+            }
         },
     }
 })

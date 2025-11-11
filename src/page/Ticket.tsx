@@ -130,7 +130,7 @@ const Ticket = () => {
     vehicles.forEach((v) => {
       dispatch(updateVehicle({ id: Number(v.id), vehicle: v }))
     })
-    console.log(tickets)
+    // console.log(tickets)
   }, [vehicles])
 
   return (
@@ -138,7 +138,7 @@ const Ticket = () => {
       <Header />
       <div className='w-full p-[10px]'>
         <HeaderTop />
-        <h2 className='text-[20px] text-left font-bold mt-[10px] mb-[10px]'>Quản lý bảng giá</h2>
+        <h2 className='text-[20px] text-left font-bold mt-[10px] mb-[10px]'>Quản lý vé</h2>
         <div className='w-full flex flex-row justify-between'>
           <div className='flex flex-row'>
             <Search placeholder='Tìm trong danh sách tuyến' />
@@ -149,11 +149,11 @@ const Ticket = () => {
               <img src={downloadicon} className='size-[20px] mr-[5px]' />
               <p>Xuất Excel</p>
             </button>
-            <button className='p-[10px] cursor-pointer text-white bg-[#1447E6] rounded-[10px]'
+            {/* <button className='p-[10px] cursor-pointer text-white bg-[#1447E6] rounded-[10px]'
               onClick={() => {
                 setIsEdit(false)
                 setIsOpen(true)
-              }}>+ Tạo vé mới</button>
+              }}>+ Tạo bảng giá mới</button> */}
           </div>
         </div>
         <div className='mt-[20px]'>

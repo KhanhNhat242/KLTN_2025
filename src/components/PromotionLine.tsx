@@ -3,7 +3,7 @@ import DeleteModal from './DeleteModal'
 import PromotionDetailModal from './PromotionDetailModal'
 import { useSelector } from 'react-redux'
 import type { RootState } from '../redux/store'
-import { type BuyNGetM as BuyNGetMInterface, type PromotionLine} from '../interface/Interface'
+import { type BuyNGetM, type BuyNGetM as BuyNGetMInterface, type PercentOff, type PromotionLine} from '../interface/Interface'
 import { type PercentOff as PercentOffInterface} from '../interface/Interface'
 
 interface BuyNGetMProps {
@@ -18,7 +18,7 @@ const PercentOff = ({percentoffs}: PercentOffProps) => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [isDelete, setIsDelete] = useState<boolean>(false)
     const [isEdit, setIsEdit] = useState<boolean>(false)
-    const [selectedLine, setSelectedLine] = useState<PromotionLine>()
+    const [selectedLine, setSelectedLine] = useState<PercentOff>()
 
     return (
         <>
@@ -48,7 +48,12 @@ const PercentOff = ({percentoffs}: PercentOffProps) => {
                                             setIsEdit(true)
                                             console.log(isOpen, isEdit)
                                     }}>Sửa</button>
-                                    <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" onClick={() => setIsDelete(true)}>Xóa</button>
+                                    <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
+                                        onClick={() => {
+                                            setSelectedLine(percentoff)
+                                            setIsDelete(true)
+                                        }
+                                        }>Xóa</button>
                                 </td>
                             </tr>
                         ))
@@ -56,7 +61,7 @@ const PercentOff = ({percentoffs}: PercentOffProps) => {
                 </tbody>
             </table>
             { isOpen && (isEdit ? <PromotionDetailModal selectedLine={selectedLine} isEdit={true} setIsOpen={setIsOpen} type={1} /> : <PromotionDetailModal isEdit={false} setIsOpen={setIsOpen} type={1} /> ) }
-            { isDelete && <DeleteModal setIsDelete={setIsDelete} /> }
+            { isDelete && <DeleteModal setIsDelete={setIsDelete} percentoff={selectedLine} /> }
         </>
     )
 }
@@ -65,7 +70,7 @@ const BuyNGetM = ({buyngetms}: BuyNGetMProps) => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [isDelete, setIsDelete] = useState<boolean>(false)
     const [isEdit, setIsEdit] = useState<boolean>(false)
-    const [selectedLine, setSelectedLine] = useState<PromotionLine>()
+    const [selectedLine, setSelectedLine] = useState<BuyNGetM>()
 
     return (
         <>
@@ -92,14 +97,19 @@ const BuyNGetM = ({buyngetms}: BuyNGetMProps) => {
                                         setIsOpen(true)
                                         setIsEdit(true)
                                     }}>Sửa</button>
-                                    <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" onClick={() => setIsDelete(true)}>Xóa</button>
+                                    <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
+                                        onClick={() => {
+                                            setSelectedLine(buyngetm)
+                                            setIsDelete(true)
+                                        }
+                                        }>Xóa</button>
                                 </td>
                             </tr>
                     ))}
                 </tbody>
             </table>
             { isOpen && (isEdit ? <PromotionDetailModal isEdit={true} selectedLine={selectedLine} setIsOpen={setIsOpen} type={2} /> : <PromotionDetailModal isEdit={false} setIsOpen={setIsOpen} type={2} /> ) }
-            { isDelete && <DeleteModal setIsDelete={setIsDelete} /> }
+            { isDelete && <DeleteModal setIsDelete={setIsDelete} buyngetm={selectedLine} /> }
         </>
     )
 }

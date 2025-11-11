@@ -66,7 +66,7 @@ const Payment = () => {
     }
 
     const handlePrice = () => {
-        console.log(vehicle)
+        // console.log(vehicle)
         setPrice(Number(vehicle?.typeFactor) * tripData.route.baseFare * 1000)
     }
 
@@ -76,8 +76,8 @@ const Payment = () => {
     }
 
     useEffect(() => {
-        // console.log(vehicleID)
         getVehicle()
+        console.log(tripData)
     }, [])
     
     useEffect(() => {

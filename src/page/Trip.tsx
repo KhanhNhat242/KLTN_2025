@@ -115,7 +115,12 @@ const Trip = () => {
                               setIsOpen(true)
                               setIsEdit(true)
                             }}>Sửa</button>
-                          <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" onClick={() => setIsDelete(true)}>Xóa</button>
+                            <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
+                              onClick={() => {
+                                setSelectedTrip(trip)
+                                setIsDelete(true)
+                              }
+                              }>Xóa</button>
                         </td>
                       </tr>
                   )
@@ -125,7 +130,7 @@ const Trip = () => {
           </div>
         </div>
         {isOpen && (isEdit ? <TripModal isEdit={true} setIsOpen={setIsOpen} trip={selectedTrip} /> : <TripModal isEdit={false} setIsOpen={setIsOpen} /> ) }
-        {isDelete && <DeleteModal setIsDelete={setIsDelete} />}
+        {isDelete && <DeleteModal setIsDelete={setIsDelete} trip={selectedTrip} />}
       </div>
     )
 }

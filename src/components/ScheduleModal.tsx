@@ -17,8 +17,8 @@ const ScheduleModal = ({ setIsOpen, isEdit, schedule }: Props) => {
     const [currentPStart, setCurrentPStart] = useState<number>(0)
     const [currentPEnd, setCurrentPEnd] = useState<number>(0)
     const [routes, setRoutes] = useState<Route[]>([])
-    // const [currentRID, setCurrentRID] = useState<number>(0)
     const [route, setRoute] = useState<Route>()
+    // const [currentRID, setCurrentRID] = useState<number>(0)
     const [pStart, setPStart] = useState<string>('')
     const [pEnd, setPEnd] = useState<string>('')
     const [code, setCode] = useState<string>('')
@@ -58,7 +58,7 @@ const ScheduleModal = ({ setIsOpen, isEdit, schedule }: Props) => {
         })
     }
 
-const getRoutes = async () => {
+    const getRoutes = async () => {
         if (currentPStart !== 0 && currentPEnd !== 0) {
             await axios.get(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/routes?originProvinceCode.equals=${currentPStart}&destinationProvinceCode.equals=${currentPEnd}`, {
                 headers: {
@@ -458,8 +458,7 @@ const getRoutes = async () => {
                                 <div className='w-[48%]'>
                                     <p>Thời điểm</p>
                                     <select className='w-full p-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}
-                                        value={occasion} onChange={(e) => setOccasion(e.target.value)}
-                                    >
+                                        value={occasion} onChange={(e) => setOccasion(e.target.value)}>
                                         <option value="normal" selected>Ngày thường</option>
                                         <option value="peak">Dịp cao điểm (Lễ, tết)</option>
                                     </select>

@@ -1,9 +1,56 @@
+import { useDispatch } from "react-redux"
+import type { Bus, BuyNGetM, PercentOff, Promotion, Route, Schedule, Station, Trip } from "../interface/Interface"
+import { remove as remove1 } from "../redux/stationSlice"
+import { remove as remove2 } from "../redux/routeSlice"
+import { remove as remove3 } from "../redux/busSlice"
+import { remove as remove4 } from "../redux/tripSlice"
+import { remove as remove5 } from "../redux/scheduleSlice"
+import { remove as remove6 } from "../redux/promotionsSlice"
+import { remove as remove7 } from "../redux/buyNGetMSlice"
+import { remove as remove8 } from "../redux/percentOffSlice"
 
 interface Props {
     setIsDelete: React.Dispatch<React.SetStateAction<boolean>>,
+    station?: Station,
+    route?: Route,
+    vehicle?: Bus,
+    trip?: Trip,
+    schedule?: Schedule,
+    promotion?: Promotion,
+    buyngetm?: BuyNGetM,
+    percentoff?: PercentOff,
 }
 
-const DeleteModal = ({ setIsDelete}: Props) => {
+const DeleteModal = ({ setIsDelete, station, route, vehicle, trip, schedule, promotion, buyngetm, percentoff}: Props) => {
+
+    const dispatch = useDispatch()
+
+    const handleDelete = () => {
+        if (station) {
+            dispatch(remove1(station.id))
+        }
+        else if (route) {
+            dispatch(remove2(route.id))
+        }
+        else if (vehicle) {
+            dispatch(remove3(vehicle.id))
+        }
+        else if (trip) {
+            dispatch(remove4(trip.id))
+        }
+        else if (schedule) {
+            dispatch(remove5(schedule.id))
+        }
+        else if (promotion) {
+            dispatch(remove6(promotion.id))
+        }
+        else if (buyngetm) {
+            dispatch(remove7(buyngetm.id))
+        }
+        else if (percentoff) {
+            dispatch(remove8(percentoff.id))
+        }
+    }
 
     return (
         <div className="fixed inset-0 flex items-center justify-center z-50" aria-labelledby="dialog-title" role="dialog" aria-modal="true">
@@ -23,6 +70,7 @@ const DeleteModal = ({ setIsDelete}: Props) => {
                     </button>
                     <button className="p-[8px] justify-center rounded-[10px] bg-[#1447E6] text-white cursor-pointer"
                         onClick={() => {
+                            handleDelete()
                             setIsDelete(false)
                             }
                         }>
