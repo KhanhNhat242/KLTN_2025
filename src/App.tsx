@@ -14,6 +14,8 @@ import { useDispatch } from 'react-redux'
 import { setAccessToken, setRefreshToken } from './redux/authSlice'
 import Schedule from './page/Schedule'
 import TicketPrice from './page/TicketPrice'
+import Driver from './page/Driver'
+import Attendant from './page/Attendant'
 
 function App() {
   const accessToken = localStorage.getItem('accessToken')
@@ -42,6 +44,8 @@ function App() {
           <Route path='/payment' element={<Payment />} />
           <Route path='/schedule' element={<Schedule />} />
           <Route path='/ticket-price' element={<TicketPrice />} />
+          <Route path='/driver' element={<Driver />} />
+          <Route path='/attendant' element={<Attendant />} />
         </Routes>
       </Router>
     </>

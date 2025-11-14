@@ -45,6 +45,7 @@ export interface Trip {
     vehicle: Bus,
     occasionFactor: number,
     isDeleted: boolean,
+    baseFare: number,
 }
 
 export interface Bus {

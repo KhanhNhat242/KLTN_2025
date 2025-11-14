@@ -89,7 +89,7 @@ const Schedule = () => {
                         <th className="p-3 border-b">Ngày bắt đầu</th>
                         <th className="p-3 border-b">Ngày kết thúc</th>
                         <th className="p-3 border-b">Chu kỳ</th>
-                        <th className="p-3 border-b">Giá theo thời điểm</th>
+                        {/* <th className="p-3 border-b">Giá theo thời điểm</th> */}
                         <th className="p-3 border-b">Tuyến</th>
                         <th className="p-3 border-b">Actions</th>
                         </tr>
@@ -104,8 +104,8 @@ const Schedule = () => {
                                 <td className="p-3 border-b">{`${s.startDate[2]}/${s.startDate[1]}/${s.startDate[0]}`}</td>
                                 <td className="p-3 border-b">{`${s.endDate[2]}/${s.endDate[1]}/${s.endDate[0]}`}</td>
                                 <td className="p-3 border-b">{convertDays(s.daysOfWeek).join(', ')}</td>
-                                <td className="p-3 border-b">{s.occasionRule.occasionFactor}</td>
-                                <td className="p-3 border-b">{`${s.route.origin.name} - ${s.route.destination.name}`}</td>
+                                {/* <td className="p-3 border-b">{s.occasionRule.occasionFactor}</td> */}
+                                <td className="p-3 border-b">{`${s.route.origin.description.replace(/^Station in /, '')} - ${s.route.destination.description.replace(/^Station in /, '')}`}</td>
                                 <td className="p-3 border-b space-x-2">
                                 <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
                                     onClick={() => {

@@ -3,7 +3,7 @@ import type { Bus, Province, Route, Trip } from '../interface/Interface'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import type { RootState } from '../redux/store'
-import { add, updateRoute } from '../redux/tripSlice'
+import { add, update, updateRoute } from '../redux/tripSlice'
 
 interface Props {
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>,
@@ -115,6 +115,17 @@ const TicketPriceModal = ({ setIsOpen, isEdit, trip }: Props) => {
         }
         else if (occasion === 'peak') {
             of = 4
+        }
+        
+        let tf: number = 0
+        if (vehicle?.type === 'STANDARD_BUS_NORMAL') {
+            tf = 1
+        }
+        else if (vehicle?.type === 'STANDARD_BUS_VIP') {
+            tf = 1.2
+        }
+        else if (vehicle?.type === 'LIMOUSINE') {
+            tf = 1.5
         }
 
         console.log(sTime, eTime, route, vehicle)
@@ -305,7 +316,7 @@ const TicketPriceModal = ({ setIsOpen, isEdit, trip }: Props) => {
             "vehicle": {
                 "id": vehicle?.id,
                 "type": vehicle?.type,
-                "typeFactor": 0,
+                "typeFactor": tf,
                 "plateNumber": vehicle?.plateNumber,
                 "brand": vehicle?.brand,
                 "description": vehicle?.description,
@@ -416,7 +427,7 @@ const TicketPriceModal = ({ setIsOpen, isEdit, trip }: Props) => {
             }  
         })
         .then((res) => {
-            // console.log(res.data)
+            console.log(res.data)
             dispatch(add(res.data))
             if (route) {
                 dispatch(updateRoute({ id: Number(res.data.route.id), route: route }))
@@ -430,7 +441,339 @@ const TicketPriceModal = ({ setIsOpen, isEdit, trip }: Props) => {
     }
 
     const handleEdit = async () => {
+        const now = new Date().toISOString()
+        const st = new Date(sTime).toISOString()
+        const et = new Date(eTime).toISOString()
+        let of: number = 0
+        if (occasion === 'normal') {
+            of = 1
+        }
+        else if (occasion === 'peak') {
+            of = 4
+        }
+        
+        let tf: number = 0
+        if (vehicle?.type === 'STANDARD_BUS_NORMAL') {
+            tf = 1
+        }
+        else if (vehicle?.type === 'STANDARD_BUS_VIP') {
+            tf = 1.2
+        }
+        else if (vehicle?.type === 'LIMOUSINE') {
+            tf = 1.5
+        }
 
+        console.log(sTime, eTime, route, vehicle)
+        // console.log(route)
+        await axios.put(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/trips/${trip?.id}`, {
+            "id": trip?.id,
+            "tripCode": generateRandomStr(12),
+            "departureTime": st,
+            "arrivalTime": et,
+            "occasionFactor": of,
+            "createdAt": now,
+            "updatedAt": now,
+            "isDeleted": true,
+            "deletedAt": "2025-10-19T07:13:00.993Z",
+            "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            "route": {
+                "id": route?.id,
+                "routeCode": route?.routeCode,
+                "distanceKm": 11,
+                "baseFare": price,
+                "createdAt": "2025-10-19T07:13:00.993Z",
+                "updatedAt": "2025-10-19T07:13:00.993Z",
+                "isDeleted": true,
+                "deletedAt": "2025-10-19T07:13:00.993Z",
+                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                "origin": {
+                "id": route?.origin.id,
+                "name": route?.origin.name,
+                "phoneNumber": "string",
+                "description": route?.origin.description,
+                "active": true,
+                "createdAt": "2025-10-19T07:13:00.993Z",
+                "updatedAt": "2025-10-19T07:13:00.993Z",
+                "isDeleted": true,
+                "deletedAt": "2025-10-19T07:13:00.993Z",
+                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                "address": {
+                    "id": route?.origin.address.id,
+                    "streetAddress": route?.origin.streetAddress,
+                    "latitude": 0,
+                    "longitude": 0,
+                    "createdAt": "2025-10-19T07:13:00.993Z",
+                    "updatedAt": "2025-10-19T07:13:00.993Z",
+                    "isDeleted": true,
+                    "deletedAt": "2025-10-19T07:13:00.993Z",
+                    "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    "ward": {
+                    "id": 0,
+                    "wardCode": "string",
+                    "name": "string",
+                    "nameEn": "string",
+                    "fullName": "string",
+                    "fullNameEn": "string",
+                    "codeName": "string",
+                    "administrativeUnitId": 0,
+                    "createdAt": "2025-10-19T07:13:00.993Z",
+                    "updatedAt": "2025-10-19T07:13:00.993Z",
+                    "isDeleted": true,
+                    "deletedAt": "2025-10-19T07:13:00.993Z",
+                    "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    "district": {
+                        "id": 0,
+                        "districtCode": "string",
+                        "name": "string",
+                        "nameEn": "string",
+                        "fullName": "string",
+                        "fullNameEn": "string",
+                        "codeName": "string",
+                        "administrativeUnitId": 0,
+                        "createdAt": "2025-10-19T07:13:00.993Z",
+                        "updatedAt": "2025-10-19T07:13:00.993Z",
+                        "isDeleted": true,
+                        "deletedAt": "2025-10-19T07:13:00.993Z",
+                        "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                        "province": {
+                        "id": 0,
+                        "provinceCode": "string",
+                        "name": "string",
+                        "nameEn": "string",
+                        "fullName": "string",
+                        "fullNameEn": "string",
+                        "codeName": "string",
+                        "administrativeUnitId": 0,
+                        "administrativeRegionId": 0,
+                        "createdAt": "2025-10-19T07:13:00.994Z",
+                        "updatedAt": "2025-10-19T07:13:00.994Z",
+                        "isDeleted": true,
+                        "deletedAt": "2025-10-19T07:13:00.994Z",
+                        "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                        }
+                    }
+                    }
+                },
+                "stationImg": {
+                    "id": 0,
+                    "bucket": "string",
+                    "objectKey": "string",
+                    "contentType": "string",
+                    "size": 0,
+                    "createdAt": "2025-10-19T07:13:00.994Z",
+                    "updatedAt": "2025-10-19T07:13:00.994Z",
+                    "isDeleted": true,
+                    "deletedAt": "2025-10-19T07:13:00.994Z",
+                    "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                }
+                },
+                "destination": {
+                "id": route?.destination.id,
+                "name": route?.destination.name,
+                "phoneNumber": "string",
+                "description": route?.destination.description,
+                "active": true,
+                "createdAt": "2025-10-19T07:13:00.994Z",
+                "updatedAt": "2025-10-19T07:13:00.994Z",
+                "isDeleted": true,
+                "deletedAt": "2025-10-19T07:13:00.994Z",
+                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                "address": {
+                    "id": route?.destination.address.id,
+                    "streetAddress": route?.destination.streetAddress,
+                    "latitude": 0,
+                    "longitude": 0,
+                    "createdAt": "2025-10-19T07:13:00.994Z",
+                    "updatedAt": "2025-10-19T07:13:00.994Z",
+                    "isDeleted": true,
+                    "deletedAt": "2025-10-19T07:13:00.994Z",
+                    "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    "ward": {
+                    "id": 0,
+                    "wardCode": "string",
+                    "name": "string",
+                    "nameEn": "string",
+                    "fullName": "string",
+                    "fullNameEn": "string",
+                    "codeName": "string",
+                    "administrativeUnitId": 0,
+                    "createdAt": "2025-10-19T07:13:00.994Z",
+                    "updatedAt": "2025-10-19T07:13:00.994Z",
+                    "isDeleted": true,
+                    "deletedAt": "2025-10-19T07:13:00.994Z",
+                    "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    "district": {
+                        "id": 0,
+                        "districtCode": "string",
+                        "name": "string",
+                        "nameEn": "string",
+                        "fullName": "string",
+                        "fullNameEn": "string",
+                        "codeName": "string",
+                        "administrativeUnitId": 0,
+                        "createdAt": "2025-10-19T07:13:00.994Z",
+                        "updatedAt": "2025-10-19T07:13:00.994Z",
+                        "isDeleted": true,
+                        "deletedAt": "2025-10-19T07:13:00.994Z",
+                        "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                        "province": {
+                        "id": 0,
+                        "provinceCode": "string",
+                        "name": "string",
+                        "nameEn": "string",
+                        "fullName": "string",
+                        "fullNameEn": "string",
+                        "codeName": "string",
+                        "administrativeUnitId": 0,
+                        "administrativeRegionId": 0,
+                        "createdAt": "2025-10-19T07:13:00.994Z",
+                        "updatedAt": "2025-10-19T07:13:00.994Z",
+                        "isDeleted": true,
+                        "deletedAt": "2025-10-19T07:13:00.994Z",
+                        "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                        }
+                    }
+                    }
+                },
+                "stationImg": {
+                    "id": 0,
+                    "bucket": "string",
+                    "objectKey": "string",
+                    "contentType": "string",
+                    "size": 0,
+                    "createdAt": "2025-10-19T07:13:00.994Z",
+                    "updatedAt": "2025-10-19T07:13:00.994Z",
+                    "isDeleted": true,
+                    "deletedAt": "2025-10-19T07:13:00.994Z",
+                    "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                }
+                }
+            },
+            "vehicle": {
+                "id": vehicle?.id,
+                "type": vehicle?.type,
+                "typeFactor": tf,
+                "plateNumber": vehicle?.plateNumber,
+                "brand": vehicle?.brand,
+                "description": vehicle?.description,
+                "status": "ACTIVE",
+                "createdAt": "2025-10-19T07:13:00.994Z",
+                "updatedAt": "2025-10-19T07:13:00.994Z",
+                "isDeleted": true,
+                "deletedAt": "2025-10-19T07:13:00.994Z",
+                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                "seatMap": {
+                "id": 0,
+                "name": "string",
+                "createdAt": "2025-10-19T07:13:00.994Z",
+                "updatedAt": "2025-10-19T07:13:00.994Z",
+                "isDeleted": true,
+                "deletedAt": "2025-10-19T07:13:00.994Z",
+                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                "seatMapImg": {
+                    "id": 0,
+                    "bucket": "string",
+                    "objectKey": "string",
+                    "contentType": "string",
+                    "size": 0,
+                    "createdAt": "2025-10-19T07:13:00.994Z",
+                    "updatedAt": "2025-10-19T07:13:00.994Z",
+                    "isDeleted": true,
+                    "deletedAt": "2025-10-19T07:13:00.994Z",
+                    "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                }
+                },
+                "vehicleImg": {
+                "id": 0,
+                "bucket": "string",
+                "objectKey": "string",
+                "contentType": "string",
+                "size": 0,
+                "createdAt": "2025-10-19T07:13:00.994Z",
+                "updatedAt": "2025-10-19T07:13:00.994Z",
+                "isDeleted": true,
+                "deletedAt": "2025-10-19T07:13:00.994Z",
+                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                }
+            },
+            "slot": {
+                "id": 1,
+                "slotCode": null,
+                "departureTime": null,
+                "arrivalTime": null,
+                "bufferMinutes": null,
+                "sequence": null,
+                "active": null,
+                "createdAt": null,
+                "updatedAt": null,
+                "isDeleted": null,
+                "deletedAt": null,
+                "deletedBy": null,
+                "schedule": null
+            },
+            "driver": {
+                "id": 1528,
+                "licenseClass": "string",
+                "yearsExperience": 0,
+                "createdAt": "2025-10-19T07:13:00.994Z",
+                "updatedAt": "2025-10-19T07:13:00.994Z",
+                "isDeleted": true,
+                "deletedAt": "2025-10-19T07:13:00.994Z",
+                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                "staff": {
+                "id": 0,
+                "name": "string",
+                "age": 0,
+                "gender": "MALE",
+                "phoneNumber": "string",
+                "status": "ACTIVE",
+                "createdAt": "2025-10-19T07:13:00.994Z",
+                "updatedAt": "2025-10-19T07:13:00.994Z",
+                "isDeleted": true,
+                "deletedAt": "2025-10-19T07:13:00.994Z",
+                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                }
+            },
+            "attendant": {
+                "id": 1538,
+                "createdAt": "2025-10-19T07:13:00.994Z",
+                "updatedAt": "2025-10-19T07:13:00.994Z",
+                "isDeleted": true,
+                "deletedAt": "2025-10-19T07:13:00.994Z",
+                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                "staff": {
+                "id": 0,
+                "name": "string",
+                "age": 0,
+                "gender": "MALE",
+                "phoneNumber": "string",
+                "status": "ACTIVE",
+                "createdAt": "2025-10-19T07:13:00.994Z",
+                "updatedAt": "2025-10-19T07:13:00.994Z",
+                "isDeleted": true,
+                "deletedAt": "2025-10-19T07:13:00.994Z",
+                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                }
+            }  
+        }, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'accept': '*/*',
+                'Content-Type': 'application/json',
+            }  
+        })
+        .then((res) => {
+            console.log(res.data)
+            dispatch(update(res.data))
+            if (route) {
+                dispatch(updateRoute({ id: Number(res.data.route.id), route: route }))
+            }
+            alert('Edit success')
+        })
+        .catch((error) => {
+            alert('Error when editing!')
+            console.log(error)
+        })
     }
 
     useEffect(() => {
@@ -554,11 +897,11 @@ const TicketPriceModal = ({ setIsOpen, isEdit, trip }: Props) => {
                             <div className='w-full flex flex-row justify-between my-[5px]'>
                                 <div className='w-[48%]'>
                                     <p>Thời gian bắt đầu</p>
-                                    <input value={sTime} onChange={(e) => setSTime(e.target.value)} type='date' className='w-full p-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}/>
+                                    <input value={sTime} onChange={(e) => setSTime(e.target.value)} type='datetime-local' className='w-full p-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}/>
                                 </div>
                                 <div className='w-[48%]'>
                                     <p>Thời gian kết thúc</p>
-                                    <input value={eTime} onChange={(e) => setETime(e.target.value)} type='date' className='w-full p-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}/>
+                                    <input value={eTime} onChange={(e) => setETime(e.target.value)} type='datetime-local' className='w-full p-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}/>
                                 </div>
                             </div>
                         </div>

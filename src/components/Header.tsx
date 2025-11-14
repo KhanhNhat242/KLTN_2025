@@ -36,6 +36,17 @@ const Ticket = () => {
     )
 }
 
+const Staff = () => {
+    const navigate = useNavigate()
+
+    return (
+        <div className='w-full flex flex-col items-start pl-[30px]'>
+            <p className='p-[5px] cursor-pointer' onClick={() => navigate('/driver')}>Tài xế</p>
+            <p className='p-[5px] cursor-pointer' onClick={() => navigate('/attendant')}>Phụ xe</p>
+        </div>
+    )
+}
+
 const Header = () => {
     const [count, setCount] = useState<number>(0)
     const navigate = useNavigate()
@@ -72,7 +83,7 @@ const Header = () => {
                     <img src={downcollapseicon} />
                 </div>
                 <div className='w-full flex flex-row justify-between items-center p-[10px] cursor-pointer'>
-                    <div className='flex flex-row' onClick={() => navigate('/payment')}>
+                    <div className='flex flex-row'>
                         <img src={paymenticon} className='mr-[10px]' />
                         <p>Thanh toán</p>
                     </div>
@@ -85,13 +96,14 @@ const Header = () => {
                     </div>
                     {/* <img src={downcollapseicon} /> */}
                 </div>
-                <div className='w-full flex flex-row justify-between items-center p-[10px] cursor-pointer'>
+                <div className='w-full flex flex-row justify-between items-center p-[10px] cursor-pointer' onClick={() => count === 4 ? setCount(0) : setCount(4)}>
                     <div className='flex flex-row'>
                         <img src={stafficon} className='mr-[10px]' />
                         <p>Nhân viên</p>
                     </div>
-                    <img src={downcollapseicon} />
+                    <img src={count === 4 ? upcollapseicon : downcollapseicon} />
                 </div>
+                {count === 4 && <Staff />}
             </div>
         </div>
     )

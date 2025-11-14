@@ -270,81 +270,81 @@ const RouteModal = ({ setIsOpen, isEdit }: Props) => {
 
     return (
         <div className="fixed inset-0 flex items-center justify-center z-50" aria-labelledby="dialog-title" role="dialog" aria-modal="true">
-                <div className="fixed inset-0 bg-gray-500/75 transition-opacity" onClick={() => setIsOpen(false)}></div>
-                <div className="w-[30%] relative bg-white rounded-lg shadow-xl transform transition-all">
-                    <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                        <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                            <h3 id="dialog-title" className="text-base text-[20px] mb-[10px] font-bold text-gray">{isEdit ? 'Chỉnh sửa thông tin tuyến' : 'Tạo tuyến mới'}</h3>
-                            <div className='w-full flex flex-col'>
-                                <p>CODE</p>
-                                <input value={code} onChange={(e) => setCode(e.target.value)} type="text" className='w-[48%] px-[5px] py-[3px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}} />
-                                <p className='mt-[10px]'>Trạm đi</p>
-                                <div className='w-full flex flex-row justify-between'>
-                                    <select className='w-[48%] ml-[5px] p-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}
-                                        onChange={(e) => setCurrentPStart(Number(e.target.value))}>
-                                        <option value="">Chọn tỉnh</option>
-                                        { 
-                                            provinces.sort((a, b) => a.name.localeCompare(b.name)).map((province) => (
-                                                <option key={province.id} value={province.provinceCode}>{province.name}</option>
-                                            ))
-                                        }
-                                    </select>
-                                    <select className='w-[48%] ml-[5px] p-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}
-                                        onChange={(e) => {
-                                            const selected = origins.find(o => o.id === Number(e.target.value))
-                                            if (selected) setOrigin(selected)
-                                        }}>
-                                        <option value="">Chọn trạm</option>
-                                        {
-                                            origins.map((origin) => (
-                                                <option key={origin.id} value={origin.id}>{origin.name}</option>
-                                            ))
-                                        }
-                                    </select>
-                                </div>
-                                <p className='mt-[10px]'>Trạm đến</p>
-                                <div className='w-full flex flex-row justify-between'>
-                                    <select className='w-[48%] ml-[5px] p-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}
-                                        onChange={(e) => setCurrentPEnd(Number(e.target.value))}>
-                                        <option value="">Chọn tỉnh</option>
-                                        {
-                                            provinces.sort((a, b) => a.name.localeCompare(b.name)).map((province) => (
-                                                <option key={province.id} value={province.provinceCode}>{province.name}</option>
-                                            ))
-                                        }
-                                    </select>
-                                    <select className='w-[48%] ml-[5px] p-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}
-                                        onChange={(e) => {
-                                            const selected = destinations.find(o => o.id === Number(e.target.value))
-                                            if (selected) setDestination(selected)
-                                        }}>
-                                        <option value="">Chọn trạm</option>
-                                        {
-                                            destinations.map((destination) => (
-                                                <option key={destination.id} value={destination.id}>{destination.name}</option>
-                                            ))
-                                        }
-                                    </select>
-                                </div>
+            <div className="fixed inset-0 bg-gray-500/75 transition-opacity" onClick={() => setIsOpen(false)}></div>
+            <div className="w-[30%] relative bg-white rounded-lg shadow-xl transform transition-all">
+                <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                        <h3 id="dialog-title" className="text-base text-[20px] mb-[10px] font-bold text-gray">{isEdit ? 'Chỉnh sửa thông tin tuyến' : 'Tạo tuyến mới'}</h3>
+                        <div className='w-full flex flex-col'>
+                            <p>CODE</p>
+                            <input value={code} onChange={(e) => setCode(e.target.value)} type="text" className='w-[48%] px-[5px] py-[3px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}} />
+                            <p className='mt-[10px]'>Trạm đi</p>
+                            <div className='w-full flex flex-row justify-between'>
+                                <select className='w-[48%] ml-[5px] p-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}
+                                    onChange={(e) => setCurrentPStart(Number(e.target.value))}>
+                                    <option value="">Chọn tỉnh</option>
+                                    { 
+                                        provinces.sort((a, b) => a.name.localeCompare(b.name)).map((province) => (
+                                            <option key={province.id} value={province.provinceCode}>{province.name}</option>
+                                        ))
+                                    }
+                                </select>
+                                <select className='w-[48%] ml-[5px] p-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}
+                                    onChange={(e) => {
+                                        const selected = origins.find(o => o.id === Number(e.target.value))
+                                        if (selected) setOrigin(selected)
+                                    }}>
+                                    <option value="">Chọn trạm</option>
+                                    {
+                                        origins.map((origin) => (
+                                            <option key={origin.id} value={origin.id}>{origin.name}</option>
+                                        ))
+                                    }
+                                </select>
+                            </div>
+                            <p className='mt-[10px]'>Trạm đến</p>
+                            <div className='w-full flex flex-row justify-between'>
+                                <select className='w-[48%] ml-[5px] p-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}
+                                    onChange={(e) => setCurrentPEnd(Number(e.target.value))}>
+                                    <option value="">Chọn tỉnh</option>
+                                    {
+                                        provinces.sort((a, b) => a.name.localeCompare(b.name)).map((province) => (
+                                            <option key={province.id} value={province.provinceCode}>{province.name}</option>
+                                        ))
+                                    }
+                                </select>
+                                <select className='w-[48%] ml-[5px] p-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}
+                                    onChange={(e) => {
+                                        const selected = destinations.find(o => o.id === Number(e.target.value))
+                                        if (selected) setDestination(selected)
+                                    }}>
+                                    <option value="">Chọn trạm</option>
+                                    {
+                                        destinations.map((destination) => (
+                                            <option key={destination.id} value={destination.id}>{destination.name}</option>
+                                        ))
+                                    }
+                                </select>
                             </div>
                         </div>
                     </div>
-                    <div className="w-full pr-[20px] pb-[20px] flex flex-row justify-end">
-                        <button onClick={() => setIsOpen(false)} className="p-[8px] justify-center rounded-[10px] bg-[#ccc] cursor-pointer mr-[10px]">
-                            Hủy bỏ
-                        </button>
-                        <button className="p-[8px] justify-center rounded-[10px] bg-[#1447E6] text-white cursor-pointer"
-                           onClick={() => {
-                            setIsOpen(false)
-                            if (!isEdit) {
-                                handleCreate()
-                            }
-                           }}>
-                            Xác nhận
-                        </button>
-                    </div>
+                </div>
+                <div className="w-full pr-[20px] pb-[20px] flex flex-row justify-end">
+                    <button onClick={() => setIsOpen(false)} className="p-[8px] justify-center rounded-[10px] bg-[#ccc] cursor-pointer mr-[10px]">
+                        Hủy bỏ
+                    </button>
+                    <button className="p-[8px] justify-center rounded-[10px] bg-[#1447E6] text-white cursor-pointer"
+                        onClick={() => {
+                        setIsOpen(false)
+                        if (!isEdit) {
+                            handleCreate()
+                        }
+                        }}>
+                        Xác nhận
+                    </button>
                 </div>
             </div>
+        </div>
     )
 }
 

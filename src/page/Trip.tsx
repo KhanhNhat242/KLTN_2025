@@ -103,7 +103,7 @@ const Trip = () => {
                     // <tr key={trip.id} className="hover:bg-gray-50 cursor-pointer" onClick={() => navigate('/bus-detail', { state: { busid: trip.vehicle.id, tripdata: trip } })}>
                     <tr key={trip.id} className="hover:bg-gray-50">
                         <td className="p-3 border-b">{trip.id}</td>
-                        <td className="p-3 border-b">{`${trip.route.origin.address.ward.district.province.name} - ${trip.route.destination.address.ward.district.province.name}`}</td>
+                        <td className="p-3 border-b">{`${trip.route.origin.description.replace(/^Station in /, '')} - ${trip.route.destination.description.replace(/^Station in /, '')}`}</td>
                         <td className="p-3 border-b">{formatTimestamp(Number(trip.departureTime))}</td>
                         <td className="p-3 border-b">{formatTimestamp(Number(trip.arrivalTime))}</td>
                         <td className="p-3 border-b">{trip.route.origin.name}</td>

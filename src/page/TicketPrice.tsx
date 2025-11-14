@@ -50,7 +50,7 @@ const TicketPrice = () => {
             },
         })
         .then((res) => {
-            // console.log(res.data)
+            console.log(res.data)
             dispatch(setTrips(res.data))
         })
         .catch(() => {
@@ -58,47 +58,48 @@ const TicketPrice = () => {
         })
     }
 
-    const getVehicle = async (id: number) => {
-        // console.log(id)
-        if (!isNaN(id)) {
-        await axios.get(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/vehicles/${id}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'accept': '*/*',
-                'Content-Type': 'application/json',
-                'X-XSRF-TOKEN': '41866a2d-cdc1-4547-9eef-f6d3464f7b6b',
-            },
-        })
-        .then((res) => {
-            // console.log(res.data)
-            if (res.data) {
-                setVehicleArr((prev) => [...prev, res.data])
-            }
-        })
-        .catch(() => {
-            console.log('Get vehicle fail!')
-        })
-        }
-    }
+    // const getVehicle = async (id: number) => {
+    //     // console.log(id)
+    //     if (!isNaN(id)) {
+    //     await axios.get(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/vehicles/${id}`, {
+    //         headers: {
+    //             'Authorization': `Bearer ${token}`,
+    //             'accept': '*/*',
+    //             'Content-Type': 'application/json',
+    //             'X-XSRF-TOKEN': '41866a2d-cdc1-4547-9eef-f6d3464f7b6b',
+    //         },
+    //     })
+    //     .then((res) => {
+    //         // console.log(res.data)
+    //         if (res.data) {
+    //             setVehicleArr((prev) => [...prev, res.data])
+    //         }
+    //     })
+    //     .catch(() => {
+    //         console.log('Get vehicle fail!')
+    //     })
+    //     }
+    // }
 
     useEffect(() => {
         getData()
     }, [])
 
-    useEffect(() => {
-        if (trips) {
-        trips.forEach((t) => {
-            getVehicle(Number(t.vehicle.id))
-        })
-        }
-    }, [trips])
+    // useEffect(() => {
+    //     if (trips) {
+    //     trips.forEach((t) => {
+    //         getVehicle(Number(t.vehicle.id))
+    //     })
+    //     }
+    //     console.log(trips)
+    // }, [trips])
 
-    useEffect(() => {
-        // console.log(vehicleArr)
-        vehicleArr.forEach((v) => {
-            dispatch(updateVehicle({ id: Number(v.id), vehicle: v }))
-        })
-    }, [vehicleArr])
+    // useEffect(() => {
+    //     // console.log(vehicleArr)
+    //     vehicleArr.forEach((v) => {
+    //         dispatch(updateVehicle({ id: Number(v.id), vehicle: v }))
+    //     })
+    // }, [vehicleArr])
 
     return (
         <div className='w-full h-full flex flex-row justify-start'>
@@ -138,7 +139,7 @@ const TicketPrice = () => {
                             if (t.id && t.id >= 1500)
                             return (
                             <tr key={t.id} className="cursor-pointer hover:bg-gray-50">
-                                <td className="p-3 border-b">{`${t.route.origin.address.ward.district.province.name} - ${t.route.destination.address.ward.district.province.name}`}</td>
+                                <td className="p-3 border-b">{`${t.route.origin.description.replace(/^Station in /, '')} - ${t.route.destination.description.replace(/^Station in /, '')}`}</td>
                                 <td className="p-3 border-b">{t.vehicle.type}</td>
                                 <td className="p-3 border-b">{t.occasionFactor === 1 ? 'Ngày thường' : 'Dịp lễ tết'}</td>
                                 <td className="p-3 border-b">{(Number(t.route.baseFare) * Number(t.vehicle.typeFactor) * 1000).toLocaleString('it-IT', {style : 'currency', currency : 'VND'})}</td>
