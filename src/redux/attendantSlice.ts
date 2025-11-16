@@ -1,6 +1,15 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { Attendant, Staff } from "../interface/Interface";
 
+interface AttendantUpdate {
+    id: number,
+    staffId: number,
+    name: string,
+    age: number,
+    gender: string,
+    phoneNumber: string,
+}
+
 const attendantSlice = createSlice({
     name: 'attendant',
     initialState: [] as Attendant[],
@@ -11,10 +20,13 @@ const attendantSlice = createSlice({
         add: (state, action: PayloadAction<Attendant>) => {
             state.unshift(action.payload)
         },
-        update: (state, action: PayloadAction<Attendant>) => {
+        update: (state, action: PayloadAction<AttendantUpdate>) => {
             const index = state.findIndex((p) => p.id === action.payload.id);
             if (index !== -1) {
-                state[index] = action.payload;
+                state[index].staff.name = action.payload.name;
+                state[index].staff.age = action.payload.age;
+                state[index].staff.gender = action.payload.gender;
+                state[index].staff.phoneNumber = action.payload.phoneNumber;
             }
         },
         updateStaff: (state, action: PayloadAction<{id: number, staff: Staff}>) => {

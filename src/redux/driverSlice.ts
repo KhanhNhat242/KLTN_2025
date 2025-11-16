@@ -1,6 +1,17 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { Driver, Staff } from "../interface/Interface";
 
+interface DriverUpdate {
+    id: number,
+    licenseClass: string,
+    yearsExperience: number,
+    staffId: number,
+    name: string,
+    age: number,
+    gender: string,
+    phoneNumber: string,
+}
+
 const driverSlice = createSlice({
     name: 'driver',
     initialState: [] as Driver[],
@@ -11,10 +22,15 @@ const driverSlice = createSlice({
         add: (state, action: PayloadAction<Driver>) => {
             state.unshift(action.payload)
         },
-        update: (state, action: PayloadAction<Driver>) => {
+        update: (state, action: PayloadAction<DriverUpdate>) => {
             const index = state.findIndex((p) => p.id === action.payload.id);
             if (index !== -1) {
-                state[index] = action.payload;
+                state[index].licenseClass = action.payload.licenseClass;
+                state[index].yearsExperience = action.payload.yearsExperience;
+                state[index].staff.name = action.payload.name;
+                state[index].staff.age = action.payload.age;
+                state[index].staff.gender = action.payload.gender;
+                state[index].staff.phoneNumber = action.payload.phoneNumber;
             }
         },
         updateStaff: (state, action: PayloadAction<{id: number, staff: Staff}>) => {

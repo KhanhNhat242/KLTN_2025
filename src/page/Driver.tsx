@@ -123,6 +123,7 @@ const Driver = () => {
                                     }}>Sửa</button>
                                     <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
                                         onClick={() => {
+                                            setSelectedDriver(d)
                                             setIsDelete(true)
                                         }
                                         }>Xóa</button>
@@ -135,7 +136,7 @@ const Driver = () => {
                 </div>
                 </div>
                 {isOpen && (isEdit ? <DriverModal isEdit={true} setIsOpen={setIsOpen} driver={selectedDriver} /> : <DriverModal isEdit={false} setIsOpen={setIsOpen} /> ) }
-                {isDelete && <DeleteModal setIsDelete={setIsDelete} />}
+                {isDelete && <DeleteModal setIsDelete={setIsDelete} driver={selectedDriver} />}
             </div>
     )
 }

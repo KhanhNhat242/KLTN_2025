@@ -116,6 +116,7 @@ const Attendant = () => {
                                     }}>Sửa</button>
                                     <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
                                         onClick={() => {
+                                            setSelectedAttendant(a)
                                             setIsDelete(true)
                                         }
                                         }>Xóa</button>
@@ -128,7 +129,7 @@ const Attendant = () => {
                 </div>
                 </div>
                 {isOpen && (isEdit ? <AttendantModal isEdit={true} setIsOpen={setIsOpen} attendant={selectedAttendant} /> : <AttendantModal isEdit={false} setIsOpen={setIsOpen} /> ) }
-                {isDelete && <DeleteModal setIsDelete={setIsDelete} />}
+                {isDelete && <DeleteModal setIsDelete={setIsDelete} attendant={selectedAttendant} />}
             </div>
     )
 }

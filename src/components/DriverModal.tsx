@@ -94,30 +94,14 @@ const DriverModal = ({ setIsOpen, isEdit, driver }: Props) => {
     }
 
     const handleEdit = async () => {
-        const now = new Date().toISOString()
-
-        await axios.put(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/drivers/${driver?.id}`, {
-            "id": driver?.id,
+        await axios.put(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/drivers/simple/${driver?.id}`, {
             "licenseClass": licenseClass,
             "yearsExperience": yoe,
-            "createdAt": "2025-11-14T15:19:17.142Z",
-            "updatedAt": now,
-            "isDeleted": true,
-            "deletedAt": "2025-11-14T15:19:17.142Z",
-            "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-            "staff": {
-                "id": driver?.staff.id,
-                "name": name,
-                "age": age,
-                "gender": gender,
-                "phoneNumber": phone,
-                "status": "ACTIVE",
-                "createdAt": "2025-11-14T15:19:17.142Z",
-                "updatedAt": now,
-                "isDeleted": true,
-                "deletedAt": "2025-11-14T15:19:17.142Z",
-                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-            }
+            "name": name,
+            "age": age,
+            "gender": gender,
+            "phoneNumber": phone,
+            "status": "ACTIVE"
         }, {
             headers: {
                 'Authorization': `Bearer ${token}`,

@@ -89,28 +89,12 @@ const AttendantModal = ({ setIsOpen, isEdit, attendant }: Props) => {
     }
 
     const handleEdit = async () => {
-        const now = new Date().toISOString()
-
-        await axios.put(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/attendants/${attendant?.id}`, {
-            "id": attendant?.id,
-            "createdAt": "2025-11-14T15:59:47.627Z",
-            "updatedAt": now,
-            "isDeleted": true,
-            "deletedAt": "2025-11-14T15:59:47.627Z",
-            "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-            "staff": {
-                "id": attendant?.staff.id,
-                "name": name,
-                "age": age,
-                "gender": gender,
-                "phoneNumber": phone,
-                "status": "ACTIVE",
-                "createdAt": "2025-11-14T15:59:47.627Z",
-                "updatedAt": now,
-                "isDeleted": true,
-                "deletedAt": "2025-11-14T15:59:47.627Z",
-                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-            }
+        await axios.put(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/attendants/simple/${attendant?.id}`, {
+            "name": name,
+            "age": age,
+            "gender": gender,
+            "phoneNumber": phone,
+            "status": "ACTIVE"
         }, {
             headers: {
                 'Authorization': `Bearer ${token}`,

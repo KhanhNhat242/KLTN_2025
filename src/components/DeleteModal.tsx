@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux"
-import type { Bus, BuyNGetM, PercentOff, Promotion, Route, Schedule, Station, Trip } from "../interface/Interface"
+import type { Attendant, Bus, BuyNGetM, Driver, PercentOff, Promotion, Route, Schedule, Station, Trip } from "../interface/Interface"
 import { remove as remove1 } from "../redux/stationSlice"
 import { remove as remove2 } from "../redux/routeSlice"
 import { remove as remove3 } from "../redux/busSlice"
@@ -8,6 +8,8 @@ import { remove as remove5 } from "../redux/scheduleSlice"
 import { remove as remove6 } from "../redux/promotionsSlice"
 import { remove as remove7 } from "../redux/buyNGetMSlice"
 import { remove as remove8 } from "../redux/percentOffSlice"
+import { remove as remove9 } from "../redux/driverSlice"
+import { remove as remove10 } from "../redux/attendantSlice"
 
 interface Props {
     setIsDelete: React.Dispatch<React.SetStateAction<boolean>>,
@@ -19,9 +21,11 @@ interface Props {
     promotion?: Promotion,
     buyngetm?: BuyNGetM,
     percentoff?: PercentOff,
+    driver?: Driver,
+    attendant?: Attendant,
 }
 
-const DeleteModal = ({ setIsDelete, station, route, vehicle, trip, schedule, promotion, buyngetm, percentoff}: Props) => {
+const DeleteModal = ({ setIsDelete, station, route, vehicle, trip, schedule, promotion, buyngetm, percentoff, driver, attendant}: Props) => {
 
     const dispatch = useDispatch()
 
@@ -49,6 +53,12 @@ const DeleteModal = ({ setIsDelete, station, route, vehicle, trip, schedule, pro
         }
         else if (percentoff) {
             dispatch(remove8(percentoff.id))
+        }
+        else if (driver) {
+            dispatch(remove9(driver.id))
+        }
+        else if (attendant) {
+            dispatch(remove10(attendant.id))
         }
     }
 

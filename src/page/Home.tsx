@@ -110,7 +110,7 @@ const Home = () => {
                                     <p className="font-medium text-[20px]">{trip.route.destination.name}</p>
                                 </div>
                             </div>
-                            <button className='w-[8vw] p-[10px] cursor-pointer text-white bg-[#1447E6] rounded-[10px]' onClick={() => navigate('/payment', { state: {tripData: trip, vehicleID: trip.vehicle.id} })}>Chọn chuyến</button>
+                            <button className='w-[8vw] p-[10px] cursor-pointer text-white bg-[#1447E6] rounded-[10px]' onClick={() => navigate('/payment', { state: {tripID: trip.id, vehicleID: trip.vehicle.id} })}>Chọn chuyến</button>
                         </div>
                     ))
                 : tripsFilter.map((trip) => (
