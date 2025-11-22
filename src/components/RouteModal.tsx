@@ -19,6 +19,7 @@ const RouteModal = ({ setIsOpen, isEdit }: Props) => {
     const [code, setCode] = useState<string>('')
     const [origin, setOrigin] = useState<Station>()
     const [destination, setDestination] = useState<Station>()
+    const [valid, setValid] = useState<number>(0)
 
     const token = useSelector((state: RootState) => state.auth.accessToken)
     const dispatch = useDispatch()
@@ -36,7 +37,7 @@ const RouteModal = ({ setIsOpen, isEdit }: Props) => {
             setProvinces(res.data)
         })
         .catch((error) => {
-            alert('Error when get provinces!')
+            console.log('Error when get provinces!')
             console.log(error)
         })
     }
@@ -59,92 +60,187 @@ const RouteModal = ({ setIsOpen, isEdit }: Props) => {
             }
         })
         .catch((error) => {
-            alert('Error when get station!')
+            console.log('Error when get station!')
             console.log(error)
         })
     }
 
-    const handleCreate = async () => {
+    const handleCreate = async (setIsOpen: React.Dispatch<React.SetStateAction<boolean>>) => {
         const now = new Date().toISOString()
         console.log(code, origin, destination)
-
-        await axios.post('https://apigateway.microservices.appf4s.io.vn/services/msroute/api/routes', {
-            "routeCode": code,
-            "distanceKm": 0,
-            "createdAt": now,
-            "updatedAt": now,
-            "isDeleted": true,
-            "deletedAt": "2025-10-18T10:26:17.325Z",
-            "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-            "origin": {
-                "id": origin?.id,
-                "name": origin?.name,
-                "phoneNumber": "string",
-                "description": origin?.description,
-                "active": origin?.active,
-                "createdAt": "2025-10-18T10:26:17.325Z",
-                "updatedAt": "2025-10-18T10:26:17.325Z",
+        
+        if (code === '') {
+            setIsOpen(true)
+            setValid(1)
+        }
+        else if (!origin?.id) {
+            setIsOpen(true)
+            setValid(2)
+        }
+        else if (!destination?.id) {
+            setIsOpen(true)
+            setValid(3)
+        }
+        else {
+            await axios.post('https://apigateway.microservices.appf4s.io.vn/services/msroute/api/routes', {
+                "routeCode": code,
+                "distanceKm": 0,
+                "baseFare": 0,
+                "createdAt": now,
+                "updatedAt": now,
                 "isDeleted": true,
                 "deletedAt": "2025-10-18T10:26:17.325Z",
                 "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                "address": {
-                    "id": origin?.address.id,
-                    "streetAddress": "string",
-                    "latitude": 0,
-                    "longitude": 0,
+                "origin": {
+                    "id": origin?.id,
+                    "name": origin?.name,
+                    "phoneNumber": "string",
+                    "description": origin?.description,
+                    "active": origin?.active,
                     "createdAt": "2025-10-18T10:26:17.325Z",
                     "updatedAt": "2025-10-18T10:26:17.325Z",
                     "isDeleted": true,
                     "deletedAt": "2025-10-18T10:26:17.325Z",
                     "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                    "ward": {
-                        "id": 0,
-                        "wardCode": "string",
-                        "name": "string",
-                        "nameEn": "string",
-                        "fullName": "string",
-                        "fullNameEn": "string",
-                        "codeName": "string",
-                        "administrativeUnitId": 0,
+                    "address": {
+                        "id": origin?.address.id,
+                        "streetAddress": "string",
+                        "latitude": 0,
+                        "longitude": 0,
                         "createdAt": "2025-10-18T10:26:17.325Z",
                         "updatedAt": "2025-10-18T10:26:17.325Z",
                         "isDeleted": true,
                         "deletedAt": "2025-10-18T10:26:17.325Z",
                         "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                        "district": {
-                        "id": 0,
-                        "districtCode": "string",
-                        "name": "string",
-                        "nameEn": "string",
-                        "fullName": "string",
-                        "fullNameEn": "string",
-                        "codeName": "string",
-                        "administrativeUnitId": 0,
-                        "createdAt": "2025-10-18T10:26:17.325Z",
-                        "updatedAt": "2025-10-18T10:26:17.325Z",
-                        "isDeleted": true,
-                        "deletedAt": "2025-10-18T10:26:17.325Z",
-                        "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                        "province": {
+                        "ward": {
                             "id": 0,
-                            "provinceCode": "string",
+                            "wardCode": "string",
                             "name": "string",
                             "nameEn": "string",
                             "fullName": "string",
                             "fullNameEn": "string",
                             "codeName": "string",
                             "administrativeUnitId": 0,
-                            "administrativeRegionId": 0,
                             "createdAt": "2025-10-18T10:26:17.325Z",
                             "updatedAt": "2025-10-18T10:26:17.325Z",
                             "isDeleted": true,
                             "deletedAt": "2025-10-18T10:26:17.325Z",
-                            "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                            "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                            "district": {
+                            "id": 0,
+                            "districtCode": "string",
+                            "name": "string",
+                            "nameEn": "string",
+                            "fullName": "string",
+                            "fullNameEn": "string",
+                            "codeName": "string",
+                            "administrativeUnitId": 0,
+                            "createdAt": "2025-10-18T10:26:17.325Z",
+                            "updatedAt": "2025-10-18T10:26:17.325Z",
+                            "isDeleted": true,
+                            "deletedAt": "2025-10-18T10:26:17.325Z",
+                            "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                            "province": {
+                                "id": 0,
+                                "provinceCode": "string",
+                                "name": "string",
+                                "nameEn": "string",
+                                "fullName": "string",
+                                "fullNameEn": "string",
+                                "codeName": "string",
+                                "administrativeUnitId": 0,
+                                "administrativeRegionId": 0,
+                                "createdAt": "2025-10-18T10:26:17.325Z",
+                                "updatedAt": "2025-10-18T10:26:17.325Z",
+                                "isDeleted": true,
+                                "deletedAt": "2025-10-18T10:26:17.325Z",
+                                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                            }
+                            }
                         }
-                        }
+                    },
+                    "stationImg": {
+                        "id": 0,
+                        "bucket": "string",
+                        "objectKey": "string",
+                        "contentType": "string",
+                        "size": 0,
+                        "createdAt": "2025-10-18T10:26:17.325Z",
+                        "updatedAt": "2025-10-18T10:26:17.325Z",
+                        "isDeleted": true,
+                        "deletedAt": "2025-10-18T10:26:17.325Z",
+                        "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
                     }
                 },
-                "stationImg": {
+                "destination": {
+                    "id": destination?.id,
+                    "name": destination?.name,
+                    "phoneNumber": "string",
+                    "description": destination?.description,
+                    "active": destination?.active,
+                    "createdAt": "2025-10-18T10:26:17.325Z",
+                    "updatedAt": "2025-10-18T10:26:17.325Z",
+                    "isDeleted": true,
+                    "deletedAt": "2025-10-18T10:26:17.325Z",
+                    "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    "address": {
+                        "id": destination?.address.id,
+                        "streetAddress": "string",
+                        "latitude": 0,
+                        "longitude": 0,
+                        "createdAt": "2025-10-18T10:26:17.325Z",
+                        "updatedAt": "2025-10-18T10:26:17.325Z",
+                        "isDeleted": true,
+                        "deletedAt": "2025-10-18T10:26:17.325Z",
+                        "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                        "ward": {
+                            "id": 0,
+                            "wardCode": "string",
+                            "name": "string",
+                            "nameEn": "string",
+                            "fullName": "string",
+                            "fullNameEn": "string",
+                            "codeName": "string",
+                            "administrativeUnitId": 0,
+                            "createdAt": "2025-10-18T10:26:17.325Z",
+                            "updatedAt": "2025-10-18T10:26:17.325Z",
+                            "isDeleted": true,
+                            "deletedAt": "2025-10-18T10:26:17.325Z",
+                            "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                            "district": {
+                            "id": 0,
+                            "districtCode": "string",
+                            "name": "string",
+                            "nameEn": "string",
+                            "fullName": "string",
+                            "fullNameEn": "string",
+                            "codeName": "string",
+                            "administrativeUnitId": 0,
+                            "createdAt": "2025-10-18T10:26:17.325Z",
+                            "updatedAt": "2025-10-18T10:26:17.325Z",
+                            "isDeleted": true,
+                            "deletedAt": "2025-10-18T10:26:17.325Z",
+                            "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                            "province": {
+                                "id": 0,
+                                "provinceCode": "string",
+                                "name": "string",
+                                "nameEn": "string",
+                                "fullName": "string",
+                                "fullNameEn": "string",
+                                "codeName": "string",
+                                "administrativeUnitId": 0,
+                                "administrativeRegionId": 0,
+                                "createdAt": "2025-10-18T10:26:17.325Z",
+                                "updatedAt": "2025-10-18T10:26:17.325Z",
+                                "isDeleted": true,
+                                "deletedAt": "2025-10-18T10:26:17.325Z",
+                                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                            }
+                            }
+                        }
+                    },
+                    "stationImg": {
                     "id": 0,
                     "bucket": "string",
                     "objectKey": "string",
@@ -155,105 +251,26 @@ const RouteModal = ({ setIsOpen, isEdit }: Props) => {
                     "isDeleted": true,
                     "deletedAt": "2025-10-18T10:26:17.325Z",
                     "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-                }
-            },
-            "destination": {
-                "id": destination?.id,
-                "name": destination?.name,
-                "phoneNumber": "string",
-                "description": destination?.description,
-                "active": destination?.active,
-                "createdAt": "2025-10-18T10:26:17.325Z",
-                "updatedAt": "2025-10-18T10:26:17.325Z",
-                "isDeleted": true,
-                "deletedAt": "2025-10-18T10:26:17.325Z",
-                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                "address": {
-                    "id": destination?.address.id,
-                    "streetAddress": "string",
-                    "latitude": 0,
-                    "longitude": 0,
-                    "createdAt": "2025-10-18T10:26:17.325Z",
-                    "updatedAt": "2025-10-18T10:26:17.325Z",
-                    "isDeleted": true,
-                    "deletedAt": "2025-10-18T10:26:17.325Z",
-                    "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                    "ward": {
-                        "id": 0,
-                        "wardCode": "string",
-                        "name": "string",
-                        "nameEn": "string",
-                        "fullName": "string",
-                        "fullNameEn": "string",
-                        "codeName": "string",
-                        "administrativeUnitId": 0,
-                        "createdAt": "2025-10-18T10:26:17.325Z",
-                        "updatedAt": "2025-10-18T10:26:17.325Z",
-                        "isDeleted": true,
-                        "deletedAt": "2025-10-18T10:26:17.325Z",
-                        "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                        "district": {
-                        "id": 0,
-                        "districtCode": "string",
-                        "name": "string",
-                        "nameEn": "string",
-                        "fullName": "string",
-                        "fullNameEn": "string",
-                        "codeName": "string",
-                        "administrativeUnitId": 0,
-                        "createdAt": "2025-10-18T10:26:17.325Z",
-                        "updatedAt": "2025-10-18T10:26:17.325Z",
-                        "isDeleted": true,
-                        "deletedAt": "2025-10-18T10:26:17.325Z",
-                        "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                        "province": {
-                            "id": 0,
-                            "provinceCode": "string",
-                            "name": "string",
-                            "nameEn": "string",
-                            "fullName": "string",
-                            "fullNameEn": "string",
-                            "codeName": "string",
-                            "administrativeUnitId": 0,
-                            "administrativeRegionId": 0,
-                            "createdAt": "2025-10-18T10:26:17.325Z",
-                            "updatedAt": "2025-10-18T10:26:17.325Z",
-                            "isDeleted": true,
-                            "deletedAt": "2025-10-18T10:26:17.325Z",
-                            "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-                        }
-                        }
                     }
-                },
-                "stationImg": {
-                "id": 0,
-                "bucket": "string",
-                "objectKey": "string",
-                "contentType": "string",
-                "size": 0,
-                "createdAt": "2025-10-18T10:26:17.325Z",
-                "updatedAt": "2025-10-18T10:26:17.325Z",
-                "isDeleted": true,
-                "deletedAt": "2025-10-18T10:26:17.325Z",
-                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
                 }
-            }
-        }, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'accept': '*/*',
-                'Content-Type': 'application/json',
-            }
-        })
-        .then((res) => {
-            // console.log(res.data)
-            dispatch(add(res.data))
-            alert('Create success')
-        })
-        .catch((error) => {
-            alert('Error when creating!')
-            console.log(error)
-        })
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'accept': '*/*',
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then((res) => {
+                // console.log(res.data)
+                dispatch(add(res.data))
+                alert('Create success')
+            })
+            .catch((error) => {
+                alert('Error when creating!')
+                console.log(error)
+            })
+            setIsOpen(false)
+        }
     }
 
     useEffect(() => {
@@ -278,6 +295,7 @@ const RouteModal = ({ setIsOpen, isEdit }: Props) => {
                         <div className='w-full flex flex-col'>
                             <p>CODE</p>
                             <input value={code} onChange={(e) => setCode(e.target.value)} type="text" className='w-[48%] px-[5px] py-[3px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}} />
+                            { valid === 1 && <p className='text-[red]'>*CODE không hợp lệ</p> }
                             <p className='mt-[10px]'>Trạm đi</p>
                             <div className='w-full flex flex-row justify-between'>
                                 <select className='w-[48%] ml-[5px] p-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}
@@ -302,6 +320,7 @@ const RouteModal = ({ setIsOpen, isEdit }: Props) => {
                                     }
                                 </select>
                             </div>
+                            {valid === 2 && <p className='text-[red]'>*Trạm không hợp lệ</p> }
                             <p className='mt-[10px]'>Trạm đến</p>
                             <div className='w-full flex flex-row justify-between'>
                                 <select className='w-[48%] ml-[5px] p-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}
@@ -326,6 +345,7 @@ const RouteModal = ({ setIsOpen, isEdit }: Props) => {
                                     }
                                 </select>
                             </div>
+                            {valid === 3 && <p className='text-[red]'>*Trạm không hợp lệ</p> }
                         </div>
                     </div>
                 </div>
@@ -335,10 +355,10 @@ const RouteModal = ({ setIsOpen, isEdit }: Props) => {
                     </button>
                     <button className="p-[8px] justify-center rounded-[10px] bg-[#1447E6] text-white cursor-pointer"
                         onClick={() => {
-                        setIsOpen(false)
-                        if (!isEdit) {
-                            handleCreate()
-                        }
+                            if (!isEdit) {
+                                handleCreate(setIsOpen)
+                            }
+                            // setIsOpen(false)
                         }}>
                         Xác nhận
                     </button>

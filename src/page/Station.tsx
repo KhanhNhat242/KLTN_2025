@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Header from '../components/Header'
 import HeaderTop from '../components/HeaderTop'
-import Search from '../components/Search'
-import Filter from '../components/Filter'
 import downloadicon from '../assets/downloadicon.png'
 import DeleteModal from '../components/DeleteModal';
 import StationModal from '../components/StationModal'
@@ -179,23 +177,19 @@ const Station = () => {
         <Header />
         <div className='w-full p-[10px]'>
             <HeaderTop />
-            <h2 className='text-[20px] text-left font-bold mt-[10px] mb-[10px]'>Quản lý trạm</h2>
-            <div className='w-full flex flex-row justify-between'>
-            <div className='flex flex-row'>
-                <Search placeholder='Tìm trong danh sách tuyến' />
-                <Filter type='bus-information' />
-            </div>
-            <div className='flex flex-row'>
-                <button className='p-[10px] flex flex-row items-center mr-[10px] rounded-[10px] cursor-pointer' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}>
-                <img src={downloadicon} className='size-[20px] mr-[5px]' />
-                <p>Xuất Excel</p>
-                </button>
-                <button className='p-[10px] cursor-pointer text-white bg-[#1447E6] rounded-[10px]' 
-                onClick={() => {
-                    setIsEdit(false)
-                    setIsOpen(true)
-                }}>+ Tạo trạm mới</button>
-            </div>
+            <div className='w-full flex flex-row justify-between my-[10px]'>
+                <h2 className='text-[20px] text-left font-bold mt-[10px] mb-[10px]'>Quản lý trạm</h2>
+                <div className='flex flex-row'>
+                    <button className='p-[10px] flex flex-row items-center mr-[10px] rounded-[10px] cursor-pointer' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}>
+                    <img src={downloadicon} className='size-[20px] mr-[5px]' />
+                    <p>Xuất Excel</p>
+                    </button>
+                    <button className='p-[10px] cursor-pointer text-white bg-[#1447E6] rounded-[10px]' 
+                    onClick={() => {
+                        setIsEdit(false)
+                        setIsOpen(true)
+                    }}>+ Tạo trạm mới</button>
+                </div>
             </div>
             <div className='mt-[20px]'>
                 <table className="w-full border border-gray-200 text-left">
@@ -205,7 +199,6 @@ const Station = () => {
                         <th className="p-3 border-b">Tên trạm</th>
                         <th className="p-3 border-b">Địa chỉ</th>
                         <th className="p-3 border-b">Mô tả</th>
-                        <th className="p-3 border-b">Trạng thái</th>
                         <th className="p-3 border-b">Actions</th>
                     </tr>
                 </thead>
@@ -218,7 +211,6 @@ const Station = () => {
                                 <td className="p-3 border-b">{station.name}</td>
                                 <td className="p-3 border-b">{station.streetAddress}</td>
                                 <td className="p-3 border-b">{station.description}</td>
-                                <td className="p-3 border-b">{station.isDeleted}</td>
                                 <td className="p-3 border-b space-x-2">
                                     <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
                                         onClick={() => {

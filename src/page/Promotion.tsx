@@ -23,6 +23,7 @@ const Promotion = () => {
     const [currentnav, setCurrentnav] = useState<number | undefined>(0)
     const [currentFilter, setCurrentFilter] = useState<string>('all')
     const [promotionsFilter, setPromotionsFilter] = useState<Promotion[]>([])
+    const [type, setType] = useState<number>()
 
     const token = useSelector((state: RootState) => state.auth.accessToken)
     const dispatch = useDispatch()
@@ -160,10 +161,9 @@ const Promotion = () => {
             <Header />
             <div className='w-full p-[10px]'>
                 <HeaderTop />
-                <h2 className='text-[20px] text-left font-bold mt-[10px] mb-[10px]'>Quản lý khuyến mãi</h2>
-                <div className='w-full flex flex-row justify-between'>
+                <div className='w-full flex flex-row justify-between my-[10px]'>
+                    <h2 className='text-[20px] text-left font-bold mt-[10px] mb-[10px]'>Quản lý khuyến mãi</h2>
                     <div className='flex flex-row'>
-                        <Search placeholder='Tìm trong danh sách tuyến' />
                         <select className='flex flex-row items-center rounded-[10px] p-[10px] ml-[10px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}
                             onChange={(e) => setCurrentFilter(e.target.value)}>
                             <option value="all">Tất cả</option>
@@ -171,8 +171,6 @@ const Promotion = () => {
                             <option value="ended">Đã kết thúc</option>
                             <option value="notStarted">Chưa diễn ra</option>
                         </select>
-                    </div>
-                    <div className='flex flex-row'>
                         <button className='p-[10px] flex flex-row items-center mx-[10px] rounded-[10px] cursor-pointer' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}>
                             <img src={downloadicon} className='size-[20px] mr-[5px]' />
                             <p>Xuất Excel</p>
@@ -221,16 +219,16 @@ const Promotion = () => {
                                             <td>{promo.usedCount}</td>
                                             <td className="p-3 space-x-2">
                                                 <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
-                                                onClick={() => {
-                                                    setSelectedPromo(promo)
-                                                    setIsOpen(true)
-                                                    setIsEdit(true)
+                                                    onClick={() => {
+                                                        setSelectedPromo(promo)
+                                                        setIsOpen(true)
+                                                        setIsEdit(true)
                                                 }}>Sửa</button>
                                                 <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" onClick={() => setIsDelete(true)}>Xóa</button>
                                             </td>
                                         </tr>
                                         <tr className='border-b'>
-                                            <td colSpan={6}>
+                                            <td colSpan={8}>
                                                 {currentnav === promo.id && <PromotionLine />}
                                             </td>
                                         </tr>
@@ -265,7 +263,7 @@ const Promotion = () => {
                                             </td>
                                         </tr>
                                         <tr className='border-b'>
-                                            <td colSpan={6}>
+                                            <td colSpan={8}>
                                                 {currentnav === promo.id && <PromotionLine />}
                                             </td>
                                         </tr>

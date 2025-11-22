@@ -16,35 +16,65 @@ const BusModal = ({ setIsOpen, isEdit, bus }: Props) => {
     const [plateNumber, setPlateNumber] = useState<string>('')
     const [brand, setBrand] = useState<string>('')
     const [description, setDescription] = useState<string>('')
+    const [valid, setValid] = useState<number>(0)
 
     const token = useSelector((state: RootState) => state.auth.accessToken)
     const dispatch = useDispatch()
+    const plateNumberRegex = /^[0-9]{2}[A-Z]-[0-9]{4,5}$/
+    const brandRegex = /^[A-Za-z]+$/
 
-    const handleCreate = async () => {
+    const handleCreate = async (setIsOpen: React.Dispatch<React.SetStateAction<boolean>>) => {
         console.log(type, plateNumber, brand, description)
-        await axios.post('https://apigateway.microservices.appf4s.io.vn/services/msroute/api/vehicles', 
-        {
-            "type": type,
-            "typeFactor": 0,
-            "plateNumber": plateNumber,
-            "brand": brand,
-            "description": description,
-            "status": "ACTIVE",
-            "createdAt": "2025-10-08T06:57:47.531Z",
-            "updatedAt": "2025-10-08T06:57:47.531Z",
-            "isDeleted": true,
-            "deletedAt": "2025-10-08T06:57:47.531Z",
-            "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-            "seatMap": {
-                "id": 1,
-                "name": "string",
+
+        if (!plateNumberRegex.test(plateNumber)) {
+            setIsOpen(true)
+            setValid(1)
+        }
+        else if (!brandRegex.test(brand)){
+            setIsOpen(true)
+            setValid(2)
+        }
+        else if (description === '') {
+            setIsOpen(true)
+            setValid(3)
+        }
+        else {
+            await axios.post('https://apigateway.microservices.appf4s.io.vn/services/msroute/api/vehicles', 
+            {
+                "type": type,
+                "typeFactor": 0,
+                "plateNumber": plateNumber,
+                "brand": brand,
+                "description": description,
+                "status": "ACTIVE",
                 "createdAt": "2025-10-08T06:57:47.531Z",
                 "updatedAt": "2025-10-08T06:57:47.531Z",
                 "isDeleted": true,
                 "deletedAt": "2025-10-08T06:57:47.531Z",
                 "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                "seatMapImg": {
-                    "id": 0,
+                "seatMap": {
+                    "id": 1,
+                    "name": "string",
+                    "createdAt": "2025-10-08T06:57:47.531Z",
+                    "updatedAt": "2025-10-08T06:57:47.531Z",
+                    "isDeleted": true,
+                    "deletedAt": "2025-10-08T06:57:47.531Z",
+                    "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    "seatMapImg": {
+                        "id": 0,
+                        "bucket": "string",
+                        "objectKey": "string",
+                        "contentType": "string",
+                        "size": 0,
+                        "createdAt": "2025-10-08T06:57:47.532Z",
+                        "updatedAt": "2025-10-08T06:57:47.532Z",
+                        "isDeleted": true,
+                        "deletedAt": "2025-10-08T06:57:47.532Z",
+                        "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                    }
+                },
+                "vehicleImg": {
+                    "id": 1,
                     "bucket": "string",
                     "objectKey": "string",
                     "contentType": "string",
@@ -56,41 +86,28 @@ const BusModal = ({ setIsOpen, isEdit, bus }: Props) => {
                     "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
                 }
             },
-            "vehicleImg": {
-                "id": 1,
-                "bucket": "string",
-                "objectKey": "string",
-                "contentType": "string",
-                "size": 0,
-                "createdAt": "2025-10-08T06:57:47.532Z",
-                "updatedAt": "2025-10-08T06:57:47.532Z",
-                "isDeleted": true,
-                "deletedAt": "2025-10-08T06:57:47.532Z",
-                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-            }
-        },
-        {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'accept': '*/*',
-                'Content-Type': 'application/json',
-            }  
-        })
-        .then((res) => {
-            // dispatch(add(res.data))
-            console.log(res.data)
-            dispatch(add(res.data))
-            alert('Create success')
-        })
-        .catch((error) => {
-            alert('Error when creating!')
-            console.log(error)
-        })
+            {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'accept': '*/*',
+                    'Content-Type': 'application/json',
+                }  
+            })
+            .then((res) => {
+                // dispatch(add(res.data))
+                console.log(res.data)
+                dispatch(add(res.data))
+                alert('Create success')
+            })
+            .catch((error) => {
+                alert('Error when creating!')
+                console.log(error)
+            })
+            setIsOpen(false)
+        }
     }
 
-    const handleEdit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        e.preventDefault()
-
+    const handleEdit = async (setIsOpen: React.Dispatch<React.SetStateAction<boolean>>) => {
         const res = await axios.get(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/vehicles/${bus?.id}`,
             {
                 headers: {
@@ -103,72 +120,87 @@ const BusModal = ({ setIsOpen, isEdit, bus }: Props) => {
         console.log(res.data.seatMap.id)
         const seatmapid = res.data.seatMap.id
 
-        await axios.put(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/vehicles/${bus?.id}`, 
-            {
-                "id": bus?.id,
-                "type": type,
-                "typeFactor": 0,
-                "plateNumber": plateNumber,
-                "brand": brand,
-                "description": description,
-                "status": "ACTIVE",
-                "createdAt": "2025-10-08T07:59:05.392Z",
-                "updatedAt": "2025-10-08T07:59:05.392Z",
-                "isDeleted": true,
-                "deletedAt": "2025-10-08T07:59:05.392Z",
-                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                "seatMap": {
-                    "id": seatmapid,
-                    "name": "string",
+        if (!plateNumberRegex.test(plateNumber)) {
+            setIsOpen(true)
+            setValid(1)
+        }
+        else if (!brandRegex.test(brand)){
+            setIsOpen(true)
+            setValid(2)
+        }
+        else if (description === '') {
+            setIsOpen(true)
+            setValid(3)
+        }
+        else {
+            await axios.put(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/vehicles/${bus?.id}`, 
+                {
+                    "id": bus?.id,
+                    "type": type,
+                    "typeFactor": 0,
+                    "plateNumber": plateNumber,
+                    "brand": brand,
+                    "description": description,
+                    "status": "ACTIVE",
                     "createdAt": "2025-10-08T07:59:05.392Z",
                     "updatedAt": "2025-10-08T07:59:05.392Z",
                     "isDeleted": true,
                     "deletedAt": "2025-10-08T07:59:05.392Z",
                     "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                    "seatMapImg": {
-                    "id": 0,
-                    "bucket": "string",
-                    "objectKey": "string",
-                    "contentType": "string",
-                    "size": 0,
-                    "createdAt": "2025-10-08T07:59:05.392Z",
-                    "updatedAt": "2025-10-08T07:59:05.392Z",
-                    "isDeleted": true,
-                    "deletedAt": "2025-10-08T07:59:05.392Z",
-                    "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                    "seatMap": {
+                        "id": seatmapid,
+                        "name": "string",
+                        "createdAt": "2025-10-08T07:59:05.392Z",
+                        "updatedAt": "2025-10-08T07:59:05.392Z",
+                        "isDeleted": true,
+                        "deletedAt": "2025-10-08T07:59:05.392Z",
+                        "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                        "seatMapImg": {
+                        "id": 0,
+                        "bucket": "string",
+                        "objectKey": "string",
+                        "contentType": "string",
+                        "size": 0,
+                        "createdAt": "2025-10-08T07:59:05.392Z",
+                        "updatedAt": "2025-10-08T07:59:05.392Z",
+                        "isDeleted": true,
+                        "deletedAt": "2025-10-08T07:59:05.392Z",
+                        "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                        }
+                    },
+                    "vehicleImg": {
+                        "id": 1,
+                        "bucket": "string",
+                        "objectKey": "string",
+                        "contentType": "string",
+                        "size": 0,
+                        "createdAt": "2025-10-08T07:59:05.392Z",
+                        "updatedAt": "2025-10-08T07:59:05.392Z",
+                        "isDeleted": true,
+                        "deletedAt": "2025-10-08T07:59:05.392Z",
+                        "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
                     }
                 },
-                "vehicleImg": {
-                    "id": 1,
-                    "bucket": "string",
-                    "objectKey": "string",
-                    "contentType": "string",
-                    "size": 0,
-                    "createdAt": "2025-10-08T07:59:05.392Z",
-                    "updatedAt": "2025-10-08T07:59:05.392Z",
-                    "isDeleted": true,
-                    "deletedAt": "2025-10-08T07:59:05.392Z",
-                    "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'accept': '*/*',
+                        'Content-Type': 'application/json',
+                    } 
                 }
-            },
-            {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'accept': '*/*',
-                    'Content-Type': 'application/json',
-                } 
-            }
-        )
-        .then((res) => {
-            // dispatch(add(res.data))
-            console.log(res.data)
-            dispatch(update(res.data))
-            alert('Edit success')
-        })
-        .catch((error) => {
-            alert('Error when editing!')
-            console.log(error)
-        })
+            )
+            .then((res) => {
+                // dispatch(add(res.data))
+                console.log(res.data)
+                dispatch(update(res.data))
+                alert('Edit success')
+            })
+            .catch((error) => {
+                alert('Error when editing!')
+                console.log(error)
+            })
+            setIsOpen(false)
+        }
     }
 
     useEffect(() => {
@@ -206,10 +238,13 @@ const BusModal = ({ setIsOpen, isEdit, bus }: Props) => {
                                     </select>
                                 </div>
                             </div>
+                            {valid === 1 && <p className='text-[red]'>Biển số không hợp lệ</p>}
+                            {valid === 2 && <p className='text-[red]'>Hãng xe không hợp lệ</p>}
                             <div className='w-full justify-between my-[5px]'>
                                 <p>Mô tả</p>
                                 <textarea value={description} onChange={(e) => setDescription(e.target.value)} className='w-full' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}></textarea>
                             </div>
+                            {valid === 3 && <p className='text-[red]'>Mô tả không hợp lệ</p>}
                         </div>
                     </div>
                 </div>
@@ -218,15 +253,15 @@ const BusModal = ({ setIsOpen, isEdit, bus }: Props) => {
                         Hủy bỏ
                     </button>
                     <button className="p-[8px] justify-center rounded-[10px] bg-[#1447E6] text-white cursor-pointer"
-                        onClick={(e) => {
+                        onClick={() => {
                             if (isEdit === false) {
                                 // createSeatmap()
-                                handleCreate()
+                                handleCreate(setIsOpen)
                             }
                             else if (isEdit === true) {
-                                handleEdit(e)
+                                handleEdit(setIsOpen)
                             }
-                            setIsOpen(false)
+                            // setIsOpen(false)
                         }}>
                         Xác nhận
                     </button>

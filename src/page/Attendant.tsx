@@ -73,17 +73,19 @@ const Attendant = () => {
             <Header />
             <div className='w-full p-[10px]'>
                 <HeaderTop />
-                <h2 className='text-[20px] text-left font-bold mt-[10px] mb-[10px]'>Danh sách phụ xe</h2>
-                <div className='w-full flex flex-row justify-end'>
-                    <button className='p-[10px] flex flex-row items-center mr-[10px] rounded-[10px] cursor-pointer' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}>
-                    <img src={downloadicon} className='size-[20px] mr-[5px]' />
-                    <p>Xuất Excel</p>
-                    </button>
-                    <button className='p-[10px] cursor-pointer text-white bg-[#1447E6] rounded-[10px]' 
-                    onClick={() => {
-                        setIsEdit(false)
-                        setIsOpen(true)
-                    }}>+ Tạo phụ xe mới</button>
+                <div className='w-full flex flex-row justify-between my-[10px]'>
+                    <h2 className='text-[20px] text-left font-bold mt-[10px] mb-[10px]'>Danh sách phụ xe</h2>
+                    <div className='flex flex-row'>
+                        <button className='p-[10px] flex flex-row items-center mr-[10px] rounded-[10px] cursor-pointer' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}>
+                        <img src={downloadicon} className='size-[20px] mr-[5px]' />
+                        <p>Xuất Excel</p>
+                        </button>
+                        <button className='p-[10px] cursor-pointer text-white bg-[#1447E6] rounded-[10px]' 
+                        onClick={() => {
+                            setIsEdit(false)
+                            setIsOpen(true)
+                        }}>+ Tạo phụ xe mới</button>
+                    </div>
                 </div>
                 <div className='mt-[20px]'>
                     <table className="w-full border border-gray-200 text-left">

@@ -85,10 +85,11 @@ const Payment = () => {
         })
         .then((res) => {
             // console.log('get trip', res.data.tripDTO)
+            console.log('seat list', res.data.seatLockDTOs)
             setTrip(res.data.tripDTO)
         })
         .catch(() => {
-            console.log('Get vehicle fail!')
+            console.log('Get trip fail!')
         })
     }
 
@@ -149,10 +150,7 @@ const Payment = () => {
         })
         .then((res) => {
             console.log('payment', res.data)
-            if (res.data.success === true) {
-                alert('Thanh toán thành công')
-                navigate('/')
-            }
+            navigate('/bill')
         })
         .catch(() => {
             console.log('Check fail!')
@@ -175,7 +173,7 @@ const Payment = () => {
     useEffect(() => {
         handlePrice()
         console.log(price)
-    }, [vehicle])
+    }, [seatList])
 
     return (
         <div className='w-full h-full flex flex-row justify-start'>
@@ -187,7 +185,7 @@ const Payment = () => {
                     <div className='w-[50vw] p-[10px] flex flex-col items-start bg-white'>
                         <h2 className='ml-[10px] font-bold text-[20px]'>Chọn ghế</h2>
                         <div className='w-full flex flex-row'>
-                            <SeatMap isLimousine={isLimousine} />
+                            <SeatMap isLimousine={isLimousine} tripID={tripID} />
                             <div className='w-[30%] px-[10px]'>
                                 <h2 className='h-[40px] font-bold text-left pt-[20px] text-gray'>Trạng thái</h2>
                                 <div className='w-full mt-[30px]'>

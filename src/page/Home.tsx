@@ -76,12 +76,12 @@ const Home = () => {
         }
     }
 
-    useEffect(() => {
-        console.log(isLogin)
-        if (isLogin === false) {
-            navigate('/log-in')
-        }
-    }, [])
+    // useEffect(() => {
+    //     console.log(isLogin)
+    //     if (isLogin === false) {
+    //         navigate('/log-in')
+    //     }
+    // }, [])
 
     useEffect(() => {
         handleFilter()

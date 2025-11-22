@@ -27,9 +27,11 @@ const TripModal = ({ setIsOpen, isEdit, trip }: Props) => {
     const [pStart, setPStart] = useState<string>('')
     const [pEnd, setPEnd] = useState<string>('')
     const [vehicle, setVehicle] = useState<Bus>()
+    const [valid, setValid] = useState<number>(0)
 
     const token = useSelector((state: RootState) => state.auth.accessToken)
     const dispatch = useDispatch()
+    const codeRegex = /^[A-Za-z]+$/
 
     const getProvinces = async () => {
         await axios.get('https://apigateway.microservices.appf4s.io.vn/services/msroute/api/provinces', {
@@ -116,71 +118,80 @@ const TripModal = ({ setIsOpen, isEdit, trip }: Props) => {
         return `${year}-${month}-${day}T${hours}:${minutes}`;
     }
 
-    const handleCreate = async () => {
-        const now = new Date().toISOString()
-        const st = new Date(sTime).toISOString()
-        const et = new Date(eTime).toISOString()
-
-        console.log(code, distance, currentRID, sTime, eTime, route)
+    const handleCreate = async (setIsOpen: React.Dispatch<React.SetStateAction<boolean>>) => {
+        const now = new Date()
+        const st = new Date(sTime)
+        const et = new Date(eTime)
+        console.log('time', st, et)
+        
+        // console.log(code, distance, currentRID, sTime, eTime, route)
         // console.log(route)
-        await axios.post('https://apigateway.microservices.appf4s.io.vn/services/msroute/api/trips', {
-            "tripCode": code,
-            "departureTime": st,
-            "arrivalTime": et,
-            "occasionFactor": 1,
-            "createdAt": now,
-            "updatedAt": now,
-            "isDeleted": true,
-            "deletedAt": "2025-10-19T07:13:00.993Z",
-            "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-            "route": {
-                "id": route?.id,
-                "routeCode": route?.routeCode,
-                "distanceKm": distance,
-                "baseFare": 0,
-                "createdAt": "2025-10-19T07:13:00.993Z",
-                "updatedAt": "2025-10-19T07:13:00.993Z",
+
+        if (!codeRegex.test(code)) {
+            setIsOpen(true)
+            setValid(1)
+        }
+        else if (distance === 0) {
+            setIsOpen(true)
+            setValid(2)
+        }
+        else if (!route) {
+            setIsOpen(true)
+            setValid(3)
+        }
+        else if (!bus) {
+            setIsOpen(true)
+            setValid(4)
+        }
+        else if (st.getTime() > et.getTime()) {
+            setIsOpen(true)
+            setValid(5)
+        }
+        else {
+            await axios.post('https://apigateway.microservices.appf4s.io.vn/services/msroute/api/trips', {
+                "tripCode": code,
+                "departureTime": st.toISOString(),
+                "arrivalTime": et.toISOString(),
+                "occasionFactor": 1,
+                "createdAt": now.toISOString(),
+                "updatedAt": now.toISOString(),
                 "isDeleted": true,
                 "deletedAt": "2025-10-19T07:13:00.993Z",
                 "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                "origin": {
-                "id": route?.origin.id,
-                "name": route?.origin.name,
-                "phoneNumber": "string",
-                "description": route?.origin.description,
-                "active": true,
-                "createdAt": "2025-10-19T07:13:00.993Z",
-                "updatedAt": "2025-10-19T07:13:00.993Z",
-                "isDeleted": true,
-                "deletedAt": "2025-10-19T07:13:00.993Z",
-                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                "address": {
-                    "id": route?.origin.address.id,
-                    "streetAddress": route?.origin.streetAddress,
-                    "latitude": 0,
-                    "longitude": 0,
+                "route": {
+                    "id": route?.id,
+                    "routeCode": route?.routeCode,
+                    "distanceKm": distance,
+                    "baseFare": 0,
                     "createdAt": "2025-10-19T07:13:00.993Z",
                     "updatedAt": "2025-10-19T07:13:00.993Z",
                     "isDeleted": true,
                     "deletedAt": "2025-10-19T07:13:00.993Z",
                     "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                    "ward": {
-                    "id": 0,
-                    "wardCode": "string",
-                    "name": "string",
-                    "nameEn": "string",
-                    "fullName": "string",
-                    "fullNameEn": "string",
-                    "codeName": "string",
-                    "administrativeUnitId": 0,
+                    "origin": {
+                    "id": route?.origin.id,
+                    "name": route?.origin.name,
+                    "phoneNumber": "string",
+                    "description": route?.origin.description,
+                    "active": true,
                     "createdAt": "2025-10-19T07:13:00.993Z",
                     "updatedAt": "2025-10-19T07:13:00.993Z",
                     "isDeleted": true,
                     "deletedAt": "2025-10-19T07:13:00.993Z",
                     "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                    "district": {
+                    "address": {
+                        "id": route?.origin.address.id,
+                        "streetAddress": route?.origin.streetAddress,
+                        "latitude": 0,
+                        "longitude": 0,
+                        "createdAt": "2025-10-19T07:13:00.993Z",
+                        "updatedAt": "2025-10-19T07:13:00.993Z",
+                        "isDeleted": true,
+                        "deletedAt": "2025-10-19T07:13:00.993Z",
+                        "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                        "ward": {
                         "id": 0,
-                        "districtCode": "string",
+                        "wardCode": "string",
                         "name": "string",
                         "nameEn": "string",
                         "fullName": "string",
@@ -192,76 +203,76 @@ const TripModal = ({ setIsOpen, isEdit, trip }: Props) => {
                         "isDeleted": true,
                         "deletedAt": "2025-10-19T07:13:00.993Z",
                         "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                        "province": {
+                        "district": {
+                            "id": 0,
+                            "districtCode": "string",
+                            "name": "string",
+                            "nameEn": "string",
+                            "fullName": "string",
+                            "fullNameEn": "string",
+                            "codeName": "string",
+                            "administrativeUnitId": 0,
+                            "createdAt": "2025-10-19T07:13:00.993Z",
+                            "updatedAt": "2025-10-19T07:13:00.993Z",
+                            "isDeleted": true,
+                            "deletedAt": "2025-10-19T07:13:00.993Z",
+                            "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                            "province": {
+                            "id": 0,
+                            "provinceCode": "string",
+                            "name": "string",
+                            "nameEn": "string",
+                            "fullName": "string",
+                            "fullNameEn": "string",
+                            "codeName": "string",
+                            "administrativeUnitId": 0,
+                            "administrativeRegionId": 0,
+                            "createdAt": "2025-10-19T07:13:00.994Z",
+                            "updatedAt": "2025-10-19T07:13:00.994Z",
+                            "isDeleted": true,
+                            "deletedAt": "2025-10-19T07:13:00.994Z",
+                            "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                            }
+                        }
+                        }
+                    },
+                    "stationImg": {
                         "id": 0,
-                        "provinceCode": "string",
-                        "name": "string",
-                        "nameEn": "string",
-                        "fullName": "string",
-                        "fullNameEn": "string",
-                        "codeName": "string",
-                        "administrativeUnitId": 0,
-                        "administrativeRegionId": 0,
+                        "bucket": "string",
+                        "objectKey": "string",
+                        "contentType": "string",
+                        "size": 0,
                         "createdAt": "2025-10-19T07:13:00.994Z",
                         "updatedAt": "2025-10-19T07:13:00.994Z",
                         "isDeleted": true,
                         "deletedAt": "2025-10-19T07:13:00.994Z",
                         "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-                        }
                     }
-                    }
-                },
-                "stationImg": {
-                    "id": 0,
-                    "bucket": "string",
-                    "objectKey": "string",
-                    "contentType": "string",
-                    "size": 0,
-                    "createdAt": "2025-10-19T07:13:00.994Z",
-                    "updatedAt": "2025-10-19T07:13:00.994Z",
-                    "isDeleted": true,
-                    "deletedAt": "2025-10-19T07:13:00.994Z",
-                    "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-                }
-                },
-                "destination": {
-                "id": route?.destination.id,
-                "name": route?.destination.name,
-                "phoneNumber": "string",
-                "description": route?.destination.description,
-                "active": true,
-                "createdAt": "2025-10-19T07:13:00.994Z",
-                "updatedAt": "2025-10-19T07:13:00.994Z",
-                "isDeleted": true,
-                "deletedAt": "2025-10-19T07:13:00.994Z",
-                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                "address": {
-                    "id": route?.destination.address.id,
-                    "streetAddress": route?.destination.streetAddress,
-                    "latitude": 0,
-                    "longitude": 0,
+                    },
+                    "destination": {
+                    "id": route?.destination.id,
+                    "name": route?.destination.name,
+                    "phoneNumber": "string",
+                    "description": route?.destination.description,
+                    "active": true,
                     "createdAt": "2025-10-19T07:13:00.994Z",
                     "updatedAt": "2025-10-19T07:13:00.994Z",
                     "isDeleted": true,
                     "deletedAt": "2025-10-19T07:13:00.994Z",
                     "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                    "ward": {
-                    "id": 0,
-                    "wardCode": "string",
-                    "name": "string",
-                    "nameEn": "string",
-                    "fullName": "string",
-                    "fullNameEn": "string",
-                    "codeName": "string",
-                    "administrativeUnitId": 0,
-                    "createdAt": "2025-10-19T07:13:00.994Z",
-                    "updatedAt": "2025-10-19T07:13:00.994Z",
-                    "isDeleted": true,
-                    "deletedAt": "2025-10-19T07:13:00.994Z",
-                    "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                    "district": {
+                    "address": {
+                        "id": route?.destination.address.id,
+                        "streetAddress": route?.destination.streetAddress,
+                        "latitude": 0,
+                        "longitude": 0,
+                        "createdAt": "2025-10-19T07:13:00.994Z",
+                        "updatedAt": "2025-10-19T07:13:00.994Z",
+                        "isDeleted": true,
+                        "deletedAt": "2025-10-19T07:13:00.994Z",
+                        "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                        "ward": {
                         "id": 0,
-                        "districtCode": "string",
+                        "wardCode": "string",
                         "name": "string",
                         "nameEn": "string",
                         "fullName": "string",
@@ -273,26 +284,88 @@ const TripModal = ({ setIsOpen, isEdit, trip }: Props) => {
                         "isDeleted": true,
                         "deletedAt": "2025-10-19T07:13:00.994Z",
                         "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                        "province": {
+                        "district": {
+                            "id": 0,
+                            "districtCode": "string",
+                            "name": "string",
+                            "nameEn": "string",
+                            "fullName": "string",
+                            "fullNameEn": "string",
+                            "codeName": "string",
+                            "administrativeUnitId": 0,
+                            "createdAt": "2025-10-19T07:13:00.994Z",
+                            "updatedAt": "2025-10-19T07:13:00.994Z",
+                            "isDeleted": true,
+                            "deletedAt": "2025-10-19T07:13:00.994Z",
+                            "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                            "province": {
+                            "id": 0,
+                            "provinceCode": "string",
+                            "name": "string",
+                            "nameEn": "string",
+                            "fullName": "string",
+                            "fullNameEn": "string",
+                            "codeName": "string",
+                            "administrativeUnitId": 0,
+                            "administrativeRegionId": 0,
+                            "createdAt": "2025-10-19T07:13:00.994Z",
+                            "updatedAt": "2025-10-19T07:13:00.994Z",
+                            "isDeleted": true,
+                            "deletedAt": "2025-10-19T07:13:00.994Z",
+                            "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                            }
+                        }
+                        }
+                    },
+                    "stationImg": {
                         "id": 0,
-                        "provinceCode": "string",
-                        "name": "string",
-                        "nameEn": "string",
-                        "fullName": "string",
-                        "fullNameEn": "string",
-                        "codeName": "string",
-                        "administrativeUnitId": 0,
-                        "administrativeRegionId": 0,
+                        "bucket": "string",
+                        "objectKey": "string",
+                        "contentType": "string",
+                        "size": 0,
                         "createdAt": "2025-10-19T07:13:00.994Z",
                         "updatedAt": "2025-10-19T07:13:00.994Z",
                         "isDeleted": true,
                         "deletedAt": "2025-10-19T07:13:00.994Z",
                         "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-                        }
                     }
                     }
                 },
-                "stationImg": {
+                "vehicle": {
+                    "id": bus?.id,
+                    "type": bus?.type,
+                    "typeFactor": 0,
+                    "plateNumber": bus?.plateNumber,
+                    "brand": bus?.brand,
+                    "description": bus?.description,
+                    "status": "ACTIVE",
+                    "createdAt": "2025-10-19T07:13:00.994Z",
+                    "updatedAt": "2025-10-19T07:13:00.994Z",
+                    "isDeleted": true,
+                    "deletedAt": "2025-10-19T07:13:00.994Z",
+                    "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    "seatMap": {
+                    "id": 0,
+                    "name": "string",
+                    "createdAt": "2025-10-19T07:13:00.994Z",
+                    "updatedAt": "2025-10-19T07:13:00.994Z",
+                    "isDeleted": true,
+                    "deletedAt": "2025-10-19T07:13:00.994Z",
+                    "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    "seatMapImg": {
+                        "id": 0,
+                        "bucket": "string",
+                        "objectKey": "string",
+                        "contentType": "string",
+                        "size": 0,
+                        "createdAt": "2025-10-19T07:13:00.994Z",
+                        "updatedAt": "2025-10-19T07:13:00.994Z",
+                        "isDeleted": true,
+                        "deletedAt": "2025-10-19T07:13:00.994Z",
+                        "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                    }
+                    },
+                    "vehicleImg": {
                     "id": 0,
                     "bucket": "string",
                     "objectKey": "string",
@@ -303,202 +376,159 @@ const TripModal = ({ setIsOpen, isEdit, trip }: Props) => {
                     "isDeleted": true,
                     "deletedAt": "2025-10-19T07:13:00.994Z",
                     "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-                }
-                }
-            },
-            "vehicle": {
-                "id": bus?.id,
-                "type": bus?.type,
-                "typeFactor": 0,
-                "plateNumber": bus?.plateNumber,
-                "brand": bus?.brand,
-                "description": bus?.description,
-                "status": "ACTIVE",
-                "createdAt": "2025-10-19T07:13:00.994Z",
-                "updatedAt": "2025-10-19T07:13:00.994Z",
-                "isDeleted": true,
-                "deletedAt": "2025-10-19T07:13:00.994Z",
-                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                "seatMap": {
-                "id": 0,
-                "name": "string",
-                "createdAt": "2025-10-19T07:13:00.994Z",
-                "updatedAt": "2025-10-19T07:13:00.994Z",
-                "isDeleted": true,
-                "deletedAt": "2025-10-19T07:13:00.994Z",
-                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                "seatMapImg": {
+                    }
+                },
+                "slot": {
+                    "id": 1,
+                    "slotCode": null,
+                    "departureTime": null,
+                    "arrivalTime": null,
+                    "bufferMinutes": null,
+                    "sequence": null,
+                    "active": null,
+                    "createdAt": null,
+                    "updatedAt": null,
+                    "isDeleted": null,
+                    "deletedAt": null,
+                    "deletedBy": null,
+                    "schedule": null
+                },
+                "driver": {
+                    "id": 1528,
+                    "licenseClass": "string",
+                    "yearsExperience": 0,
+                    "createdAt": "2025-10-19T07:13:00.994Z",
+                    "updatedAt": "2025-10-19T07:13:00.994Z",
+                    "isDeleted": true,
+                    "deletedAt": "2025-10-19T07:13:00.994Z",
+                    "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    "staff": {
                     "id": 0,
-                    "bucket": "string",
-                    "objectKey": "string",
-                    "contentType": "string",
-                    "size": 0,
+                    "name": "string",
+                    "age": 0,
+                    "gender": "MALE",
+                    "phoneNumber": "string",
+                    "status": "ACTIVE",
                     "createdAt": "2025-10-19T07:13:00.994Z",
                     "updatedAt": "2025-10-19T07:13:00.994Z",
                     "isDeleted": true,
                     "deletedAt": "2025-10-19T07:13:00.994Z",
                     "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-                }
+                    }
                 },
-                "vehicleImg": {
-                "id": 0,
-                "bucket": "string",
-                "objectKey": "string",
-                "contentType": "string",
-                "size": 0,
-                "createdAt": "2025-10-19T07:13:00.994Z",
-                "updatedAt": "2025-10-19T07:13:00.994Z",
-                "isDeleted": true,
-                "deletedAt": "2025-10-19T07:13:00.994Z",
-                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                "attendant": {
+                    "id": 1538,
+                    "createdAt": "2025-10-19T07:13:00.994Z",
+                    "updatedAt": "2025-10-19T07:13:00.994Z",
+                    "isDeleted": true,
+                    "deletedAt": "2025-10-19T07:13:00.994Z",
+                    "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    "staff": {
+                    "id": 0,
+                    "name": "string",
+                    "age": 0,
+                    "gender": "MALE",
+                    "phoneNumber": "string",
+                    "status": "ACTIVE",
+                    "createdAt": "2025-10-19T07:13:00.994Z",
+                    "updatedAt": "2025-10-19T07:13:00.994Z",
+                    "isDeleted": true,
+                    "deletedAt": "2025-10-19T07:13:00.994Z",
+                    "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                    }
+                }  
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'accept': '*/*',
+                    'Content-Type': 'application/json',
+                }  
+            })
+            .then((res) => {
+                // console.log(res.data)
+                dispatch(add(res.data))
+                if (route) {
+                    dispatch(updateRoute({ id: Number(res.data.route.id), route: route }))
                 }
-            },
-            "slot": {
-                "id": 1,
-                "slotCode": null,
-                "departureTime": null,
-                "arrivalTime": null,
-                "bufferMinutes": null,
-                "sequence": null,
-                "active": null,
-                "createdAt": null,
-                "updatedAt": null,
-                "isDeleted": null,
-                "deletedAt": null,
-                "deletedBy": null,
-                "schedule": null
-            },
-            "driver": {
-                "id": 1528,
-                "licenseClass": "string",
-                "yearsExperience": 0,
-                "createdAt": "2025-10-19T07:13:00.994Z",
-                "updatedAt": "2025-10-19T07:13:00.994Z",
-                "isDeleted": true,
-                "deletedAt": "2025-10-19T07:13:00.994Z",
-                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                "staff": {
-                "id": 0,
-                "name": "string",
-                "age": 0,
-                "gender": "MALE",
-                "phoneNumber": "string",
-                "status": "ACTIVE",
-                "createdAt": "2025-10-19T07:13:00.994Z",
-                "updatedAt": "2025-10-19T07:13:00.994Z",
-                "isDeleted": true,
-                "deletedAt": "2025-10-19T07:13:00.994Z",
-                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-                }
-            },
-            "attendant": {
-                "id": 1538,
-                "createdAt": "2025-10-19T07:13:00.994Z",
-                "updatedAt": "2025-10-19T07:13:00.994Z",
-                "isDeleted": true,
-                "deletedAt": "2025-10-19T07:13:00.994Z",
-                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                "staff": {
-                "id": 0,
-                "name": "string",
-                "age": 0,
-                "gender": "MALE",
-                "phoneNumber": "string",
-                "status": "ACTIVE",
-                "createdAt": "2025-10-19T07:13:00.994Z",
-                "updatedAt": "2025-10-19T07:13:00.994Z",
-                "isDeleted": true,
-                "deletedAt": "2025-10-19T07:13:00.994Z",
-                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-                }
-            }  
-        }, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'accept': '*/*',
-                'Content-Type': 'application/json',
-            }  
-        })
-        .then((res) => {
-            // console.log(res.data)
-            dispatch(add(res.data))
-            if (route) {
-                dispatch(updateRoute({ id: Number(res.data.route.id), route: route }))
-            }
-            alert('Create success')
-        })
-        .catch((error) => {
-            alert('Error when creating!')
-            console.log(error)
-        })
+                alert('Create success')
+            })
+            .catch((error) => {
+                alert('Error when creating!')
+                console.log(error)
+            })
+            setIsOpen(false)
+        }
     }
 
-    const handleEdit = async () => {
+    const handleEdit = async (setIsOpen: React.Dispatch<React.SetStateAction<boolean>>) => {
         const now = new Date().toISOString()
         const st = new Date(sTime).toISOString()
         const et = new Date(eTime).toISOString()
         // console.log(code, distance, sTime, eTime)
         // console.log('route', route)
 
-        await axios.put(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/trips/${trip?.id}`, {
-            "id": trip?.id,
-            "tripCode": code,
-            "departureTime": st,
-            "arrivalTime": et,
-            "occasionFactor": 1,
-            "createdAt": "2025-10-19T07:13:00.993Z",
-            "updatedAt": now,
-            "isDeleted": true,
-            "deletedAt": "2025-10-19T07:13:00.993Z",
-            "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-            "route": {
-                "id": route?.id,
-                "routeCode": route?.routeCode,
-                "distanceKm": distance,
-                "baseFare": 0,
+        if (!codeRegex.test(code)) {
+            setIsOpen(true)
+            setValid(1)
+        }
+        else if (distance === 0) {
+            setIsOpen(true)
+            setValid(2)
+        }
+        else if (!route) {
+            setIsOpen(true)
+            setValid(3)
+        }
+        else if (!bus) {
+            setIsOpen(true)
+            setValid(4)
+        }
+        else {
+            await axios.put(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/trips/${trip?.id}`, {
+                "id": trip?.id,
+                "tripCode": code,
+                "departureTime": st,
+                "arrivalTime": et,
+                "occasionFactor": 1,
                 "createdAt": "2025-10-19T07:13:00.993Z",
-                "updatedAt": "2025-10-19T07:13:00.993Z",
+                "updatedAt": now,
                 "isDeleted": true,
                 "deletedAt": "2025-10-19T07:13:00.993Z",
                 "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                "origin": {
-                "id": route?.origin.id,
-                "name": route?.origin.name,
-                "phoneNumber": "string",
-                "description": route?.origin.description,
-                "active": true,
-                "createdAt": "2025-10-19T07:13:00.993Z",
-                "updatedAt": "2025-10-19T07:13:00.993Z",
-                "isDeleted": true,
-                "deletedAt": "2025-10-19T07:13:00.993Z",
-                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                "address": {
-                    "id": route?.origin.address.id,
-                    "streetAddress": route?.origin.streetAddress,
-                    "latitude": 0,
-                    "longitude": 0,
+                "route": {
+                    "id": route?.id,
+                    "routeCode": route?.routeCode,
+                    "distanceKm": distance,
+                    "baseFare": 0,
                     "createdAt": "2025-10-19T07:13:00.993Z",
                     "updatedAt": "2025-10-19T07:13:00.993Z",
                     "isDeleted": true,
                     "deletedAt": "2025-10-19T07:13:00.993Z",
                     "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                    "ward": {
-                    "id": 0,
-                    "wardCode": "string",
-                    "name": "string",
-                    "nameEn": "string",
-                    "fullName": "string",
-                    "fullNameEn": "string",
-                    "codeName": "string",
-                    "administrativeUnitId": 0,
+                    "origin": {
+                    "id": route?.origin.id,
+                    "name": route?.origin.name,
+                    "phoneNumber": "string",
+                    "description": route?.origin.description,
+                    "active": true,
                     "createdAt": "2025-10-19T07:13:00.993Z",
                     "updatedAt": "2025-10-19T07:13:00.993Z",
                     "isDeleted": true,
                     "deletedAt": "2025-10-19T07:13:00.993Z",
                     "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                    "district": {
+                    "address": {
+                        "id": route?.origin.address.id,
+                        "streetAddress": route?.origin.streetAddress,
+                        "latitude": 0,
+                        "longitude": 0,
+                        "createdAt": "2025-10-19T07:13:00.993Z",
+                        "updatedAt": "2025-10-19T07:13:00.993Z",
+                        "isDeleted": true,
+                        "deletedAt": "2025-10-19T07:13:00.993Z",
+                        "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                        "ward": {
                         "id": 0,
-                        "districtCode": "string",
+                        "wardCode": "string",
                         "name": "string",
                         "nameEn": "string",
                         "fullName": "string",
@@ -510,76 +540,76 @@ const TripModal = ({ setIsOpen, isEdit, trip }: Props) => {
                         "isDeleted": true,
                         "deletedAt": "2025-10-19T07:13:00.993Z",
                         "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                        "province": {
+                        "district": {
+                            "id": 0,
+                            "districtCode": "string",
+                            "name": "string",
+                            "nameEn": "string",
+                            "fullName": "string",
+                            "fullNameEn": "string",
+                            "codeName": "string",
+                            "administrativeUnitId": 0,
+                            "createdAt": "2025-10-19T07:13:00.993Z",
+                            "updatedAt": "2025-10-19T07:13:00.993Z",
+                            "isDeleted": true,
+                            "deletedAt": "2025-10-19T07:13:00.993Z",
+                            "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                            "province": {
+                            "id": 0,
+                            "provinceCode": "string",
+                            "name": "string",
+                            "nameEn": "string",
+                            "fullName": "string",
+                            "fullNameEn": "string",
+                            "codeName": "string",
+                            "administrativeUnitId": 0,
+                            "administrativeRegionId": 0,
+                            "createdAt": "2025-10-19T07:13:00.994Z",
+                            "updatedAt": "2025-10-19T07:13:00.994Z",
+                            "isDeleted": true,
+                            "deletedAt": "2025-10-19T07:13:00.994Z",
+                            "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                            }
+                        }
+                        }
+                    },
+                    "stationImg": {
                         "id": 0,
-                        "provinceCode": "string",
-                        "name": "string",
-                        "nameEn": "string",
-                        "fullName": "string",
-                        "fullNameEn": "string",
-                        "codeName": "string",
-                        "administrativeUnitId": 0,
-                        "administrativeRegionId": 0,
+                        "bucket": "string",
+                        "objectKey": "string",
+                        "contentType": "string",
+                        "size": 0,
                         "createdAt": "2025-10-19T07:13:00.994Z",
                         "updatedAt": "2025-10-19T07:13:00.994Z",
                         "isDeleted": true,
                         "deletedAt": "2025-10-19T07:13:00.994Z",
                         "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-                        }
                     }
-                    }
-                },
-                "stationImg": {
-                    "id": 0,
-                    "bucket": "string",
-                    "objectKey": "string",
-                    "contentType": "string",
-                    "size": 0,
-                    "createdAt": "2025-10-19T07:13:00.994Z",
-                    "updatedAt": "2025-10-19T07:13:00.994Z",
-                    "isDeleted": true,
-                    "deletedAt": "2025-10-19T07:13:00.994Z",
-                    "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-                }
-                },
-                "destination": {
-                "id": route?.destination.id,
-                "name": route?.destination.name,
-                "phoneNumber": "string",
-                "description": route?.destination.description,
-                "active": true,
-                "createdAt": "2025-10-19T07:13:00.994Z",
-                "updatedAt": "2025-10-19T07:13:00.994Z",
-                "isDeleted": true,
-                "deletedAt": "2025-10-19T07:13:00.994Z",
-                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                "address": {
-                    "id": route?.destination.address.id,
-                    "streetAddress": route?.destination.streetAddress,
-                    "latitude": 0,
-                    "longitude": 0,
+                    },
+                    "destination": {
+                    "id": route?.destination.id,
+                    "name": route?.destination.name,
+                    "phoneNumber": "string",
+                    "description": route?.destination.description,
+                    "active": true,
                     "createdAt": "2025-10-19T07:13:00.994Z",
                     "updatedAt": "2025-10-19T07:13:00.994Z",
                     "isDeleted": true,
                     "deletedAt": "2025-10-19T07:13:00.994Z",
                     "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                    "ward": {
-                    "id": 0,
-                    "wardCode": "string",
-                    "name": "string",
-                    "nameEn": "string",
-                    "fullName": "string",
-                    "fullNameEn": "string",
-                    "codeName": "string",
-                    "administrativeUnitId": 0,
-                    "createdAt": "2025-10-19T07:13:00.994Z",
-                    "updatedAt": "2025-10-19T07:13:00.994Z",
-                    "isDeleted": true,
-                    "deletedAt": "2025-10-19T07:13:00.994Z",
-                    "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                    "district": {
+                    "address": {
+                        "id": route?.destination.address.id,
+                        "streetAddress": route?.destination.streetAddress,
+                        "latitude": 0,
+                        "longitude": 0,
+                        "createdAt": "2025-10-19T07:13:00.994Z",
+                        "updatedAt": "2025-10-19T07:13:00.994Z",
+                        "isDeleted": true,
+                        "deletedAt": "2025-10-19T07:13:00.994Z",
+                        "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                        "ward": {
                         "id": 0,
-                        "districtCode": "string",
+                        "wardCode": "string",
                         "name": "string",
                         "nameEn": "string",
                         "fullName": "string",
@@ -591,26 +621,88 @@ const TripModal = ({ setIsOpen, isEdit, trip }: Props) => {
                         "isDeleted": true,
                         "deletedAt": "2025-10-19T07:13:00.994Z",
                         "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                        "province": {
+                        "district": {
+                            "id": 0,
+                            "districtCode": "string",
+                            "name": "string",
+                            "nameEn": "string",
+                            "fullName": "string",
+                            "fullNameEn": "string",
+                            "codeName": "string",
+                            "administrativeUnitId": 0,
+                            "createdAt": "2025-10-19T07:13:00.994Z",
+                            "updatedAt": "2025-10-19T07:13:00.994Z",
+                            "isDeleted": true,
+                            "deletedAt": "2025-10-19T07:13:00.994Z",
+                            "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                            "province": {
+                            "id": 0,
+                            "provinceCode": "string",
+                            "name": "string",
+                            "nameEn": "string",
+                            "fullName": "string",
+                            "fullNameEn": "string",
+                            "codeName": "string",
+                            "administrativeUnitId": 0,
+                            "administrativeRegionId": 0,
+                            "createdAt": "2025-10-19T07:13:00.994Z",
+                            "updatedAt": "2025-10-19T07:13:00.994Z",
+                            "isDeleted": true,
+                            "deletedAt": "2025-10-19T07:13:00.994Z",
+                            "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                            }
+                        }
+                        }
+                    },
+                    "stationImg": {
                         "id": 0,
-                        "provinceCode": "string",
-                        "name": "string",
-                        "nameEn": "string",
-                        "fullName": "string",
-                        "fullNameEn": "string",
-                        "codeName": "string",
-                        "administrativeUnitId": 0,
-                        "administrativeRegionId": 0,
+                        "bucket": "string",
+                        "objectKey": "string",
+                        "contentType": "string",
+                        "size": 0,
                         "createdAt": "2025-10-19T07:13:00.994Z",
                         "updatedAt": "2025-10-19T07:13:00.994Z",
                         "isDeleted": true,
                         "deletedAt": "2025-10-19T07:13:00.994Z",
                         "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-                        }
                     }
                     }
                 },
-                "stationImg": {
+                "vehicle": {
+                    "id": bus?.id,
+                    "type": bus?.type,
+                    "typeFactor": 0,
+                    "plateNumber": bus?.plateNumber,
+                    "brand": bus?.brand,
+                    "description": bus?.description,
+                    "status": "ACTIVE",
+                    "createdAt": "2025-10-19T07:13:00.994Z",
+                    "updatedAt": "2025-10-19T07:13:00.994Z",
+                    "isDeleted": true,
+                    "deletedAt": "2025-10-19T07:13:00.994Z",
+                    "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    "seatMap": {
+                    "id": 0,
+                    "name": "string",
+                    "createdAt": "2025-10-19T07:13:00.994Z",
+                    "updatedAt": "2025-10-19T07:13:00.994Z",
+                    "isDeleted": true,
+                    "deletedAt": "2025-10-19T07:13:00.994Z",
+                    "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    "seatMapImg": {
+                        "id": 0,
+                        "bucket": "string",
+                        "objectKey": "string",
+                        "contentType": "string",
+                        "size": 0,
+                        "createdAt": "2025-10-19T07:13:00.994Z",
+                        "updatedAt": "2025-10-19T07:13:00.994Z",
+                        "isDeleted": true,
+                        "deletedAt": "2025-10-19T07:13:00.994Z",
+                        "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                    }
+                    },
+                    "vehicleImg": {
                     "id": 0,
                     "bucket": "string",
                     "objectKey": "string",
@@ -621,134 +713,88 @@ const TripModal = ({ setIsOpen, isEdit, trip }: Props) => {
                     "isDeleted": true,
                     "deletedAt": "2025-10-19T07:13:00.994Z",
                     "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-                }
-                }
-            },
-            "vehicle": {
-                "id": bus?.id,
-                "type": bus?.type,
-                "typeFactor": 0,
-                "plateNumber": bus?.plateNumber,
-                "brand": bus?.brand,
-                "description": bus?.description,
-                "status": "ACTIVE",
-                "createdAt": "2025-10-19T07:13:00.994Z",
-                "updatedAt": "2025-10-19T07:13:00.994Z",
-                "isDeleted": true,
-                "deletedAt": "2025-10-19T07:13:00.994Z",
-                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                "seatMap": {
-                "id": 0,
-                "name": "string",
-                "createdAt": "2025-10-19T07:13:00.994Z",
-                "updatedAt": "2025-10-19T07:13:00.994Z",
-                "isDeleted": true,
-                "deletedAt": "2025-10-19T07:13:00.994Z",
-                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                "seatMapImg": {
+                    }
+                },
+                "slot": {
+                    "id": 1,
+                    "slotCode": null,
+                    "departureTime": null,
+                    "arrivalTime": null,
+                    "bufferMinutes": null,
+                    "sequence": null,
+                    "active": null,
+                    "createdAt": null,
+                    "updatedAt": null,
+                    "isDeleted": null,
+                    "deletedAt": null,
+                    "deletedBy": null,
+                    "schedule": null
+                },
+                "driver": {
+                    "id": 1528,
+                    "licenseClass": "string",
+                    "yearsExperience": 0,
+                    "createdAt": "2025-10-19T07:13:00.994Z",
+                    "updatedAt": "2025-10-19T07:13:00.994Z",
+                    "isDeleted": true,
+                    "deletedAt": "2025-10-19T07:13:00.994Z",
+                    "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    "staff": {
                     "id": 0,
-                    "bucket": "string",
-                    "objectKey": "string",
-                    "contentType": "string",
-                    "size": 0,
+                    "name": "string",
+                    "age": 0,
+                    "gender": "MALE",
+                    "phoneNumber": "string",
+                    "status": "ACTIVE",
                     "createdAt": "2025-10-19T07:13:00.994Z",
                     "updatedAt": "2025-10-19T07:13:00.994Z",
                     "isDeleted": true,
                     "deletedAt": "2025-10-19T07:13:00.994Z",
                     "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-                }
+                    }
                 },
-                "vehicleImg": {
-                "id": 0,
-                "bucket": "string",
-                "objectKey": "string",
-                "contentType": "string",
-                "size": 0,
-                "createdAt": "2025-10-19T07:13:00.994Z",
-                "updatedAt": "2025-10-19T07:13:00.994Z",
-                "isDeleted": true,
-                "deletedAt": "2025-10-19T07:13:00.994Z",
-                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-                }
-            },
-            "slot": {
-                "id": 1,
-                "slotCode": null,
-                "departureTime": null,
-                "arrivalTime": null,
-                "bufferMinutes": null,
-                "sequence": null,
-                "active": null,
-                "createdAt": null,
-                "updatedAt": null,
-                "isDeleted": null,
-                "deletedAt": null,
-                "deletedBy": null,
-                "schedule": null
-            },
-            "driver": {
-                "id": 1528,
-                "licenseClass": "string",
-                "yearsExperience": 0,
-                "createdAt": "2025-10-19T07:13:00.994Z",
-                "updatedAt": "2025-10-19T07:13:00.994Z",
-                "isDeleted": true,
-                "deletedAt": "2025-10-19T07:13:00.994Z",
-                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                "staff": {
-                "id": 0,
-                "name": "string",
-                "age": 0,
-                "gender": "MALE",
-                "phoneNumber": "string",
-                "status": "ACTIVE",
-                "createdAt": "2025-10-19T07:13:00.994Z",
-                "updatedAt": "2025-10-19T07:13:00.994Z",
-                "isDeleted": true,
-                "deletedAt": "2025-10-19T07:13:00.994Z",
-                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-                }
-            },
-            "attendant": {
-                "id": 1538,
-                "createdAt": "2025-10-19T07:13:00.994Z",
-                "updatedAt": "2025-10-19T07:13:00.994Z",
-                "isDeleted": true,
-                "deletedAt": "2025-10-19T07:13:00.994Z",
-                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                "staff": {
-                "id": 0,
-                "name": "string",
-                "age": 0,
-                "gender": "MALE",
-                "phoneNumber": "string",
-                "status": "ACTIVE",
-                "createdAt": "2025-10-19T07:13:00.994Z",
-                "updatedAt": "2025-10-19T07:13:00.994Z",
-                "isDeleted": true,
-                "deletedAt": "2025-10-19T07:13:00.994Z",
-                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-                }
-            }  
-        }, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'accept': '*/*',
-                'Content-Type': 'application/json',
-            } 
-        })
-        .then((res) => {
-            console.log('trip',res.data)
-            // if (route) {
-            //     dispatch(updateRoute({ id: Number(res.data.route.id), route: route }))
-            // }
-            dispatch(update(res.data))
-            alert('Update success')
-        })
-        .catch((error) => {
-            alert('Error when update!')
-            console.log(error)
-        })
+                "attendant": {
+                    "id": 1538,
+                    "createdAt": "2025-10-19T07:13:00.994Z",
+                    "updatedAt": "2025-10-19T07:13:00.994Z",
+                    "isDeleted": true,
+                    "deletedAt": "2025-10-19T07:13:00.994Z",
+                    "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    "staff": {
+                    "id": 0,
+                    "name": "string",
+                    "age": 0,
+                    "gender": "MALE",
+                    "phoneNumber": "string",
+                    "status": "ACTIVE",
+                    "createdAt": "2025-10-19T07:13:00.994Z",
+                    "updatedAt": "2025-10-19T07:13:00.994Z",
+                    "isDeleted": true,
+                    "deletedAt": "2025-10-19T07:13:00.994Z",
+                    "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                    }
+                }  
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'accept': '*/*',
+                    'Content-Type': 'application/json',
+                } 
+            })
+            .then((res) => {
+                console.log('trip',res.data)
+                // if (route) {
+                //     dispatch(updateRoute({ id: Number(res.data.route.id), route: route }))
+                // }
+                dispatch(update(res.data))
+                alert('Update success')
+                setIsOpen(false)
+            })
+            .catch((error) => {
+                alert('Error when update!')
+                console.log(error)
+            })
+        }
     }
 
     useEffect(() => {
@@ -789,6 +835,8 @@ const TripModal = ({ setIsOpen, isEdit, trip }: Props) => {
                                     <input value={distance} onChange={(e) => setDistance(e.target.valueAsNumber)} type="number" className='w-full p-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}/>
                                 </div>
                             </div>
+                            {valid === 1 && <p className='text-[red]'>CODE không hợp lệ</p>}
+                            {valid === 2 && <p className='text-[red]'>Khoảng cách không hợp lệ</p>}
                             <div className='w-full flex flex-row justify-between my-[5px]'>
                                 <div className='w-[48%]'>
                                     <p>Nơi đi</p>
@@ -831,6 +879,7 @@ const TripModal = ({ setIsOpen, isEdit, trip }: Props) => {
                                     ))
                                 }
                             </select>
+                            {valid === 3 && <p className='text-[red]'>Bến xe không hợp lệ</p>}
                             <div className='w-full flex flex-row justify-between my-[5px]'>
                                 <div className='w-[48%]'>
                                     <p>Loại xe</p>
@@ -860,6 +909,7 @@ const TripModal = ({ setIsOpen, isEdit, trip }: Props) => {
                                     </select>
                                 </div>
                             </div>
+                            {valid === 4 && <p className='text-[red]'>Xe không hợp lệ</p>}
                             <div className='w-full flex flex-row justify-between my-[5px]'>
                                 <div className='w-[48%]'>
                                     <p>Thời gian bắt đầu</p>
@@ -870,6 +920,7 @@ const TripModal = ({ setIsOpen, isEdit, trip }: Props) => {
                                     <input value={eTime} onChange={(e) => setETime(e.target.value)} type='datetime-local' className='w-full p-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}/>
                                 </div>
                             </div>
+                            {valid === 5 && <p className='text-[red]'>Thời gian không hợp lệ</p>}
                         </div>
                     </div>
                 </div>
@@ -879,12 +930,12 @@ const TripModal = ({ setIsOpen, isEdit, trip }: Props) => {
                     </button>
                     <button className="p-[8px] justify-center rounded-[10px] bg-[#1447E6] text-white cursor-pointer"
                         onClick={() => {
-                            setIsOpen(false)
+                            // setIsOpen(false)
                             if (!isEdit) {
-                                handleCreate()
+                                handleCreate(setIsOpen)
                             }
                             else if (isEdit) {
-                                handleEdit()
+                                handleEdit(setIsOpen)
                             }
                         }}>
                         Xác nhận

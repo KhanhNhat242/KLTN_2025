@@ -16,39 +16,55 @@ const AttendantModal = ({ setIsOpen, isEdit, attendant }: Props) => {
     const [name, setName] = useState<string>('')
     const [gender, setGender] = useState<string>('MALE')
     const [phone, setPhone] = useState<string>('')
+    const [valid, setValid] = useState<number>(0)
 
     const token = useSelector((state: RootState) => state.auth.accessToken)
     const dispatch = useDispatch()
+    const nameRegex = /^[A-Za-zÀ-Ỹà-ỹ]+(?:\s[A-Za-zÀ-Ỹà-ỹ]+)*$/
+    const phoneRegex = /^\d{10}$/
 
-    const createStaff = async () => {
+    const createStaff = async (setIsOpen: React.Dispatch<React.SetStateAction<boolean>>) => {
         const now = new Date().toISOString()
 
-        const res = await axios.post('https://apigateway.microservices.appf4s.io.vn/services/msroute/api/staff', {
-            "name": name,
-            "age": age,
-            "gender": gender,
-            "phoneNumber": phone,
-            "status": "ACTIVE",
-            "createdAt": now,
-            "updatedAt": now,
-            "isDeleted": true,
-            "deletedAt": "2025-11-14T12:13:40.144Z",
-            "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-        }, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'accept': '*/*',
-                'Content-Type': 'application/json',
-                'X-XSRF-TOKEN': '41866a2d-cdc1-4547-9eef-f6d3464f7b6b',
-            },
-        })
+        if (!nameRegex.test(name)) {
+            setValid(1)
+            setIsOpen(true)
+        }
+        else if (age === 0 || isNaN(age)) {
+            setValid(2)
+            setIsOpen(true)
+        }
+        else if (!phoneRegex.test(phone)) {
+            setValid(3)
+        }
+        else {
+            const res = await axios.post('https://apigateway.microservices.appf4s.io.vn/services/msroute/api/staff', {
+                "name": name,
+                "age": age,
+                "gender": gender,
+                "phoneNumber": phone,
+                "status": "ACTIVE",
+                "createdAt": now,
+                "updatedAt": now,
+                "isDeleted": true,
+                "deletedAt": "2025-11-14T12:13:40.144Z",
+                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'accept': '*/*',
+                    'Content-Type': 'application/json',
+                    'X-XSRF-TOKEN': '41866a2d-cdc1-4547-9eef-f6d3464f7b6b',
+                },
+            })
+            return res.data
+        }
 
-        return res.data
     }
 
-    const handleCreate = async () => {
+    const handleCreate = async (setIsOpen: React.Dispatch<React.SetStateAction<boolean>>) => {
         const now = new Date().toISOString()
-        const ns = await createStaff()
+        const ns = await createStaff(setIsOpen)
 
         await axios.post('https://apigateway.microservices.appf4s.io.vn/services/msroute/api/attendants', {
             "createdAt": now,
@@ -86,32 +102,47 @@ const AttendantModal = ({ setIsOpen, isEdit, attendant }: Props) => {
             alert('Error when creating!')
             console.log(error)
         })
+        setIsOpen(false)
     }
 
-    const handleEdit = async () => {
-        await axios.put(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/attendants/simple/${attendant?.id}`, {
-            "name": name,
-            "age": age,
-            "gender": gender,
-            "phoneNumber": phone,
-            "status": "ACTIVE"
-        }, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'accept': '*/*',
-                'Content-Type': 'application/json',
-                'X-XSRF-TOKEN': '41866a2d-cdc1-4547-9eef-f6d3464f7b6b',
-            },
-        })
-        .then((res) => {
-            console.log(res.data)
-            dispatch(update(res.data))
-            alert('Update success')
-        })
-        .catch((error) => {
-            alert('Error when updating!')
-            console.log(error)
-        })
+    const handleEdit = async (setIsOpen: React.Dispatch<React.SetStateAction<boolean>>) => {
+        if (!nameRegex.test(name)) {
+            setValid(1)
+            setIsOpen(true)
+        }
+        else if (age === 0 || isNaN(age)) {
+            setValid(2)
+            setIsOpen(true)
+        }
+        else if (!phoneRegex.test(phone)) {
+            setValid(3)
+        }
+        else {
+            await axios.put(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/attendants/simple/${attendant?.id}`, {
+                "name": name,
+                "age": age,
+                "gender": gender,
+                "phoneNumber": phone,
+                "status": "ACTIVE"
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'accept': '*/*',
+                    'Content-Type': 'application/json',
+                    'X-XSRF-TOKEN': '41866a2d-cdc1-4547-9eef-f6d3464f7b6b',
+                },
+            })
+            .then((res) => {
+                console.log(res.data)
+                dispatch(update(res.data))
+                alert('Update success')
+            })
+            .catch((error) => {
+                alert('Error when updating!')
+                console.log(error)
+            })
+            setIsOpen(false)
+        }
     }
 
     useEffect(() => {
@@ -141,6 +172,8 @@ const AttendantModal = ({ setIsOpen, isEdit, attendant }: Props) => {
                                     <input value={age} onChange={(e) => setAge(e.target.valueAsNumber)} type="number"  className='w-full px-[5px] py-[3px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}} />
                                 </div>
                             </div>
+                            {valid === 1 && <p className='text-[red]'>*Tên không hợp lệ</p>}
+                            {valid === 2 && <p className='text-[red]'>*Tuổi không hợp lệ</p>}
                             <div className='w-full flex flex-row justify-between'>
                                 <div className='w-[48%]'>
                                     <p>Giới tính</p>
@@ -155,6 +188,7 @@ const AttendantModal = ({ setIsOpen, isEdit, attendant }: Props) => {
                                     <input value={phone} onChange={(e) => setPhone(e.target.value)} type="text"  className='w-full px-[5px] py-[3px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}} />
                                 </div>
                             </div>
+                            {valid === 3 && <p className='text-[red]'>*Số điện thoại không hợp lệ</p>}
                         </div>
                     </div>
                 </div>
@@ -164,12 +198,12 @@ const AttendantModal = ({ setIsOpen, isEdit, attendant }: Props) => {
                     </button>
                     <button className="p-[8px] justify-center rounded-[10px] bg-[#1447E6] text-white cursor-pointer"
                         onClick={() => {
-                        setIsOpen(false)
+                        // setIsOpen(false)
                             if (!isEdit) {
-                                handleCreate()
+                                handleCreate(setIsOpen)
                             }
                             else {
-                                handleEdit()
+                                handleEdit(setIsOpen)
                             }
                         }}>
                         Xác nhận

@@ -28,7 +28,7 @@ const Bus = () => {
     await axios.get('https://apigateway.microservices.appf4s.io.vn/services/msroute/api/vehicles', {
         params: {
             'page': '0',
-            'size': '20',
+            'size': '50',
         },
         headers: {
             'Authorization': `Bearer ${token}`,
@@ -61,12 +61,8 @@ const Bus = () => {
       <Header />
       <div className='w-full p-[10px]'>
         <HeaderTop />
-        <h2 className='text-[20px] text-left font-bold mt-[10px] mb-[10px]'>Danh sách xe</h2>
-        <div className='w-full flex flex-row justify-between'>
-          <div className='flex flex-row'>
-            <Search placeholder='Tìm trong danh sách tuyến' />
-            <Filter type='bus-information' />
-          </div>
+        <div className='w-full flex flex-row justify-between my-[10px]'>
+          <h2 className='text-[20px] text-left font-bold mt-[10px] mb-[10px]'>Danh sách xe</h2>
           <div className='flex flex-row'>
             <button className='p-[10px] flex flex-row items-center mr-[10px] rounded-[10px] cursor-pointer' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}>
               <img src={downloadicon} className='size-[20px] mr-[5px]' />

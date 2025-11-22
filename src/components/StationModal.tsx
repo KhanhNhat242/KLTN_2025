@@ -25,9 +25,11 @@ const StationModal = ({ setIsOpen, isEdit, station }: Props) => {
     const [currentPID, setCurrentPID] = useState<number>(0)
     const [currentDID, setCurrentDID] = useState<number>(0)
     const [currentWID, setCurrentWID] = useState<number>(0)
+    const [valid, setValid] = useState<number>(0)
 
     const token = useSelector((state: RootState) => state.auth.accessToken)
     const dispatch = useDispatch()
+    const nameRegex = /^[A-Za-z]+$/
 
     const getProvinces = async () => {
         await axios.get('https://apigateway.microservices.appf4s.io.vn/services/msroute/api/provinces', {
@@ -207,7 +209,7 @@ const StationModal = ({ setIsOpen, isEdit, station }: Props) => {
         return res.data
     }
 
-    const handleCreate = async () => {
+    const handleCreate = async (setIsOpen: React.Dispatch<React.SetStateAction<boolean>>) => {
         const now = new Date().toISOString()
 
         let active = true
@@ -220,46 +222,45 @@ const StationModal = ({ setIsOpen, isEdit, station }: Props) => {
 
         console.log(name, active, description, street)
 
-        const res = await createAddress()
-        console.log(res)
-
-        await axios.post('https://apigateway.microservices.appf4s.io.vn/services/msroute/api/stations', {
-            "name": name,
-            "phoneNumber": "0123456666",
-            "description": description,
-            "active": active,
-            "createdAt": now,
-            "updatedAt": now,
-            "isDeleted": true,
-            "deletedAt": "2025-10-15T09:21:57.774Z",
-            "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-            "address": {
-                "id": res.id,
-                "streetAddress": res.streetAddress,
-                "latitude": 0,
-                "longitude": 0,
-                "createdAt": "2025-11-11T16:32:20.101Z",
-                "updatedAt": "2025-11-11T16:32:20.101Z",
+        
+        if (!nameRegex.test(name)) {
+            setIsOpen(true)
+            setValid(1)
+        }
+        else if (!nameRegex.test(description)) {
+            setIsOpen(true)
+            setValid(2)
+        }
+        else if (street === '' || currentWID === 0) {
+            setIsOpen(true)
+            setValid(3)
+        }
+        else {
+            const res = await createAddress()
+            console.log(res)
+            await axios.post('https://apigateway.microservices.appf4s.io.vn/services/msroute/api/stations', {
+                "name": name,
+                "phoneNumber": "0123456666",
+                "description": description,
+                "active": active,
+                "createdAt": now,
+                "updatedAt": now,
                 "isDeleted": true,
-                "deletedAt": "2025-11-11T16:32:20.101Z",
+                "deletedAt": "2025-10-15T09:21:57.774Z",
                 "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                "ward": {
-                "id": 0,
-                "wardCode": "string",
-                "name": "string",
-                "nameEn": "string",
-                "fullName": "string",
-                "fullNameEn": "string",
-                "codeName": "string",
-                "administrativeUnitId": 0,
-                "createdAt": "2025-11-11T16:32:20.101Z",
-                "updatedAt": "2025-11-11T16:32:20.101Z",
-                "isDeleted": true,
-                "deletedAt": "2025-11-11T16:32:20.101Z",
-                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                "district": {
+                "address": {
+                    "id": res.id,
+                    "streetAddress": res.streetAddress,
+                    "latitude": 0,
+                    "longitude": 0,
+                    "createdAt": "2025-11-11T16:32:20.101Z",
+                    "updatedAt": "2025-11-11T16:32:20.101Z",
+                    "isDeleted": true,
+                    "deletedAt": "2025-11-11T16:32:20.101Z",
+                    "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    "ward": {
                     "id": 0,
-                    "districtCode": "string",
+                    "wardCode": "string",
                     "name": "string",
                     "nameEn": "string",
                     "fullName": "string",
@@ -271,83 +272,38 @@ const StationModal = ({ setIsOpen, isEdit, station }: Props) => {
                     "isDeleted": true,
                     "deletedAt": "2025-11-11T16:32:20.101Z",
                     "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                    "province": {
-                    "id": 0,
-                    "provinceCode": "string",
-                    "name": "string",
-                    "nameEn": "string",
-                    "fullName": "string",
-                    "fullNameEn": "string",
-                    "codeName": "string",
-                    "administrativeUnitId": 0,
-                    "administrativeRegionId": 0,
-                    "createdAt": "2025-11-11T16:32:20.101Z",
-                    "updatedAt": "2025-11-11T16:32:20.101Z",
-                    "isDeleted": true,
-                    "deletedAt": "2025-11-11T16:32:20.101Z",
-                    "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                    "district": {
+                        "id": 0,
+                        "districtCode": "string",
+                        "name": "string",
+                        "nameEn": "string",
+                        "fullName": "string",
+                        "fullNameEn": "string",
+                        "codeName": "string",
+                        "administrativeUnitId": 0,
+                        "createdAt": "2025-11-11T16:32:20.101Z",
+                        "updatedAt": "2025-11-11T16:32:20.101Z",
+                        "isDeleted": true,
+                        "deletedAt": "2025-11-11T16:32:20.101Z",
+                        "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                        "province": {
+                        "id": 0,
+                        "provinceCode": "string",
+                        "name": "string",
+                        "nameEn": "string",
+                        "fullName": "string",
+                        "fullNameEn": "string",
+                        "codeName": "string",
+                        "administrativeUnitId": 0,
+                        "administrativeRegionId": 0,
+                        "createdAt": "2025-11-11T16:32:20.101Z",
+                        "updatedAt": "2025-11-11T16:32:20.101Z",
+                        "isDeleted": true,
+                        "deletedAt": "2025-11-11T16:32:20.101Z",
+                        "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                        }
                     }
-                }
-                }
-            },
-            "stationImg": {
-                "id": 1,
-                "bucket": "string",
-                "objectKey": "string",
-                "contentType": "string",
-                "size": 0,
-                "createdAt": "2025-10-15T09:21:57.774Z",
-                "updatedAt": "2025-10-15T09:21:57.774Z",
-                "isDeleted": true,
-                "deletedAt": "2025-10-15T09:21:57.774Z",
-                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-            }
-        }, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'accept': '*/*',
-                'Content-Type': 'application/json',
-            }  
-        })
-        .then((res) => {
-            console.log(res.data)
-            dispatch(add(res.data))
-            alert('Create success')
-        })
-        .catch((error) => {
-            alert('Error when creating!')
-            console.log(error)
-        })
-    }
-
-    const handleEdit = async () => {
-        const now = new Date().toISOString()
-
-        let active = true
-        if (isActive === 'NOT_ACTIVE') {
-            active = false
-        }
-        else if (isActive === 'ACTIVE') {
-            active = true
-        }
-
-        const cp = provinces.find((p) => p.id === currentPID)
-
-        console.log(province, cp)
-        if (cp === undefined) {
-            await axios.put(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/stations/${station?.id}`, {
-                "id": station?.id,
-                "name": name,
-                "phoneNumber": "0123456666",
-                "description": description,
-                "active": active,
-                "createdAt": now,
-                "updatedAt": now,
-                "isDeleted": false,
-                "deletedAt": "2025-10-15T09:21:57.774Z",
-                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                "address": {
-                    "id": station?.address.id,
+                    }
                 },
                 "stationImg": {
                     "id": 1,
@@ -360,22 +316,97 @@ const StationModal = ({ setIsOpen, isEdit, station }: Props) => {
                     "isDeleted": true,
                     "deletedAt": "2025-10-15T09:21:57.774Z",
                     "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-                }, 
+                }
             }, {
                 headers: {
-                'Authorization': `Bearer ${token}`,
-                'accept': '*/*',
-                'Content-Type': 'application/json',
-            }})
+                    'Authorization': `Bearer ${token}`,
+                    'accept': '*/*',
+                    'Content-Type': 'application/json',
+                }  
+            })
             .then((res) => {
                 console.log(res.data)
-                dispatch(update(res.data))
-                alert('Update success')
+                dispatch(add(res.data))
+                alert('Create success')
             })
             .catch((error) => {
-                alert('Error when updating!')
+                alert('Error when creating!')
                 console.log(error)
             })
+            setIsOpen(false)
+        }
+    }
+
+    const handleEdit = async (setIsOpen: React.Dispatch<React.SetStateAction<boolean>>) => {
+        const now = new Date().toISOString()
+
+        let active = true
+        if (isActive === 'NOT_ACTIVE') {
+            active = false
+        }
+        else if (isActive === 'ACTIVE') {
+            active = true
+        }
+
+        if (name === '') {
+            setIsOpen(true)
+            setValid(1)
+        }
+        else if (description === '') {
+            setIsOpen(true)
+            setValid(2)
+        }
+        else if (street === '') {
+            setIsOpen(true)
+            setValid(3)
+        }
+        else {
+            const cp = provinces.find((p) => p.id === currentPID)
+            
+            console.log(province, cp)
+            if (cp === undefined) {
+                await axios.put(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/stations/${station?.id}`, {
+                    "id": station?.id,
+                    "name": name,
+                    "phoneNumber": "0123456666",
+                    "description": description,
+                    "active": active,
+                    "createdAt": now,
+                    "updatedAt": now,
+                    "isDeleted": false,
+                    "deletedAt": "2025-10-15T09:21:57.774Z",
+                    "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    "address": {
+                        "id": station?.address.id,
+                    },
+                    "stationImg": {
+                        "id": 1,
+                        "bucket": "string",
+                        "objectKey": "string",
+                        "contentType": "string",
+                        "size": 0,
+                        "createdAt": "2025-10-15T09:21:57.774Z",
+                        "updatedAt": "2025-10-15T09:21:57.774Z",
+                        "isDeleted": true,
+                        "deletedAt": "2025-10-15T09:21:57.774Z",
+                        "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                    }, 
+                }, {
+                    headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'accept': '*/*',
+                    'Content-Type': 'application/json',
+                }})
+                .then((res) => {
+                    console.log(res.data)
+                    dispatch(update(res.data))
+                    alert('Update success')
+                })
+                .catch((error) => {
+                    alert('Error when updating!')
+                    console.log(error)
+                })
+            }
         }
         // else if (cp !== undefined) {
         //     const res = await createAddress()
@@ -436,10 +467,12 @@ const StationModal = ({ setIsOpen, isEdit, station }: Props) => {
                                     </select>
                                 </div>
                             </div>
+                            { valid === 1 && <p className='text-[red]'>*Tên trạm không hợp lệ</p> }
                             <div className='w-full justify-between my-[5px]'>
                                 <p>Mô tả</p>
                                 <textarea value={description} onChange={(e) => setDescription(e.target.value)} name="" id="" className='w-full p-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}></textarea>
                             </div>
+                            { valid === 2 && <p className='text-[red]'>*Mô tả không hợp lệ</p> }
                             <div className='w-full justify-between my-[5px]'>
                                 <p>Địa chỉ:</p>
                                 <div className='w-[48%] flex flex-row items-center my-[5px]'>
@@ -487,6 +520,7 @@ const StationModal = ({ setIsOpen, isEdit, station }: Props) => {
                                     <input value={street} onChange={(e) => setStreet(e.target.value)} type="text"  className='w-[68%] px-[5px] py-[3px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}} />
                                 </div>
                             </div>
+                            { valid === 3 && <p className='text-[red]'>*Địa chỉ không hợp lệ</p> }
                         </div>
                     </div>
                 </div>
@@ -496,12 +530,12 @@ const StationModal = ({ setIsOpen, isEdit, station }: Props) => {
                     </button>
                     <button className="p-[8px] justify-center rounded-[10px] bg-[#1447E6] text-white cursor-pointer"
                         onClick={() => {
-                            setIsOpen(false)
+                            // setIsOpen(false)
                             if (!isEdit) {
-                                handleCreate()
+                                handleCreate(setIsOpen)
                             }
                             else if (isEdit){
-                                handleEdit()
+                                handleEdit(setIsOpen)
                             }
                         }}>
                         Xác nhận

@@ -1,18 +1,15 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { SeatMap } from "../interface/Interface";
+import type { Seat } from "../interface/Interface";
 
 const seatmapSlice = createSlice({
     name: 'seatmap',
-    initialState: [] as SeatMap[],
+    initialState: [] as Seat[],
     reducers: {
-        setSeatmap: (_, action: PayloadAction<SeatMap[]>) => {
+        setSeatmap: (_, action: PayloadAction<Seat[]>) => {
             return action.payload 
-        },
-        add: (state, action: PayloadAction<SeatMap>) => {
-            state.push(action.payload)
         },
     }
 })
 
-export const { setSeatmap, add } = seatmapSlice.actions
+export const { setSeatmap } = seatmapSlice.actions
 export default seatmapSlice.reducer

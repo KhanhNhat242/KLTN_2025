@@ -10,8 +10,11 @@ const seatListSlice = createSlice({
         remove: (state, action: PayloadAction<string>) => {
             return state.filter(item => item !== action.payload)
         },
+        reset: (state) => {
+            state.length = 0
+        }
     }
 })
 
-export const { add, remove } = seatListSlice.actions
+export const { add, remove, reset } = seatListSlice.actions
 export default seatListSlice.reducer

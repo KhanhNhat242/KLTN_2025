@@ -167,19 +167,6 @@ export interface Ticket {
     isDeleted: boolean,
 }
 
-export interface Booking {
-    id: number,
-    bookingCode: string,
-    status: string,
-    quantity: number,
-    totalAmount: number,
-    bookedAt: number,
-    expireat: number,
-    timeoutMinute: number,
-    customerId: string,
-    tripId: number,
-    isDeleted: boolean,
-}
 
 export interface OccasionRule {
     id: number,
@@ -198,4 +185,37 @@ export interface Schedule {
     occasionRule: OccasionRule,
     route: Route,
     isDeleted: boolean,
+}
+
+export interface Booking {
+    id: number,
+    bookingCode: string,
+    status: string,
+    quantity: number,
+    totalAmount: number,
+    bookedAt: number,
+    expireat: number,
+    timeoutMinute: number,
+    customerId: string,
+    tripId: number,
+    isDeleted: boolean,
+}
+
+export interface Bill {
+    id: number,
+    bookingCode: string,
+    status: string,
+    quantity: number,
+    totalAmount: number,
+    bookedAt: number,
+    expiresAt: number,
+    tripId: number,
+    trip?: Trip,
+}
+
+export interface Seat {
+    id: number,
+    bookingId: number
+    seatNo: string,
+    status: string,
 }
