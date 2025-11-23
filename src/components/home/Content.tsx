@@ -1,7 +1,8 @@
 import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker'
 import { Link, useRouter } from 'expo-router'
+import axios from 'axios'
 
 interface Props {
   returnDate: boolean,
@@ -91,6 +92,15 @@ const FromtoDate = ({ fromDay, returnDay, setFromDay, setReturnDay }: FromtoDate
 }
 
 
+
+type Trip = {
+  id: number;
+  route: {
+    origin: { name: string };
+    destination: { name: string };
+  };
+};
+
 const Content = ({ returnDate }: Props) => {
   const [date, setDate] = useState<Date>(new Date())
   const [fromDay, setFromDay] = useState<Date>(new Date())
@@ -98,8 +108,28 @@ const Content = ({ returnDate }: Props) => {
   const [numpeople, setNumpeople] = useState<number>(1)
   // const [typeLocation, setTypeLocation] = useState<number>(0)
 
-  const router = useRouter()
 
+  const [trips, setTrips] = useState<Trip[]>([]);
+  const [pickup, setPickup] = useState<string>("Chọn điểm đi...");
+  const [dropoff, setDropoff] = useState<string>("Chọn điểm đến...");
+  const router = useRouter();
+
+  useEffect(() => {
+    // Gọi API trips
+    axios
+      .get(
+        "https://apigateway.microservices.appf4s.io.vn/services/msroute/api/trips?page=0&size=20"
+      )
+      .then((res) => {
+        setTrips(res.data.content || res.data); // tuỳ API trả về content hay mảng trực tiếp
+        if (res.data.content?.length > 0 || res.data.length > 0) {
+          const firstTrip = (res.data.content || res.data)[0];
+          setPickup(firstTrip.route.origin.name);
+          setDropoff(firstTrip.route.destination.name);
+        }
+      })
+      .catch((err) => console.log(err));
+  }, []);
   return (
     <View>
       <View className="w-full h-[150px] bg-white p-[10px] flex-row justify-between items-center rounded-[10px] mt-[10px]">
