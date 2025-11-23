@@ -1,51 +1,34 @@
 import { useEffect, useState } from "react"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { add, remove } from "../redux/seatListSlice"
 import type { Seat } from "../interface/Interface"
-
-interface sl {
-    seatno: string,
-    status: number,
-}
+import type { RootState } from "../redux/store"
 
 interface Props {
     value: string,
-    seats: sl[],
+    isLock: boolean,
 }
 
-const Seat = ({ value, seats }: Props) => {
+const Seat = ({ value, isLock }: Props) => {
     const [type, setType] = useState<number>(0)
     const [bg, setBg] = useState<string>('')
     const [txt, setTxt] = useState<string>('')
-    const [sl, setSl] = useState<string[]>()
 
     // const currentBg = 'bg-[#1447E6]'
     // const currentTxt = 'text-white border-b-[#fff]'
     // const redBg = 'bg-[red]'
     const dispatch = useDispatch()
+    const seatmap = useSelector((state: RootState) => state.seatmap)
+
+    // useEffect(() => {
+    //     console.log('lock', isLock)
+    //     if (isLock === true) {
+    //         setBg('bg-[red]')
+    //         setTxt('text-white')
+    //     }
+    // }, [])
 
     useEffect(() => {
-        // console.log('seats', seats)
-        const arrSeats: sl[] = Array.isArray(seats) ? seats : Object.values(seats)
-        const s1 = arrSeats
-            .filter(item => item.status === 1)
-            .map(item => item.seatno)
-        // console.log('s1', s1)
-        setSl(s1)
-    }, [seats])
-
-    useEffect(() => {
-        console.log('seattttt', sl)
-        const result = sl?.find(item => item === value)
-        if (result !== undefined) {
-            // setType(2)
-            setBg('bg-[red]')
-            setTxt('text-white')
-        }
-    }, [sl])
-
-    useEffect(() => {
-        console.log(type)
         if (type === 0) {
             setBg('bg-[white]')
             setTxt('text-[#000]')
@@ -54,26 +37,22 @@ const Seat = ({ value, seats }: Props) => {
             setBg('bg-[#1447E6]')
             setTxt('text-white')
         }
-        // else if (type === 2) {
-        //     setBg('bg-[red]')
-        //     setTxt('text-white')
-        // }
-    }, [])
+    }, [type])
 
     return (
-        <div className={`h-[70px] p-[5px] mt-[10px] rounded-t-[10px] cursor-pointer ${bg}`} style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#000'}} 
+        <div className={`h-[70px] p-[5px] mt-[10px] rounded-t-[10px] cursor-pointer ${isLock ? 'bg-[red]' : bg}`} style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#000'}} 
             onClick={() => {
                 if (type === 1) {
                     setType(0) 
                     dispatch(remove(value))
                 }
-                else if (type === 0) {
+                else if (type === 0 && isLock === false) {
                     setType(1)
                     dispatch(add(value))
                 }
             }
         }>
-            <p className={`h-[45px] mb-[10px] text-[18px] ${txt}`} style={{borderStyle: 'solid', borderBottomWidth: 1}}>{value}</p>
+            <p className={`h-[45px] mb-[10px] text-[18px] ${isLock ? 'text-[white]': txt}`} style={{borderStyle: 'solid', borderBottomWidth: 1}}>{value}</p>
         </div>
     )
 }

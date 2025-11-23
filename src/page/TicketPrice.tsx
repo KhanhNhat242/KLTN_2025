@@ -38,10 +38,6 @@ const TicketPrice = () => {
 
     const getData = async () => {
         await axios.get('https://apigateway.microservices.appf4s.io.vn/services/msroute/api/trips', {
-            params: {
-                'page': '0',
-                'size': '30',
-            },
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'accept': '*/*',
@@ -125,13 +121,14 @@ const TicketPrice = () => {
                     <table className="w-full border border-gray-200 text-left">
                     <thead className="bg-gray-100">
                         <tr>
-                        <th className="p-3 border-b">Tuyến</th>
-                        <th className="p-3 border-b">Loại xe</th>
-                        <th className="p-3 border-b">Thời điểm</th>
-                        <th className="p-3 border-b">Giá vé áp dụng</th>
-                        <th className="p-3 border-b">Bắt đầu</th>
-                        <th className="p-3 border-b">Kết thúc</th>
-                        <th className="p-3 border-b">Actions</th>
+                            <th className="p-3 border-b">ID</th>
+                            <th className="p-3 border-b">Tuyến</th>
+                            <th className="p-3 border-b">Loại xe</th>
+                            <th className="p-3 border-b">Thời điểm</th>
+                            <th className="p-3 border-b">Giá vé áp dụng</th>
+                            <th className="p-3 border-b">Bắt đầu</th>
+                            <th className="p-3 border-b">Kết thúc</th>
+                            <th className="p-3 border-b">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -139,6 +136,7 @@ const TicketPrice = () => {
                             if (t.id && t.id >= 1500)
                             return (
                             <tr key={t.id} className="cursor-pointer hover:bg-gray-50">
+                                <td className="p-3 border-b">{t.id}</td>
                                 <td className="p-3 border-b">{`${t.route.origin.description.replace(/^Station in /, '')} - ${t.route.destination.description.replace(/^Station in /, '')}`}</td>
                                 <td className="p-3 border-b">{t.vehicle.type}</td>
                                 <td className="p-3 border-b">{t.occasionFactor === 1 ? 'Ngày thường' : 'Dịp lễ tết'}</td>

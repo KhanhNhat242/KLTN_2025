@@ -18,12 +18,11 @@ const Login = () => {
 
     const login = async () => {
         // e.preventDefault()
-        // console.log(username, pwd)
-
+        console.log(username, pwd)
         await axios.post('https://apigateway.microservices.appf4s.io.vn/services/msuser/api/auth/login', 
             {
                 'username': username,
-                'password': pwd,
+                'password': pwd
             },
             {
                 headers: {
@@ -41,7 +40,7 @@ const Login = () => {
 
             localStorage.setItem('accessToken', res.data.accessToken)
             localStorage.setItem('refreshToken', res.data.refreshToken)
-            navigate('/home')
+            navigate('/booking')
         })
         .catch(() => {
             alert('log in fail!')

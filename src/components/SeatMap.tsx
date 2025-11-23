@@ -1,66 +1,80 @@
 import { useEffect, useState } from 'react'
 import drivericon from '../assets/drivericon.png'
-import Seat from './Seat'
 import { useDispatch, useSelector } from 'react-redux'
 import type { RootState } from '../redux/store'
 import { reset } from '../redux/seatListSlice'
 import axios from 'axios'
-import type { Seat as tSeat } from '../interface/Interface'
+import Seat from './Seat'
+import type { Seat as SeatType } from '../interface/Interface'
 
 interface Props {
     isLimousine: boolean,
     tripID: number | undefined,
 }
 
-const seats = [
-    { seatno: '1A01', status: 0 },
-  { seatno: '1A02', status: 0 },
-  { seatno: '1A03', status: 0 },
-  { seatno: '1A04', status: 0 },
+const seats_col1 = [
+    { seatno: '1A01', isLock: false },
+    { seatno: '1A02', isLock: false },
+    { seatno: '1A03', isLock: false },
+    { seatno: '1A04', isLock: false },
+    { seatno: '1D01', isLock: false },
+]
 
-  { seatno: '1B01', status: 0 },
-  { seatno: '1B02', status: 0 },
-  { seatno: '1B03', status: 0 },
-  { seatno: '1B04', status: 0 },
+const seats_col2 = [
+    { seatno: '1B01', isLock: false },
+    { seatno: '1B02', isLock: false },
+    { seatno: '1B03', isLock: false },
+    { seatno: '1B04', isLock: false },
+    { seatno: '1D02', isLock: false },
+    { seatno: '1E04', isLock: false },
+]
 
-  { seatno: '1C01', status: 0 },
-  { seatno: '1C02', status: 0 },
-  { seatno: '1C03', status: 0 },
-  { seatno: '1C04', status: 0 },
+const seats_col3 = [
+    { seatno: '1C01', isLock: false },
+    { seatno: '1C02', isLock: false },
+    { seatno: '1C03', isLock: false },
+    { seatno: '1C04', isLock: false },
+    { seatno: '1D03', isLock: false },
+]
 
-  { seatno: '1D01', status: 0 },
-  { seatno: '1D02', status: 0 },
-  { seatno: '1D03', status: 0 },
+const seats_col4 = [
+    { seatno: '2A01', isLock: false },
+    { seatno: '2A02', isLock: false },
+    { seatno: '2A03', isLock: false },
+    { seatno: '2A04', isLock: false },
+    { seatno: '2D01', isLock: false },
+    { seatno: '2E01', isLock: false },
+]
 
-  { seatno: '1E04', status: 0 },
+const seats_col5 = [
+    { seatno: '2B01', isLock: false },
+    { seatno: '2B02', isLock: false },
+    { seatno: '2B03', isLock: false },
+    { seatno: '2B04', isLock: false },
+    { seatno: '2D02', isLock: false },
+    { seatno: '2E02', isLock: false },
+]
 
-  { seatno: '2A01', status: 0 },
-  { seatno: '2A02', status: 0 },
-  { seatno: '2A03', status: 0 },
-  { seatno: '2A04', status: 0 },
-
-  { seatno: '2B01', status: 0 },
-  { seatno: '2B02', status: 0 },
-  { seatno: '2B03', status: 0 },
-  { seatno: '2B04', status: 0 },
-
-  { seatno: '2C01', status: 0 },
-  { seatno: '2C02', status: 0 },
-  { seatno: '2C03', status: 0 },
-  { seatno: '2C04', status: 0 },
-
-  { seatno: '2D01', status: 0 },
-  { seatno: '2D02', status: 0 },
-  { seatno: '2D03', status: 0 },
-
-  { seatno: '2E01', status: 0 },
-  { seatno: '2E02', status: 0 },
-  { seatno: '2E03', status: 0 },
+const seats_col6 = [
+    { seatno: '2C01', isLock: false },
+    { seatno: '2C02', isLock: false },
+    { seatno: '2C03', isLock: false },
+    { seatno: '2C04', isLock: false },
+    { seatno: '2D03', isLock: false },
+    { seatno: '2E03', isLock: false },
 ]
 
 const SeatMap = ({ isLimousine, tripID }: Props) => {
-    const [seatLock, setSeatLock] = useState<tSeat[]>([])
-    const [seatProp, setSeatProp] = useState<string[]>([])
+    const [seatmap, setSeatMap] = useState<SeatType[]>([])
+    const [sl, setSl] = useState<string[]>([])
+    const [cols, setCols] = useState({
+        c1: seats_col1,
+        c2: seats_col2,
+        c3: seats_col3,
+        c4: seats_col4,
+        c5: seats_col5,
+        c6: seats_col6,
+    })
 
     const token = useSelector((state: RootState) => state.auth.accessToken)
     const seatList = useSelector((state: RootState) => state.seatList)
@@ -78,7 +92,7 @@ const SeatMap = ({ isLimousine, tripID }: Props) => {
             .then((res) => {
                 // console.log('get trip', res.data.tripDTO)
                 console.log('seat list', res.data.seatLockDTOs)
-                setSeatLock(res.data.seatLockDTOs)
+                setSeatMap(res.data.seatLockDTOs)
             })
             .catch(() => {
                 console.log('Get trip fail!')
@@ -95,22 +109,22 @@ const SeatMap = ({ isLimousine, tripID }: Props) => {
     }, [])
 
     useEffect(() => {
-        console.log(seatList)
-    }, [seatList])
+        // console.log('state', seatmap)
+        setSl(seatmap.map(s => s.seatNo))
+    }, [seatmap])
 
     useEffect(() => {
-        const s = seatLock.map(sl => sl.seatNo)
-        // console.log(s)
-        seats.forEach(s1 => {
-            s.forEach(s2 => {
-                if (s1.seatno === s2) {
-                    s1.status = 1
-                }
-            })
-        })
-        // setSeatProp(seats.filter(item => item.status === 1).map(item => item.seatno))
-        // console.log('seat prop', seatProp)
-    }, [seatLock])
+        console.log('state', sl)
+        setCols(prev => ({
+            c1: prev.c1.map(s => ({ ...s, isLock: sl.includes(s.seatno) })),
+            c2: prev.c2.map(s => ({ ...s, isLock: sl.includes(s.seatno) })),
+            c3: prev.c3.map(s => ({ ...s, isLock: sl.includes(s.seatno) })),
+            c4: prev.c4.map(s => ({ ...s, isLock: sl.includes(s.seatno) })),
+            c5: prev.c5.map(s => ({ ...s, isLock: sl.includes(s.seatno) })),
+            c6: prev.c6.map(s => ({ ...s, isLock: sl.includes(s.seatno) })),
+        }))
+        console.log('column', cols)
+    }, [sl])
 
     return (
         <div className={`pt-[10px] pl-[10px] pb-[10px] pr-[20px] flex flex-row ${isLimousine ? 'w-[60%]' : 'w-[70%]' }`} style={{borderStyle: 'solid', borderRightColor: '#000', borderRightWidth: 2}}>
@@ -121,26 +135,19 @@ const SeatMap = ({ isLimousine, tripID }: Props) => {
                 </div>
                 <div className='w-full flex flex-row justify-between'>
                     <div className='flex flex-col'>
-                        <Seat value='1A01' seats={seats} />
-                        <Seat value='1A02' seats={seats} />
-                        <Seat value='1A03' seats={seats} />
-                        <Seat value='1A04' seats={seats} />
-                        <Seat value='1D01' seats={seats} />
+                        {cols.c1.map((s) => (
+                            <Seat key={s.seatno} value={s.seatno} isLock={s.isLock} />
+                        ))}
                     </div>
                     <div className='flex flex-col'>
-                        <Seat value='1B01' seats={seats} />
-                        <Seat value='1B02' seats={seats} />
-                        <Seat value='1B03' seats={seats} />
-                        <Seat value='1B04' seats={seats} />
-                        <Seat value='1D02' seats={seats} />
-                        <Seat value='1E04' seats={seats} />
+                        {cols.c2.map((s) => (
+                            <Seat key={s.seatno} value={s.seatno} isLock={s.isLock} />
+                        ))}
                     </div>
                     <div className={`flex flex-col ${isLimousine && 'hidden'}`}>
-                        <Seat value='1C01' seats={seats} />
-                        <Seat value='1C02' seats={seats} />
-                        <Seat value='1C03' seats={seats} />
-                        <Seat value='1C04' seats={seats} />
-                        <Seat value='1D03' seats={seats} />
+                        {cols.c3.map((s) => (
+                            <Seat key={s.seatno} value={s.seatno} isLock={s.isLock} />
+                        ))}
                     </div>
                 </div>
             </div>
@@ -148,28 +155,19 @@ const SeatMap = ({ isLimousine, tripID }: Props) => {
                 <h2 className='h-[40px] font-bold text-right mb-[10px] pt-[10px] text-gray'>Tầng trên</h2>
                 <div className='w-full flex flex-row justify-between'>
                     <div className='flex flex-col'>
-                        <Seat value='2A01' seats={seats} />
-                        <Seat value='2A02' seats={seats} />
-                        <Seat value='2A03' seats={seats} />
-                        <Seat value='2A04' seats={seats} />
-                        <Seat value='2D01' seats={seats} />
-                        <Seat value='2E01' seats={seats} />
+                        {cols.c4.map((s) => (
+                            <Seat key={s.seatno} value={s.seatno} isLock={s.isLock} />
+                        ))}
                     </div>
                     <div className='flex flex-col'>
-                        <Seat value='2B01' seats={seats} />
-                        <Seat value='2B02' seats={seats} />
-                        <Seat value='2B03' seats={seats} />
-                        <Seat value='2B04' seats={seats} />
-                        <Seat value='2D02' seats={seats} />
-                        <Seat value='2E02' seats={seats} />
+                        {cols.c5.map((s) => (
+                            <Seat key={s.seatno} value={s.seatno} isLock={s.isLock} />
+                        ))}
                     </div>
                     <div className={`flex flex-col ${isLimousine && 'hidden'}`}>
-                        <Seat value='2C01' seats={seats} />
-                        <Seat value='2C02' seats={seats} />
-                        <Seat value='2C03' seats={seats} />
-                        <Seat value='2C04' seats={seats} />
-                        <Seat value='2D03' seats={seats} />
-                        <Seat value='2E03' seats={seats} />
+                        {cols.c6.map((s) => (
+                            <Seat key={s.seatno} value={s.seatno} isLock={s.isLock} />
+                        ))}
                     </div>
                 </div>
             </div>

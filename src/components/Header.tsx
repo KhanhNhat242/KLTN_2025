@@ -30,6 +30,7 @@ const Ticket = () => {
 
     return (
         <div className='w-full flex flex-col items-start pl-[30px]'>
+            <p className='p-[5px] cursor-pointer' onClick={() => navigate('/booking')}>Đặt vé</p>
             <p className='p-[5px] cursor-pointer' onClick={() => navigate('/ticket-price')}>Quản lý bảng giá vé</p>
             <p className='p-[5px] cursor-pointer' onClick={() => navigate('/ticket')}>Quản lý vé (Hóa đơn)</p>
         </div>

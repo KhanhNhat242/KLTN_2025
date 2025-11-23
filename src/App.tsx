@@ -17,6 +17,7 @@ import TicketPrice from './page/TicketPrice'
 import Driver from './page/Driver'
 import Attendant from './page/Attendant'
 import Bill from './page/Bill'
+import Booking from './page/Booking'
 
 function App() {
   const accessToken = localStorage.getItem('accessToken')
@@ -48,6 +49,7 @@ function App() {
           <Route path='/driver' element={<Driver />} />
           <Route path='/attendant' element={<Attendant />} />
           <Route path='/bill' element={<Bill />} />
+          <Route path='/booking' element={<Booking />} />
         </Routes>
       </Router>
     </>
