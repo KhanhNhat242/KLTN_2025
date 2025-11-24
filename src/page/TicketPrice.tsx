@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Header from '../components/Header'
 import HeaderTop from '../components/HeaderTop'
 import downloadicon from '../assets/downloadicon.png'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
 import type { RootState } from '../redux/store'
-import { setTrips, updateVehicle } from '../redux/tripSlice'
-import type { Bus, Trip } from '../interface/Interface'
+import { setTrips } from '../redux/tripSlice'
+import type { Trip } from '../interface/Interface'
 import SearchTrip from '../components/SearchTrip'
 import TicketPriceModal from '../components/TicketPriceModal'
 import DeleteModal from '../components/DeleteModal'
@@ -15,7 +15,6 @@ const TicketPrice = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [isEdit, setIsEdit] = useState<boolean>(false)
     const [isDelete, setIsDelete] = useState<boolean>(false)
-    const [vehicleArr, setVehicleArr] = useState<Bus[]>([])
     const [selectedTrip, setSelectedTrip] = useState<Trip>()
 
     const token = useSelector((state: RootState) => state.auth.accessToken)

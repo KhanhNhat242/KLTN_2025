@@ -463,8 +463,8 @@ const TicketPriceModal = ({ setIsOpen, isEdit, trip }: Props) => {
             tf = 1.5
         }
 
-        console.log(sTime, eTime, route, vehicle)
-        // console.log(route)
+        // console.log(sTime, eTime, route, vehicle)
+        console.log(vehicle)
         await axios.put(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/trips/${trip?.id}`, {
             "id": trip?.id,
             "tripCode": generateRandomStr(12),
@@ -795,11 +795,18 @@ const TicketPriceModal = ({ setIsOpen, isEdit, trip }: Props) => {
     }, [currentPStart, currentPEnd])
 
     useEffect(() => {
-        if (route) {
+        if (route && !isEdit) {
             setPrice(route?.baseFare)
+        }
+        else if (route && isEdit) {
+            setPrice(route.baseFare * Number(trip?.vehicle.typeFactor))
         }
         console.log(price)
     }, [route])
+
+    useEffect(() => {
+        setPrice(Number(route?.baseFare) * Number(vehicle?.typeFactor))
+    }, [vehicle])
 
     return (
         <div className="fixed inset-0 flex items-center justify-center z-50" aria-labelledby="dialog-title" role="dialog" aria-modal="true">

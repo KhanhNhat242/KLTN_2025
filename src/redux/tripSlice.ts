@@ -18,6 +18,7 @@ const tripSlice = createSlice({
                 state[index].distance = action.payload.distance
                 state[index].arrivalTime = action.payload.arrivalTime
                 state[index].departureTime = action.payload.departureTime
+                state[index].vehicle = action.payload.vehicle
             }
         },
         updateVehicle: (state, action: PayloadAction<{id: number, vehicle: Bus}>) => {

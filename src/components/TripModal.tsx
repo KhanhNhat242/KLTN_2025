@@ -842,7 +842,7 @@ const TripModal = ({ setIsOpen, isEdit, trip }: Props) => {
                                     <p>Nơi đi</p>
                                     <select className='w-full p-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}
                                         onChange={(e) => setCurrentPStart(Number(e.target.value))}>
-                                        <option value="">Chọn tỉnh</option>
+                                        <option value="">{isEdit ? trip?.route.origin.description.split("Station in ")[1] : 'Chọn tỉnh'}</option>
                                         { 
                                             provinces.sort((a, b) => a.name.localeCompare(b.name)).map((province) => {
                                                 if (province.id >= 1500)
@@ -855,7 +855,7 @@ const TripModal = ({ setIsOpen, isEdit, trip }: Props) => {
                                     <p>Nơi đến</p>
                                     <select className='w-full p-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}
                                         onChange={(e) => setCurrentPEnd(Number(e.target.value))}>
-                                        <option value="">Chọn tỉnh</option>
+                                        <option value="">{isEdit ? trip?.route.destination.description.split("Station in ")[1] : 'Chọn tỉnh'}</option>
                                         { 
                                             provinces.sort((a, b) => a.name.localeCompare(b.name)).map((province) => {
                                                 if (province.id >= 1500)

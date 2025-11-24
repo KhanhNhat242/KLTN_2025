@@ -9,6 +9,7 @@ import type { RootState } from '../redux/store'
 import DeleteModal from '../components/DeleteModal'
 import RouteModal from '../components/RouteModal'
 import type { Route } from '../interface/Interface'
+import SearchRoute from '../components/SearchRoute'
 
 const Route = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -47,14 +48,15 @@ const Route = () => {
         <Header />
         <div className='w-full p-[10px]'>
             <HeaderTop />
-            <div className='w-full flex flex-row justify-between my-[10px]'>
-                <h2 className='text-[20px] text-left font-bold mt-[10px] mb-[10px]'>Danh sách tuyến xe</h2>
-                <div className='flex flex-row'>
-                    <button className='p-[10px] flex flex-row items-center mr-[10px] rounded-[10px] cursor-pointer' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}>
+            <h2 className='text-[20px] text-left font-bold mt-[10px] mb-[10px]'>Danh sách tuyến xe</h2>
+            <div className='w-full flex flex-row justify-between my-[10px] items-end'>
+                <SearchRoute />
+                <div className='flex flex-row mb-[20px]'>
+                    <button className='h-[30%] p-[10px] flex flex-row items-center mr-[10px] rounded-[10px] cursor-pointer' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}>
                     <img src={downloadicon} className='size-[20px] mr-[5px]' />
                     <p>Xuất Excel</p>
                     </button>
-                    <button className='p-[10px] cursor-pointer text-white bg-[#1447E6] rounded-[10px]' 
+                    <button className='h-[30%] p-[10px] cursor-pointer text-white bg-[#1447E6] rounded-[10px]' 
                     onClick={() => {
                         setIsEdit(false)
                         setIsOpen(true)
@@ -80,15 +82,16 @@ const Route = () => {
                         <tr key={route.id} className="cursor-pointer hover:bg-gray-50">
                             <td className="p-3 border-b">{route.id}</td>
                             <td className="p-3 border-b">{route.routeCode}</td>
-                            <td className="p-3 border-b">{route.baseFare}</td>
+                            <td className="p-3 border-b">{(route.baseFare * 1000).toLocaleString('it-IT', {style : 'currency', currency : 'VND'})}</td>
                             <td className="p-3 border-b">{route.origin.name}</td>
                             <td className="p-3 border-b">{route.destination.name}</td>
                             <td className="p-3 border-b space-x-2">
-                                {/* <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
+                                <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
                                     onClick={() => {
+                                        setSelectedRoute(route)
                                         setIsOpen(true)
                                         setIsEdit(true)
-                                }}>Sửa</button> */}
+                                }}>Sửa</button>
                                 <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
                                     onClick={() => {
                                         setSelectedRoute(route)
@@ -104,7 +107,7 @@ const Route = () => {
                 </table>
             </div>
             </div>
-            {isOpen && (isEdit ? <RouteModal isEdit={true} setIsOpen={setIsOpen} /> : <RouteModal isEdit={false} setIsOpen={setIsOpen} /> ) }
+            {isOpen && (isEdit ? <RouteModal isEdit={true} setIsOpen={setIsOpen} route={selectedRoute} /> : <RouteModal isEdit={false} setIsOpen={setIsOpen} /> ) }
             {isDelete && <DeleteModal setIsDelete={setIsDelete} route={selectedRoute}/>}
         </div>
     )

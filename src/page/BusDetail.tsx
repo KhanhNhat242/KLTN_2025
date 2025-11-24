@@ -21,12 +21,11 @@ import type { Bus } from '../interface/Interface'
 
 const BusDetail = () => {
     const [type, setType] = useState<string>('')
-    const [seatnum, setSeatnum] = useState<number>(0)
     const [isLimousine, setIsLimousine] = useState<boolean>(false)
     const [bus, setBus] = useState<Bus>()
 
     const location = useLocation() 
-    const { busid, tripdata } = location.state
+    const { busid, tripid } = location.state
     const token = useSelector((state: RootState) => state.auth.accessToken)
 
     const getVehicle = async () => {
@@ -42,26 +41,23 @@ const BusDetail = () => {
             setBus(res.data.vehicle)
             if (res.data.vehicle.type === 'STANDARD_BUS_VIP') {
                 setType('VIP')
-                setSeatnum(36)
             }
             else if (res.data.vehicle.type === 'STANDARD_BUS_NORMAL') {
                 setType('Thường')
-                setSeatnum(36)
             }
             else if (res.data.vehicle.type === 'LIMOUSINE') {
                 setIsLimousine(true)
                 setType('Limousine')
-                setSeatnum(24)
             }
         })
         .catch(() => {
             console.log('Get data fail!')
         })
     }
-    
+
     useEffect(() => {
         getVehicle()
-        console.log(busid, tripdata, bus?.type)
+        console.log(busid, tripid)
     }, [])
 
     return (
@@ -88,10 +84,6 @@ const BusDetail = () => {
                         <div className='w-full flex flex-row justify-between'>
                             <p>Loại xe:</p>
                             <p className='font-bold'>{type}</p>
-                        </div>
-                        <div className='w-full flex flex-row justify-between'>
-                            <p>Số ghế:</p>
-                            <p className='font-bold'>{seatnum}</p>
                         </div>
                         <div className='w-full flex flex-row justify-between'>
                             <p>Hãng xe</p>
@@ -121,7 +113,7 @@ const BusDetail = () => {
                     <div className='w-[70%] bg-white'>
                         <h2 className='font-bold text-left p-[10px]' style={{borderStyle: 'solid', borderBottomColor: '#ccc', borderBottomWidth: 2}}>Sơ đồ ghế</h2>
                         <div className='w-full p-[10px] flex flex-row'>
-                            <SeatMap isLimousine={isLimousine} />
+                            <SeatMap isLimousine={isLimousine} tripID={tripid} />
                             <div className='w-[50% pl-[20px] pb-[10px] flex flex-col justify-between items-start'>
                                 <div>
                                     <h2 className='h-[40px] font-bold text-left pt-[20px] text-gray'>Trạng thái</h2>
@@ -140,9 +132,6 @@ const BusDetail = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <button className='px-[10px] py-[5px] cursor-pointer text-white bg-[#1447E6] rounded-[10px]'
-                                    // onClick={() => navigate('/payment', { state: { tripdata: tripdata } })}
-                                >Xác nhận</button>
                             </div>
                         </div>
                     </div>

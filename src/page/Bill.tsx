@@ -103,6 +103,7 @@ const Bill = () => {
                     <thead className="bg-gray-100">
                         <tr>
                             <th className="p-3 border-b">ID</th>
+                            <th className="p-3 border-b">Trip ID</th>
                             <th className="p-3 border-b">Booking CODE</th>
                             <th className="p-3 border-b">Tuyến</th> 
                             <th className="p-3 border-b">Số lượng ghế</th>
@@ -118,6 +119,7 @@ const Bill = () => {
                             return (
                                 <tr key={b.id} className="hover:bg-gray-50">
                                 <td className="p-3 border-b">{b.id}</td>
+                                <td className="p-3 border-b">{b.tripId}</td>
                                 <td className="p-3 border-b">{b.bookingCode}</td>
                                 <td className="p-3 border-b">{`${b.trip?.route.origin.address.ward.district.province.name} - ${b.trip?.route.destination.address.ward.district.province.name}`}</td>
                                 <td className="p-3 border-b">{b.quantity}</td>

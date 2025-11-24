@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import Header from '../components/Header'
 import HeaderTop from '../components/HeaderTop'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import type { RootState } from '../redux/store'
 import type { Bus, Trip } from '../interface/Interface'
 import axios from 'axios'
@@ -10,7 +10,6 @@ import SeatMap from '../components/SeatMap'
 import currenticon from '../assets/currenticon.png'
 import soldicon from '../assets/soldicon.png'
 import emptyicon from '../assets/emptyicon.png'
-import { setSeatmap } from '../redux/seatmapSlice'
 
 const Payment = () => {
     // const [promoCode, setPromoCode] = useState<string>('')
@@ -25,7 +24,6 @@ const Payment = () => {
     const seatList = useSelector((state: RootState) => state.seatList)
     const token = useSelector((state: RootState) => state.auth.accessToken)
     const navigate = useNavigate()
-    const dispatch = useDispatch()
 
     const formatTimestamp = (timestamp: number) => {
         const date = new Date(timestamp * 1000)

@@ -219,3 +219,8 @@ export interface Seat {
     seatNo: string,
     status: string,
 }
+
+export interface Message {
+    content: string,
+    isBot: boolean,
+}

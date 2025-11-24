@@ -10,6 +10,7 @@ import type { RootState } from '../redux/store';
 import { setTrips } from '../redux/tripSlice';
 import type { Trip } from '../interface/Interface';
 import SearchTrip from '../components/SearchTrip';
+import { useNavigate } from 'react-router-dom';
 
 const Trip = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -20,6 +21,7 @@ const Trip = () => {
     const token = useSelector((state: RootState) => state.auth.accessToken)
     const dispatch = useDispatch()
     const trips = useSelector((state: RootState) => state.trips)
+    const navigate = useNavigate()
 
     const formatTimestamp = (timestamp: number) => {
         const date = new Date(timestamp * 1000)
@@ -93,6 +95,7 @@ const Trip = () => {
                   <th className="p-3 border-b">Thời gian kết thúc</th>
                   <th className="p-3 border-b">Nơi đi</th>
                   <th className="p-3 border-b">Nơi đến</th>
+                  <th className="p-3 border-b">Loại xe</th>
                   <th className="p-3 border-b">Actions</th>
                 </tr>
               </thead>
@@ -101,13 +104,14 @@ const Trip = () => {
                   if (Number(trip.id) >= 1500)
                   return (
                     // <tr key={trip.id} className="hover:bg-gray-50 cursor-pointer" onClick={() => navigate('/bus-detail', { state: { busid: trip.vehicle.id, tripdata: trip } })}>
-                    <tr key={trip.id} className="hover:bg-gray-50">
+                    <tr key={trip.id} className="cursor-pointer hover:bg-gray-50" onClick={() => navigate('/bus-detail', { state: { busid: trip.vehicle.id, tripid: trip.id } })}>
                         <td className="p-3 border-b">{trip.id}</td>
                         <td className="p-3 border-b">{`${trip.route.origin.description.replace(/^Station in /, '')} - ${trip.route.destination.description.replace(/^Station in /, '')}`}</td>
                         <td className="p-3 border-b">{formatTimestamp(Number(trip.departureTime))}</td>
                         <td className="p-3 border-b">{formatTimestamp(Number(trip.arrivalTime))}</td>
                         <td className="p-3 border-b">{trip.route.origin.name}</td>
                         <td className="p-3 border-b">{trip.route.destination.name}</td>
+                        <td className="p-3 border-b">{trip.vehicle.type}</td>
                         <td className="p-3 border-b space-x-2">
                           <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
                             onClick={() => {

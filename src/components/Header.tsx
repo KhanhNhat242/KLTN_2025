@@ -10,6 +10,7 @@ import upcollapseicon from '../assets/upcollapseicon.png'
 import downcollapseicon from '../assets/downcollapseicon.png'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import Chatbot from './Chatbot'
 
 const Trip = () => {
     const navigate = useNavigate()
@@ -53,7 +54,7 @@ const Header = () => {
     const navigate = useNavigate()
 
     return (
-        <div className='w-[20%] h-[100vh] flex flex-col justify-start items-start bg-white ml-[10px]'>
+        <div className='w-[20%] h-[100vh] flex flex-col justify-start items-start bg-white ml-[10px] relative'>
             <img src={mainlogo} alt="admin-logo" className='w-[50%] h-[50px] p-[10px]' />
             <div className='w-full'>
                 <div className='w-full flex flex-row items-center p-[10px] cursor-pointer' onClick={() => navigate('/home')}>
@@ -104,6 +105,9 @@ const Header = () => {
                     <img src={count === 4 ? upcollapseicon : downcollapseicon} />
                 </div>
                 {count === 4 && <Staff />}
+            </div>
+            <div className='absolute left-[20px] bottom-[50px]'>
+                <Chatbot />
             </div>
         </div>
     )
