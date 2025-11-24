@@ -2,7 +2,7 @@ import Content from "@/components/signup/Content";
 import Header from "@/components/signup/Header";
 import Step from "@/components/signup/Step";
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import axios from "axios";

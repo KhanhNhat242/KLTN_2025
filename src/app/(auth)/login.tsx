@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { ActivityIndicator, Alert, Image, Text, TouchableOpacity, View } from "react-native";
 import Input from "../../components/signup/Input";
 import { Link, useRouter } from "expo-router";
@@ -22,39 +22,39 @@ const LoginScreen = () => {
   const router = useRouter();
 
   const handleLogin = async () => {
-    // if (!email || !password) {
-    //   Alert.alert("Thông báo", "Vui lòng nhập đầy đủ email và mật khẩu.");
-    //   return;
-    // }
+    if (!email || !password) {
+      Alert.alert("Thông báo", "Vui lòng nhập đầy đủ email và mật khẩu.");
+      return;
+    }
 
-    // setLoading(true);
-    // try {
-    //   const payload = {
-    //     username: email,
-    //     password: password,
-    //   };
+    setLoading(true);
+    try {
+      const payload = {
+        username: email,
+        password: password,
+      };
 
-    //   console.log("📦 Payload gửi đi:", payload);
+      console.log("📦 Payload gửi đi:", payload);
 
-    //   const res = await axios.post(BASE_URL, payload);
-    //   console.log("✅ Kết quả API:", res.data);
-    //    const profileId = res.data.profileId;
+      const res = await axios.post(BASE_URL, payload);
+      console.log("✅ Kết quả API:", res.data);
+       const profileId = res.data.profileId;
 
-    //    // Lưu vào AsyncStorage
-    //    await AsyncStorage.setItem("profileId", profileId.toString());
+       // Lưu vào AsyncStorage
+       await AsyncStorage.setItem("profileId", profileId.toString());
 
-    //   Alert.alert("Thành công", "Đăng nhập thành công!");
+      Alert.alert("Thành công", "Đăng nhập thành công!");
       router.push("/(tabs)/home");
-    // } catch (error: any) {
-    //   console.log("❌ Lỗi đăng nhập:", error.response?.data || error.message);
-    //   Alert.alert(
-    //     "Đăng nhập thất bại",
-    //     error.response?.data?.message ||
-    //       "Sai thông tin đăng nhập hoặc lỗi hệ thống."
-    //   );
-    // } finally {
-    //   setLoading(false);
-    // }
+    } catch (error: any) {
+      console.log("❌ Lỗi đăng nhập:", error.response?.data || error.message);
+      Alert.alert(
+        "Đăng nhập thất bại",
+        error.response?.data?.message ||
+          "Sai thông tin đăng nhập hoặc lỗi hệ thống."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
