@@ -4,7 +4,7 @@ import HeaderTop from '../components/HeaderTop'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import type { RootState } from '../redux/store'
-import type { Bus, Trip } from '../interface/Interface'
+import type { Bus, BuyNGetM, PercentOff, Promotion, Trip } from '../interface/Interface'
 import axios from 'axios'
 import SeatMap from '../components/SeatMap'
 import currenticon from '../assets/currenticon.png'
@@ -18,6 +18,12 @@ const Payment = () => {
     const [type, setType] = useState<string>('')
     const [price, setPrice] = useState<number>(1)
     const [trip, setTrip] = useState<Trip>()
+    const [promotions, setPromotions] = useState<Promotion[]>([])
+    const [cPromotions, setCPromotions] = useState<Promotion[]>([])
+    const [percentOffs, setPercentOffs] = useState<PercentOff[]>([])
+    const [buyngetms, setBuyngetms] = useState<BuyNGetM[]>([])
+    const [applyPromotion, setApplyPromotion] = useState<string[]>([])
+    const [promoCode, setPromoCode] = useState<string>('')
 
     const location = useLocation() 
     const { tripID, vehicleID } = location.state
@@ -97,7 +103,7 @@ const Payment = () => {
         // console.log(vehicle)
         console.log(trip?.route.baseFare)
         if (trip) {
-            setPrice(Number(vehicle?.typeFactor) * Number(trip?.route.baseFare) * 1000)
+            setPrice(Number(vehicle?.typeFactor) * Number(trip?.route.baseFare) * seatList.length * 1000)
         }
     }
 
@@ -123,8 +129,8 @@ const Payment = () => {
 
     const getLinkVNPAY = async () => {
         const booking = await createBooking()
-        console.log('bookingID', booking.bookingId)
-        console.log('bookingCode', booking.bookingCode)
+        // console.log('bookingID', booking.bookingId)
+        // console.log('bookingCode', booking.bookingCode)
 
         const res = await axios.post(`https://apigateway.microservices.appf4s.io.vn/services/msbooking/api/bookings/${booking.bookingId}/pay`, {
             "bookingId": booking.bookingId,
@@ -159,21 +165,109 @@ const Payment = () => {
 
     const handlePayment = async () => {
         const link = await getLinkVNPAY()
-        console.log('link', link.paymentUrl)
-        console.log('transactionID', link.transactionId)
+        // console.log('link', link.paymentUrl)
+        // console.log('transactionID', link.transactionId)
         checkStatusTrans(link.transactionId)
         window.open(link.paymentUrl)
     }
 
+    const getPromotion = async () => {
+        const date = new Date()
+        const cd = date.toISOString().split("T")[0]
+
+        await axios.get(`https://apigateway.microservices.appf4s.io.vn/services/mspromotion/api/promotions?startDate.lessThan=${cd}&endDate.greaterThan=${cd}`,{
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'accept': '*/*',
+                'Content-Type': 'application/json',
+                'X-XSRF-TOKEN': '41866a2d-cdc1-4547-9eef-f6d3464f7b6b',
+            },
+        })
+        .then((res) => {
+            setPromotions(res.data)
+        })
+        .catch(() => {
+            console.log('Filter fail!')
+        })
+    }
+
+    const getCPromotions = async (id: number) => {
+        await axios.get(`https://apigateway.microservices.appf4s.io.vn/services/mspromotion/api/promotions/${id}/detail`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'accept': '*/*',
+                'Content-Type': 'application/json',
+                'X-XSRF-TOKEN': '41866a2d-cdc1-4547-9eef-f6d3464f7b6b'
+            },
+        })
+        .then((res) => {
+            setCPromotions(prev => [...prev, res.data])
+        })
+        .catch(() => {
+            console.log('Filter fail!')
+        })
+    }
+
+    // const handlePromotion = async () => {
+    //     await axios.post('https://apigateway.microservices.appf4s.io.vn/services/msbooking/api/bookings/draft', {
+    //         "tripId": 1577,
+    //         "seats": seatList,
+    //         "promoCode": "string",
+    //         "customerId": 6,
+    //         "idemKey": randomStr(10),
+    //         "holdTtlSec": 300000
+    //     })
+    // }
+
     useEffect(() => {
         getVehicle()
         getTrip()
+        getPromotion()
     }, [])
     
     useEffect(() => {
         handlePrice()
         console.log('price', price)
     }, [seatList])
+    
+    useEffect(() => {
+        promotions.forEach((p) => {
+            getCPromotions(p.id)
+        })
+    }, [promotions])
+
+    useEffect(() => {
+        console.log('KM', cPromotions)
+    }, [cPromotions])
+
+    useEffect(() => {
+        // const count = cPromotions.length
+        cPromotions.forEach((c) => {
+            c.buyNGetMS.forEach((b) => {
+                if (seatList.length === b.buyN) {
+                    setApplyPromotion(prev => [...prev, `Mua ${b.buyN} được tặng ${b.getM} vé (${c.code})`])
+                }
+            })
+            c.percentOffs.forEach((p) => {
+                if (price >= p.minPrice) {
+                    setApplyPromotion(prev => [...prev, `Giảm ${p.percent}% cho hóa đơn tối thiểu ${(p.minPrice).toLocaleString('it-IT', {style : 'currency', currency : 'VND'})}, giảm tối đa ${(p.maxOff).toLocaleString('it-IT', {style : 'currency', currency : 'VND'})} (${c.code})`])
+                }
+            })
+        })
+        // for (let i = 0; i < count; i++) {
+        //     console.log('count', i)
+            // cPromotions[i].buyNGetMS.forEach((b) => {
+            //     if (seatList.length === b.buyN) {
+            //         setApplyPromotion(prev => [...prev, `Mua ${b.buyN} được tặng ${b.getM} vé (${cPromotions[i].code})`])
+            //     }
+            // })
+            // cPromotions[i].percentOffs.forEach((p) => {
+            //     if (price >= p.minPrice) {
+            //         setApplyPromotion(prev => [...prev, `Giảm ${p.percent}% cho hóa đơn tối thiểu ${(p.minPrice).toLocaleString('it-IT', {style : 'currency', currency : 'VND'})}, giảm tối đa ${(p.maxOff).toLocaleString('it-IT', {style : 'currency', currency : 'VND'})} (${cPromotions[i].code})`])
+            //     }
+            // })
+        // }
+    }, [seatList, price])
 
     return (
         <div className='w-full h-full flex flex-row justify-start'>
@@ -263,24 +357,26 @@ const Payment = () => {
                         <div className='w-full bg-white flex flex-col items-start p-[10px] mt-[10px]'>
                             <h2 className='font-bold text-[20px] p-[10px]'>Thông tin hóa đơn</h2>
                             <div className='w-full flex flex-col p-[10px]' style={{borderTopColor: '#ccc', borderTopStyle: 'solid', borderTopWidth: '1px'}}>
-                                {/* <div className='w-full flex flex-row justify-between mt-[5px]'>
-                                    <p>Tạm tính</p>
-                                    <p className='font-bold'>600000</p>
-                                </div>
                                 <div className='w-full flex flex-row items-center justify-between'>
                                     <p>Khuyến mãi</p>
-                                    <input type="text" className='w-[30%] px-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}} />
-                                    <select className='w-[30%] p-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}>
-                                        <option value="">ứdfgử</option>
-                                        <option value="">ửdtgwẻ</option>
-                                        <option value="">ưêtgư</option>
+                                    <select className='w-[50%] p-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}>
+                                        <option value="">Áp dụng khuyến mãi</option>
+                                        {
+                                            applyPromotion.map((a) => (
+                                                <option value="">{a}</option>
+                                            ))
+                                        }
                                     </select>
-                                </div> */}
-                                {/* <div className='w-full h-full flex flex-col justify-between items-end mt-[10px] pt-[10px]' style={{borderTopStyle: 'solid', borderTopWidth: 1, borderTopColor: '#000'}} > */}
-                                <div className='w-full h-full flex flex-col justify-between items-end mt-[10px] pt-[10px]' >
+                                </div>
+                                <div className='w-full flex flex-row justify-between mt-[5px]'>
+                                    <p>Tạm tính</p>
+                                    <p className='font-bold'>0</p>
+                                </div>
+                                <div className='w-full h-full flex flex-col justify-between items-end mt-[10px] pt-[10px]' style={{borderTopStyle: 'solid', borderTopWidth: 1, borderTopColor: '#000'}} >
+                                {/* <div className='w-full h-full flex flex-col justify-between items-end mt-[10px] pt-[10px]' > */}
                                     <div className='w-full flex flex-row justify-between'>
                                         <p>Tổng tiền</p>
-                                        <p className='font-bold'>{(price * seatList.length).toLocaleString('it-IT', {style : 'currency', currency : 'VND'})}</p>
+                                        <p className='font-bold'>{price.toLocaleString('it-IT', {style : 'currency', currency : 'VND'})}</p>
                                     </div>
                                     <button className='w-[30%] mt-[10px] p-[10px] cursor-pointer text-white bg-[#1447E6] rounded-[10px]'
                                         onClick={() => handlePayment()}

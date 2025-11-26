@@ -65,8 +65,7 @@ const BusDetail = () => {
             <Header />
             <div className='w-full p-[10px] bg-gray-100'>
                 <HeaderTop />
-                <h2 className='text-[20px] text-left font-bold mt-[10px]'>Chi tiết xe</h2>
-                <p className='text-left mb-[10px]'>Tuyến: HCM – An Giang</p>
+                <h2 className='text-[20px] text-left font-bold my-[10px]'>Chi tiết xe</h2>
                 <div className='w-full flex flex-row'>
                     <div className='w-[30%] bg-white mr-[10px] p-[10px] rounded-[10px]'>
                         <div className='w-full flex flex-row justify-between' style={{borderStyle: 'solid', borderBottomColor: '#ccc', borderBottomWidth: 2}}>

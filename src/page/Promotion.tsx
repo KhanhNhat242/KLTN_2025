@@ -1,6 +1,5 @@
 import Header from '../components/Header'
 import HeaderTop from '../components/HeaderTop'
-import Search from '../components/Search'
 import downloadicon from '../assets/downloadicon.png'
 import { useEffect, useState } from 'react'
 import PromotionModal from '../components/PromotionModal'
@@ -85,8 +84,9 @@ const Promotion = () => {
     const handleFilter = async () => {
         const date = new Date()
         const cd = date.toISOString().split("T")[0]
+        // console.log(cd)
         if (currentFilter === 'happening') {
-            await axios.get(`https://apigateway.microservices.appf4s.io.vn/services/mspromotion/api/promotions?startDate.equals=${cd}`,{
+            await axios.get(`https://apigateway.microservices.appf4s.io.vn/services/mspromotion/api/promotions?startDate.lessThan=${cd}&endDate.greaterThan=${cd}`,{
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'accept': '*/*',

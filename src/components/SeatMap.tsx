@@ -91,7 +91,7 @@ const SeatMap = ({ isLimousine, tripID }: Props) => {
             })
             .then((res) => {
                 // console.log('get trip', res.data.tripDTO)
-                console.log('seat list', res.data.seatLockDTOs)
+                // console.log('seat list', res.data.seatLockDTOs)
                 setSeatMap(res.data.seatLockDTOs)
             })
             .catch(() => {
@@ -114,7 +114,7 @@ const SeatMap = ({ isLimousine, tripID }: Props) => {
     }, [seatmap])
 
     useEffect(() => {
-        console.log('state', sl)
+        // console.log('state', sl)
         setCols(prev => ({
             c1: prev.c1.map(s => ({ ...s, isLock: sl.includes(s.seatno) })),
             c2: prev.c2.map(s => ({ ...s, isLock: sl.includes(s.seatno) })),
@@ -123,7 +123,7 @@ const SeatMap = ({ isLimousine, tripID }: Props) => {
             c5: prev.c5.map(s => ({ ...s, isLock: sl.includes(s.seatno) })),
             c6: prev.c6.map(s => ({ ...s, isLock: sl.includes(s.seatno) })),
         }))
-        console.log('column', cols)
+        // console.log('column', cols)
     }, [sl])
 
     return (

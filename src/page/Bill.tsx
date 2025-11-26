@@ -8,12 +8,14 @@ import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
 import type { RootState } from '../redux/store'
 import { setBills, updateTrip } from '../redux/billSlice'
+import { useNavigate } from 'react-router-dom'
 
 const Bill = () => {
 
     const token = useSelector((state: RootState) => state.auth.accessToken)
     const dispatch = useDispatch()
     const bills = useSelector((state: RootState) => state.bill)
+    const navigate = useNavigate()
 
     const formatTimestamp = (timestamp: number) => {
         const date = new Date(timestamp * 1000)
@@ -117,16 +119,16 @@ const Bill = () => {
                         {bills.map((b) => {
                             if (b.id > 1500)
                             return (
-                                <tr key={b.id} className="hover:bg-gray-50">
-                                <td className="p-3 border-b">{b.id}</td>
-                                <td className="p-3 border-b">{b.tripId}</td>
-                                <td className="p-3 border-b">{b.bookingCode}</td>
-                                <td className="p-3 border-b">{`${b.trip?.route.origin.address.ward.district.province.name} - ${b.trip?.route.destination.address.ward.district.province.name}`}</td>
-                                <td className="p-3 border-b">{b.quantity}</td>
-                                <td className="p-3 border-b">{(1000*b.totalAmount).toLocaleString('it-IT', {style : 'currency', currency : 'VND'})}</td>
-                                <td className="p-3 border-b">{formatTimestamp(Number(b.bookedAt))}</td>
-                                <td className="p-3 border-b">{formatTimestamp(Number(b.expiresAt))}</td>
-                                <td className="p-3 border-b">{b.status}</td>
+                                <tr key={b.id} className="cursor-pointer hover:bg-gray-50" onClick={() => navigate('/bus-detail', { state: { busid: b.trip?.vehicle.id, tripid: b.tripId } })}>
+                                    <td className="p-3 border-b">{b.id}</td>
+                                    <td className="p-3 border-b">{b.tripId}</td>
+                                    <td className="p-3 border-b">{b.bookingCode}</td>
+                                    <td className="p-3 border-b">{`${b.trip?.route.origin.address.ward.district.province.name} - ${b.trip?.route.destination.address.ward.district.province.name}`}</td>
+                                    <td className="p-3 border-b">{b.quantity}</td>
+                                    <td className="p-3 border-b">{(1000*b.totalAmount).toLocaleString('it-IT', {style : 'currency', currency : 'VND'})}</td>
+                                    <td className="p-3 border-b">{formatTimestamp(Number(b.bookedAt))}</td>
+                                    <td className="p-3 border-b">{formatTimestamp(Number(b.expiresAt))}</td>
+                                    <td className="p-3 border-b">{b.status}</td>
                                 </tr>
                             )
                         })}

@@ -51,7 +51,7 @@ const PromotionModal = ({ setIsOpen, isEdit, promo }: Props) => {
             setIsOpen(true)
             setValid(3)
         }
-        else if (num === 0 || count === 0 || num < count) {
+        else if (num === 0 || num < count) {
             setIsOpen(true)
             setValid(4)
         }
@@ -109,7 +109,7 @@ const PromotionModal = ({ setIsOpen, isEdit, promo }: Props) => {
             setIsOpen(true)
             setValid(3)
         }
-        else if (num === 0 || count === 0 || num < count) {
+        else if (num === 0 || num < count) {
             setIsOpen(true)
             setValid(4)
         }
