@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { ActivityIndicator, Alert, Image, Text, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  Alert,
+  Image,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import Input from "../../components/signup/Input";
 import { Link, useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -29,24 +36,18 @@ const LoginScreen = () => {
 
     setLoading(true);
     try {
-      const payload = {
-        username: email,
-        password: password,
-      };
-
-      console.log("📦 Payload gửi đi:", payload);
-
+      const payload = { username: email, password };
       const res = await axios.post(BASE_URL, payload);
-      console.log("✅ Kết quả API:", res.data);
-       const profileId = res.data.profileId;
 
-       // Lưu vào AsyncStorage
-       await AsyncStorage.setItem("profileId", profileId.toString());
+      const token = res.data.accessToken;
+      const profileId = res.data.userInfo.keycloakId;
+
+      await AsyncStorage.setItem("token", token);
+      await AsyncStorage.setItem("profileId", profileId);
 
       Alert.alert("Thành công", "Đăng nhập thành công!");
       router.push("/(tabs)/home");
     } catch (error: any) {
-      console.log("❌ Lỗi đăng nhập:", error.response?.data || error.message);
       Alert.alert(
         "Đăng nhập thất bại",
         error.response?.data?.message ||
@@ -56,6 +57,7 @@ const LoginScreen = () => {
       setLoading(false);
     }
   };
+
 
   return (
     <SafeAreaView className="flex-1 bg-white px-2">
