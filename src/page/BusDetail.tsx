@@ -37,7 +37,7 @@ const BusDetail = () => {
             }  
         })
         .then((res) => {
-            // console.log(res.data)
+            console.log(res.data)
             setBus(res.data.vehicle)
             if (res.data.vehicle.type === 'STANDARD_BUS_VIP') {
                 setType('VIP')
@@ -57,7 +57,13 @@ const BusDetail = () => {
 
     useEffect(() => {
         getVehicle()
-        console.log(busid, tripid)
+        console.log('id', busid, tripid)
+        const hasReloaded = sessionStorage.getItem("page_reloaded");
+
+        if (!hasReloaded) {
+            sessionStorage.setItem("page_reloaded", "true");
+            window.location.reload();
+        }
     }, [])
 
     return (

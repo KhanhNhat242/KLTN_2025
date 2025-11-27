@@ -61,6 +61,7 @@ const Bill = () => {
         .then((res) => {
             // console.log(res.data.tripDTO)
             // console.log(res.data.seatLockDTOs)
+            // console.log(res.data)
             dispatch(updateTrip({ id: id, trip: res.data.tripDTO}))
         })
         .catch(() => {
@@ -119,7 +120,7 @@ const Bill = () => {
                         {bills.map((b) => {
                             if (b.id > 1500)
                             return (
-                                <tr key={b.id} className="cursor-pointer hover:bg-gray-50" onClick={() => navigate('/bus-detail', { state: { busid: b.trip?.vehicle.id, tripid: b.tripId } })}>
+                                <tr key={b.id} className="cursor-pointer hover:bg-gray-50" onClick={() => navigate('/bus-detail', { state: { busid: Number(b.trip?.vehicle.id), tripid: b.tripId } })}>
                                     <td className="p-3 border-b">{b.id}</td>
                                     <td className="p-3 border-b">{b.tripId}</td>
                                     <td className="p-3 border-b">{b.bookingCode}</td>
