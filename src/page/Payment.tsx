@@ -22,7 +22,7 @@ const Payment = () => {
     const [cPromotions, setCPromotions] = useState<Promotion[]>([])
     const [applyPromotion, setApplyPromotion] = useState<string[]>([])
     const [promoCode, setPromoCode] = useState<string>('')
-    const [finalPrice, setFinalPrice] = useState<number>(0)
+    const [finalPrice, setFinalPrice] = useState<number>(1)
 
     const location = useLocation() 
     const { tripID, vehicleID } = location.state
@@ -112,12 +112,12 @@ const Payment = () => {
     }
 
     const createBooking = async () => {
-        console.log(trip?.id, seatList, randomStr(10))
+        console.log(trip?.id, seatList, randomStr(10), promoCode)
 
         const res =  await axios.post('https://apigateway.microservices.appf4s.io.vn/services/msbooking/api/bookings/real-booking', {
             "tripId": trip?.id,
             "seats": seatList,
-            "promoCode": "string",
+            "promoCode": promoCode,
             "customerId": 6,
             "idemKey": randomStr(10),
             "holdTtlSec": 300000
@@ -255,6 +255,12 @@ const Payment = () => {
         })
     }, [promotions])
 
+    useEffect(() => {
+        if (promoCode === '') {
+            setFinalPrice(price/1000)
+        }
+    }, [price])
+
     // useEffect(() => {
     //     console.log('KM', cPromotions)
     // }, [cPromotions])
@@ -373,7 +379,11 @@ const Payment = () => {
                         <div className='w-full bg-white flex flex-col items-start p-[10px] mt-[10px]'>
                             <h2 className='font-bold text-[20px] p-[10px]'>Thông tin hóa đơn</h2>
                             <div className='w-full flex flex-col p-[10px]' style={{borderTopColor: '#ccc', borderTopStyle: 'solid', borderTopWidth: '1px'}}>
-                                <div className='w-full flex flex-row items-center justify-between'>
+                                <div className='w-full flex flex-row justify-between mt-[5px]'>
+                                    <p>Tạm tính</p>
+                                    <p className='font-bold'>{price === 1 ? 0 : price.toLocaleString('it-IT', {style : 'currency', currency : 'VND'})}</p>
+                                </div>
+                                <div className='w-full flex flex-row items-center justify-between mt-[10px]'>
                                     <p>Khuyến mãi</p>
                                     <select className='w-[50%] p-[5px] rounded-[5px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}
                                         onChange={(e) => setPromoCode(e.target.value)}
@@ -386,15 +396,10 @@ const Payment = () => {
                                         }
                                     </select>
                                 </div>
-                                <div className='w-full flex flex-row justify-between mt-[5px]'>
-                                    <p>Tạm tính</p>
-                                    <p className='font-bold'>{price.toLocaleString('it-IT', {style : 'currency', currency : 'VND'})}</p>
-                                </div>
                                 <div className='w-full h-full flex flex-col justify-between items-end mt-[10px] pt-[10px]' style={{borderTopStyle: 'solid', borderTopWidth: 1, borderTopColor: '#000'}} >
-                                {/* <div className='w-full h-full flex flex-col justify-between items-end mt-[10px] pt-[10px]' > */}
                                     <div className='w-full flex flex-row justify-between'>
                                         <p>Tổng tiền</p>
-                                        <p className='font-bold'>{(finalPrice * 1000).toLocaleString('it-IT', {style : 'currency', currency : 'VND'})}</p>
+                                        <p className='font-bold'>{finalPrice === 1 ? 0 : (finalPrice * 1000).toLocaleString('it-IT', {style : 'currency', currency : 'VND'})}</p>
                                     </div>
                                     <button className='w-[30%] mt-[10px] p-[10px] cursor-pointer text-white bg-[#1447E6] rounded-[10px]'
                                         onClick={() => handlePayment()}

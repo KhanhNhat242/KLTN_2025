@@ -40,7 +40,7 @@ const Login = () => {
 
             localStorage.setItem('accessToken', res.data.accessToken)
             localStorage.setItem('refreshToken', res.data.refreshToken)
-            navigate('/booking')
+            navigate('/home')
         })
         .catch(() => {
             alert('log in fail!')
