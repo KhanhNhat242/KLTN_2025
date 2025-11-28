@@ -16,22 +16,22 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const account = () => {
   const router = useRouter();
   const [fullName, setFullName] = useState<string>("");
- useEffect(() => {
-   const fetchProfile = async () => {
-     try {
-       const id = await AsyncStorage.getItem("profileId");
-       if (!id) return;
+//  useEffect(() => {
+//    const fetchProfile = async () => {
+//      try {
+//        const id = await AsyncStorage.getItem("profileId");
+//        if (!id) return;
 
-       const res = await api.get(`/profiles/${id}`);
-       setFullName(res.data.fullName);
-     } catch (err) {
-       console.log("Lỗi lấy profile:", err);
-       setFullName("Không lấy được tên");
-     }
-   };
+//        const res = await api.get(`/profiles/${id}`);
+//        setFullName(res.data.fullName);
+//      } catch (err) {
+//        console.log("Lỗi lấy profile:", err);
+//        setFullName("Không lấy được tên");
+//      }
+//    };
 
-   fetchProfile();
- }, []);
+//    fetchProfile();
+//  }, []);
 
   return (
     <SafeAreaView>

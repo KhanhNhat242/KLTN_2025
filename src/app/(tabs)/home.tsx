@@ -19,6 +19,7 @@ import DateTimePicker, {
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ProvincePicker from "@/components/provincepicker/ProvincePicker";
+import { useRouter } from "expo-router";
 
 type Province = {
   id: number;
@@ -34,6 +35,8 @@ interface Props {
 }
 
 const Home = () => {
+
+  const router = useRouter();
   const [returndate, setReturnDate] = useState<boolean>(false);
   const [provinces, setProvinces] = useState<Province[]>([]);
   const [loading, setLoading] = useState(true);
@@ -56,9 +59,7 @@ const Home = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      // console.log("📦 Provinces API response:", res.data);
 
-      // Nếu API trả về object với content, dùng res.data.content
       if (Array.isArray(res.data)) {
         setProvinces(res.data);
       } else if (res.data.content && Array.isArray(res.data.content)) {
@@ -95,6 +96,63 @@ const Home = () => {
     }
   };
 
+ const handleSearch = async () => {
+   if (!fromProvince || !toProvince) {
+     Alert.alert("Thông báo", "Vui lòng chọn điểm đi và điểm đến.");
+     return;
+   }
+
+   const token = await AsyncStorage.getItem("token");
+   if (!token) {
+     Alert.alert("Lỗi", "Bạn chưa đăng nhập.");
+     return;
+   }
+
+   const day = date.toISOString().split("T")[0]; // yyyy-mm-dd
+   const startTime = `${day}T00:00:00.000Z`;
+   const endTime = `${day}T23:59:59.000Z`;
+
+   try {
+     const res = await axios.get(
+       "https://apigateway.microservices.appf4s.io.vn/services/msroute/api/trips",
+       {
+         params: {
+           page: 0,
+           size: 200,
+           "departureTime.greaterThan": startTime,
+           "departureTime.lessThan": endTime,
+           "originProvinceCode.equals": fromProvince.provinceCode,
+           "destinationProvinceCode.equals": toProvince.provinceCode,
+         },
+         headers: {
+           Authorization: `Bearer ${token}`,
+           Accept: "*/*",
+           "Content-Type": "application/json",
+         },
+       }
+     );
+
+     const trips = res.data;
+
+     if (!trips || trips.length === 0) {
+       Alert.alert("Không có chuyến", "Không tìm thấy chuyến xe nào.");
+       return;
+     }
+
+     // 👉 CHUYỂN TRANG SAU KHI TÌM THẤY KẾT QUẢ
+     router.push({
+       pathname: "/trip-list",
+       params: {
+         from: JSON.stringify(fromProvince),
+         to: JSON.stringify(toProvince),
+         trips: JSON.stringify(trips),
+       },
+     });
+   } catch (error: any) {
+     Alert.alert("Lỗi", "Không tìm thấy chuyến xe nào.");
+     console.log("Error search trip:", error.response?.data || error.message);
+   }
+ };
 
   return (
     <SafeAreaView>
@@ -145,7 +203,7 @@ const Home = () => {
             className="w-[40px] h-full"
           />
           <View className="w-[70%] h-full justify-between">
-            <View className="h-[44%] justify-between">
+            <View className="h-[44%] justify-center">
               <TouchableOpacity onPress={() => setShowPicker("from")}>
                 <Text>Chọn điểm đi: {fromProvince?.name || "..."}</Text>
               </TouchableOpacity>
@@ -154,7 +212,7 @@ const Home = () => {
               source={require("../../../assets/line.png")}
               className="w-full h-[2px]"
             />
-            <View className="h-[42%] justify-between">
+            <View className="h-[42%] justify-center">
               <TouchableOpacity onPress={() => setShowPicker("to")}>
                 <Text>Chọn điểm đến: {toProvince?.name || "..."}</Text>
               </TouchableOpacity>
@@ -176,30 +234,14 @@ const Home = () => {
               style={{ width: 28, height: 28 }}
             />
           </View>
-
-          {/* Số hành khách */}
-          <View className="bg-white p-4 rounded-[10px] mt-2">
-            <Text className="text-[#8c8c8c] mb-1">Số hành khách</Text>
-
-            <View className="flex-row items-center justify-between">
-              <Text className="text-[16px]">Chọn số người đi</Text>
-
-              <View className="flex-row items-center">
-                <TouchableOpacity
-                  onPress={() => setNumPeople((prev) => Math.max(1, prev - 1))}
-                  className="w-8 h-8 bg-[#f0f0f0] rounded-full items-center justify-center">
-                  <Text className="text-[20px]">−</Text>
-                </TouchableOpacity>
-                <Text className="mx-4 text-[18px] font-medium">
-                  {numPeople}
-                </Text>
-                <TouchableOpacity
-                  onPress={() => setNumPeople((prev) => prev + 1)}
-                  className="w-8 h-8 bg-[#1677FF] rounded-full items-center justify-center">
-                  <Text className="text-[20px] text-white">+</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
+          <View className="px-[10px] mt-4">
+            <TouchableOpacity
+              className="bg-blue-600 p-4 rounded-[10px]"
+              onPress={handleSearch}>
+              <Text className="text-center text-white text-[16px] font-bold">
+                TÌM CHUYẾN XE
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
         {showPicker && (

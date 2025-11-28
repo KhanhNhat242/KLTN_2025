@@ -48,7 +48,7 @@ const ProvincePicker = ({
           />
 
           <TouchableOpacity
-            className="mt-[10px] p-[12px] bg-red-500 rounded-[8px]"
+            className="mt-[10px] p-[12px] bg-blue-500 rounded-[8px]"
             onPress={onClose}>
             <Text className="text-white text-center">Đóng</Text>
           </TouchableOpacity>
