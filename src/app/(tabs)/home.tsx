@@ -1,18 +1,14 @@
 import {
   Alert,
-  FlatList,
   Image,
   ImageBackground,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
 import { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-// import Content from "@/components/home/Content";
-// import BookedTicket from "@/components/home/BookedTicket";
 import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
@@ -27,20 +23,12 @@ type Province = {
   provinceCode: number;
 };
 
-interface Props {
-  label: string;
-  value: Province | null;
-  provinces: Province[];
-  onSelect: (p: Province) => void;
-}
-
 const Home = () => {
-
   const router = useRouter();
-  const [returndate, setReturnDate] = useState<boolean>(false);
+
   const [provinces, setProvinces] = useState<Province[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [loadingProvinces, setLoadingProvinces] = useState<boolean>(false);
+  const [loadingProvinces, setLoadingProvinces] = useState(false);
+
   const [fromProvince, setFromProvince] = useState<Province | null>(null);
   const [toProvince, setToProvince] = useState<Province | null>(null);
   const [showPicker, setShowPicker] = useState<"from" | "to" | null>(null);
@@ -48,22 +36,23 @@ const Home = () => {
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  const [numPeople, setNumPeople] = useState(1);
+  const isValid = !!fromProvince && !!toProvince && !!date;
 
-  
   const fetchProvinces = async (token: string) => {
     setLoadingProvinces(true);
+
     try {
       const res = await axios.get(
         "https://apigateway.microservices.appf4s.io.vn/services/msroute/api/provinces",
-        { headers: { Authorization: `Bearer ${token}` } }
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
       );
 
-
       if (Array.isArray(res.data)) {
-        setProvinces(res.data);
-      } else if (res.data.content && Array.isArray(res.data.content)) {
-        setProvinces(res.data.content);
+        setProvinces(res.data.slice(10));
+      } else if (res.data?.content && Array.isArray(res.data.content)) {
+        setProvinces(res.data.content.slice(10));
       } else {
         console.warn("⚠️ Unexpected provinces format", res.data);
         setProvinces([]);
@@ -79,13 +68,15 @@ const Home = () => {
   useEffect(() => {
     const loadProvinces = async () => {
       const token = await AsyncStorage.getItem("token");
-      // console.log("🔑 Token:", token);
+
       if (!token) {
         Alert.alert("Thông báo", "Bạn chưa đăng nhập.");
         return;
       }
+
       fetchProvinces(token);
     };
+
     loadProvinces();
   }, []);
 
@@ -96,154 +87,131 @@ const Home = () => {
     }
   };
 
- const handleSearch = async () => {
-   if (!fromProvince || !toProvince) {
-     Alert.alert("Thông báo", "Vui lòng chọn điểm đi và điểm đến.");
-     return;
-   }
+  const handleSearch = async () => {
+    if (!fromProvince || !toProvince) {
+      Alert.alert("Thông báo", "Vui lòng chọn điểm đi và điểm đến.");
+      return;
+    }
 
-   const token = await AsyncStorage.getItem("token");
-   if (!token) {
-     Alert.alert("Lỗi", "Bạn chưa đăng nhập.");
-     return;
-   }
+    const token = await AsyncStorage.getItem("token");
+    if (!token) {
+      Alert.alert("Lỗi", "Bạn chưa đăng nhập.");
+      return;
+    }
 
-   const day = date.toISOString().split("T")[0]; // yyyy-mm-dd
-   const startTime = `${day}T00:00:00.000Z`;
-   const endTime = `${day}T23:59:59.000Z`;
+    const day = date.toISOString().split("T")[0]; // yyyy-mm-dd
+    const startTime = `${day}T00:00:00.000Z`;
+    const endTime = `${day}T23:59:59.000Z`;
 
-   try {
-     const res = await axios.get(
-       "https://apigateway.microservices.appf4s.io.vn/services/msroute/api/trips",
-       {
-         params: {
-           page: 0,
-           size: 200,
-           "departureTime.greaterThan": startTime,
-           "departureTime.lessThan": endTime,
-           "originProvinceCode.equals": fromProvince.provinceCode,
-           "destinationProvinceCode.equals": toProvince.provinceCode,
-         },
-         headers: {
-           Authorization: `Bearer ${token}`,
-           Accept: "*/*",
-           "Content-Type": "application/json",
-         },
-       }
-     );
+    try {
+      const res = await axios.get(
+        "https://apigateway.microservices.appf4s.io.vn/services/msroute/api/trips",
+        {
+          params: {
+            page: 0,
+            size: 200,
+            "departureTime.greaterThan": startTime,
+            "departureTime.lessThan": endTime,
+            "originProvinceCode.equals": fromProvince.provinceCode,
+            "destinationProvinceCode.equals": toProvince.provinceCode,
+          },
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "*/*",
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-     const trips = res.data;
+      const trips = res.data;
 
-     if (!trips || trips.length === 0) {
-       Alert.alert("Không có chuyến", "Không tìm thấy chuyến xe nào.");
-       return;
-     }
+      console.log("🔍 API TRẢ VỀ TRIPS:", trips);
 
-     // 👉 CHUYỂN TRANG SAU KHI TÌM THẤY KẾT QUẢ
-     router.push({
-       pathname: "/trip-list",
-       params: {
-         from: JSON.stringify(fromProvince),
-         to: JSON.stringify(toProvince),
-         trips: JSON.stringify(trips),
-       },
-     });
-   } catch (error: any) {
-     Alert.alert("Lỗi", "Không tìm thấy chuyến xe nào.");
-     console.log("Error search trip:", error.response?.data || error.message);
-   }
- };
+      if (!trips || trips.length === 0) {
+        Alert.alert("Không có chuyến", "Không tìm thấy chuyến xe nào.");
+        return;
+      }
+
+      router.push({
+        pathname: "/trip-list",
+        params: {
+          from: JSON.stringify(fromProvince),
+          to: JSON.stringify(toProvince),
+          trips: JSON.stringify(trips),
+        },
+      });
+    } catch (error: any) {
+      Alert.alert("Lỗi", "Không tìm thấy chuyến xe nào.");
+      console.log("Error search trip:", error.response?.data || error.message);
+    }
+  };
 
   return (
-    <SafeAreaView>
-      <View className="">
+    <SafeAreaView style={styles.container}>
+      <View>
         <ImageBackground
           source={require("../../../assets/homebg.png")}
-          style={{ width: "100%", height: 100 }}
-          imageStyle={{
-            borderBottomLeftRadius: 10,
-            borderBottomRightRadius: 10,
-          }}>
-          <Text className="text-white mt-6 text-[20px] p-[10px]">
-            Bạn muốn đi đâu, Nguyên?
-          </Text>
+          style={styles.bg}
+          imageStyle={styles.bgImage}
+        >
+          <Text style={styles.headerText}>Bạn muốn đi đâu, Lộc</Text>
         </ImageBackground>
 
-        <View className="p-[10px]">
-          <View className="flex-row rounded-[10px] bg-white p-[3px]">
-            <TouchableOpacity
-              style={{
-                backgroundColor: `${returndate ? "#fff" : "#1677FF"}`,
-              }}
-              className="w-[50%] rounded-[10px] p-[10px]"
-              onPress={() => setReturnDate(false)}>
-              <Text
-                style={{ color: `${returndate ? "#000" : "#fff"}` }}
-                className="text-center">
-                Một chiều
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                backgroundColor: `${returndate ? "#1677FF" : "#fff"}`,
-              }}
-              className="w-[50%] rounded-[10px] p-[10px]"
-              onPress={() => setReturnDate(true)}>
-              <Text
-                style={{ color: `${returndate ? "#fff" : "#000"}` }}
-                className="text-center">
-                Khứ hồi
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View className="w-full h-[150px] bg-white p-[10px] flex-row justify-between items-center rounded-[10px] mt-[10px]">
+        {/* Chọn điểm đi & điểm đến */}
+        <View style={styles.locationBox}>
           <Image
             source={require("../../../assets/locationicon.png")}
-            className="w-[40px] h-full"
+            style={styles.locationIcon}
           />
-          <View className="w-[70%] h-full justify-between">
-            <View className="h-[44%] justify-center">
-              <TouchableOpacity onPress={() => setShowPicker("from")}>
-                <Text>Chọn điểm đi: {fromProvince?.name || "..."}</Text>
-              </TouchableOpacity>
-            </View>
+
+          <View style={styles.locationContent}>
+            <TouchableOpacity onPress={() => setShowPicker("from")}>
+              <Text>Chọn điểm đi: {fromProvince?.name || "..."}</Text>
+            </TouchableOpacity>
+
             <Image
               source={require("../../../assets/line.png")}
-              className="w-full h-[2px]"
+              style={styles.line}
             />
-            <View className="h-[42%] justify-center">
-              <TouchableOpacity onPress={() => setShowPicker("to")}>
-                <Text>Chọn điểm đến: {toProvince?.name || "..."}</Text>
-              </TouchableOpacity>
-            </View>
+
+            <TouchableOpacity onPress={() => setShowPicker("to")}>
+              <Text>Chọn điểm đến: {toProvince?.name || "..."}</Text>
+            </TouchableOpacity>
           </View>
+
           <Image
             source={require("../../../assets/swapicon.png")}
-            className="size-[40px]"
+            style={styles.swapIcon}
           />
         </View>
-        <View className="px-[10px]">
-          {/* Ngày đi */}
-          <View className="bg-white p-4 rounded-[10px] mt-2 flex-row justify-between items-center">
-            <TouchableOpacity onPress={() => setShowDatePicker(true)}>
-              <Text>Ngày đi: {date.toLocaleDateString()}</Text>
-            </TouchableOpacity>
-            <Image
-              source={require("../../../assets/calendaricon.png")}
-              style={{ width: 28, height: 28 }}
-            />
-          </View>
-          <View className="px-[10px] mt-4">
-            <TouchableOpacity
-              className="bg-blue-600 p-4 rounded-[10px]"
-              onPress={handleSearch}>
-              <Text className="text-center text-white text-[16px] font-bold">
-                TÌM CHUYẾN XE
-              </Text>
-            </TouchableOpacity>
-          </View>
+
+        {/* Chọn ngày */}
+        <View style={styles.dateBox}>
+          <TouchableOpacity onPress={() => setShowDatePicker(true)}>
+            <Text>Ngày đi: {date.toLocaleDateString()}</Text>
+          </TouchableOpacity>
+
+          <Image
+            source={require("../../../assets/calendaricon.png")}
+            style={styles.calendarIcon}
+          />
         </View>
+
+        {/* Button tìm chuyến */}
+        <View style={{ paddingHorizontal: 10, marginTop: 16 }}>
+          <TouchableOpacity
+            disabled={!isValid}
+            style={[
+              styles.searchBtn,
+              { backgroundColor: isValid ? "#2563eb" : "#9ca3af" },
+            ]}
+            onPress={handleSearch}
+          >
+            <Text style={styles.searchText}>TÌM CHUYẾN XE</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Province Picker */}
         {showPicker && (
           <ProvincePicker
             visible={!!showPicker}
@@ -259,12 +227,13 @@ const Home = () => {
           />
         )}
 
+        {/* Date Picker */}
         {showDatePicker && (
           <DateTimePicker
             value={date}
             mode="date"
             display="default"
-            minimumDate={new Date()} // chặn chọn ngày trước hôm nay
+            minimumDate={new Date()}
             onChange={onChange}
           />
         )}
@@ -272,6 +241,80 @@ const Home = () => {
     </SafeAreaView>
   );
 };
+
 export default Home;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#f3f4f6",
+  },
+  bg: {
+    width: "100%",
+    height: 100,
+  },
+  bgImage: {
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+  },
+  headerText: {
+    color: "#fff",
+    fontSize: 18,
+    padding: 12,
+    marginTop: 30,
+  },
+  locationBox: {
+    backgroundColor: "#fff",
+    marginTop: 10,
+    marginHorizontal: 10,
+    padding: 10,
+    borderRadius: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    height: 150,
+  },
+  locationIcon: {
+    width: 40,
+    height: "100%",
+    resizeMode: "contain",
+  },
+  locationContent: {
+    width: "70%",
+    justifyContent: "space-between",
+    height: "100%",
+  },
+  line: {
+    width: "100%",
+    height: 2,
+    marginVertical: 6,
+  },
+  swapIcon: {
+    width: 40,
+    height: 40,
+  },
+  dateBox: {
+    backgroundColor: "#fff",
+    marginHorizontal: 10,
+    marginTop: 8,
+    padding: 16,
+    borderRadius: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  calendarIcon: {
+    width: 28,
+    height: 28,
+  },
+  searchBtn: {
+    padding: 16,
+    borderRadius: 10,
+  },
+  searchText: {
+    color: "#fff",
+    textAlign: "center",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+});

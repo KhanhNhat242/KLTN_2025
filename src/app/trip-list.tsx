@@ -13,6 +13,7 @@ export default function TripList() {
     Array.isArray(params.trips) ? params.trips[0] : params.trips!
   );
 
+  console.log("TRIP OBJECT:", JSON.stringify(trips[0], null, 2));
   const renderTrip = (item: any) => {
     return (
       <View
@@ -102,7 +103,10 @@ export default function TripList() {
             router.push({
               pathname: "/seat",
               params: {
+                
                 trip: JSON.stringify(item),
+                from: JSON.stringify(from),
+                to: JSON.stringify(to),
               },
             });
           }}>

@@ -39,6 +39,8 @@ const LoginScreen = () => {
       const payload = { username: email, password };
       const res = await axios.post(BASE_URL, payload);
 
+       console.log("API LOGIN RESPONSE:", res.data);
+
       const token = res.data.accessToken;
       const profileId = res.data.userInfo.keycloakId;
 
@@ -84,6 +86,9 @@ const LoginScreen = () => {
             value={email}
             onchange={setEmail}
             type="email-address"
+            autoCapitalize="none"
+            
+            autoCorrect={false}
           />
           <Input
             header="Mật khẩu"
@@ -93,6 +98,8 @@ const LoginScreen = () => {
             value={password}
             onchange={setPassword}
             type="default"
+            autoCapitalize="none"
+            autoCorrect={false}
           />
         </View>
         <Link
@@ -115,7 +122,7 @@ const LoginScreen = () => {
             )}
           </TouchableOpacity>
 
-          <Text className="text-center">Hoặc</Text>
+          {/* <Text className="text-center">Hoặc</Text>
 
           <TouchableOpacity
             className="w-full flex-row items-center justify-center rounded-lg border border-gray-300 p-3"
@@ -126,7 +133,7 @@ const LoginScreen = () => {
               resizeMode="contain"
             />
             <Text className="ml-2">Đăng nhập với Google</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
         <View className="flex-row justify-center">
           <Text>Bạn chưa có tài khoản?</Text>
