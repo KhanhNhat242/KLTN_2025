@@ -9,10 +9,11 @@ const billSlice = createSlice({
             return action.payload 
         },
         updateTrip: (state, action: PayloadAction<{id: number, trip: Trip}>) => {
-            const index = state.findIndex((t) => t.tripId === action.payload.id)
-            if (index !== -1) {
-                state[index].trip = action.payload.trip
-            }
+            state.forEach((bill) => {
+                if (bill.tripId === action.payload.id) {
+                    bill.trip = action.payload.trip;
+                }
+            })
         },
     }
 })

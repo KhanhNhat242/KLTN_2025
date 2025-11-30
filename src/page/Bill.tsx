@@ -1,14 +1,15 @@
 import React, { useEffect } from 'react'
 import Header from '../components/Header'
 import HeaderTop from '../components/HeaderTop'
-import Search from '../components/Search'
-import Filter from '../components/Filter'
 import downloadicon from '../assets/downloadicon.png'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
 import type { RootState } from '../redux/store'
 import { setBills, updateTrip } from '../redux/billSlice'
 import { useNavigate } from 'react-router-dom'
+import type { Bill } from '../interface/Interface'
+import Excel from 'exceljs'
+import { saveAs } from 'file-saver'
 
 const Bill = () => {
 
@@ -32,7 +33,7 @@ const Bill = () => {
     }
 
     const getData = async () => {
-        await axios.get('https://apigateway.microservices.appf4s.io.vn/services/msbooking/api/bookings?page=0&size=50', {
+        await axios.get('https://apigateway.microservices.appf4s.io.vn/services/msbooking/api/bookings?page=0&size=10&sort=bookedAt%2Cdesc', {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'accept': '*/*',
@@ -41,7 +42,7 @@ const Bill = () => {
             },
         })
         .then((res) => {
-            // console.log(res.data)
+            console.log(res.data)
             dispatch(setBills(res.data))
         })
         .catch(() => {
@@ -59,7 +60,7 @@ const Bill = () => {
             },
         })
         .then((res) => {
-            // console.log(res.data.tripDTO)
+            // console.log(res.data)
             // console.log(res.data.seatLockDTOs)
             // console.log(res.data)
             dispatch(updateTrip({ id: id, trip: res.data.tripDTO}))
@@ -67,6 +68,41 @@ const Bill = () => {
         .catch(() => {
             console.log('Get trip fail!')
         })
+    }
+
+    const handleExportExcel = async (data: Bill[], fileName: string) => {
+        const workbook = new Excel.Workbook();
+        const worksheet = workbook.addWorksheet('Sheet1');
+
+        worksheet.columns = [
+            { header: "ID", key: "id", width: 10 },
+            { header: "Trip ID", key: "tripId", width: 10 },
+            { header: "Booking Code", key: "bookingCode", width: 20 },
+            { header: "Tuyến", key: "route", width: 30 },
+            { header: "Số lượng ghế", key: "quantity", width: 15 },
+            { header: "Tổng tiền", key: "totalAmount", width: 15 },
+            { header: "Thời gian đặt", key: "bookedAt", width: 25 },
+            { header: "Thời hạn thanh toán", key: "expiresAt", width: 25 },
+            { header: "Status", key: "status", width: 15 },
+        ];
+
+        data.forEach(b => {
+            worksheet.addRow({
+                id: b.id,
+                tripId: b.tripId,
+                bookingCode: b.bookingCode,
+                route: `${b.trip?.route.origin.address.ward.district.province.name} - ${b.trip?.route.destination.address.ward.district.province.name}`,
+                quantity: b.quantity,
+                totalAmount: b.totalAmount,
+                bookedAt: formatTimestamp(Number(b.bookedAt)),
+                expiresAt: formatTimestamp(Number(b.expiresAt)),
+                status: b.status
+            });
+        });
+
+        const buffer = await workbook.xlsx.writeBuffer()
+        const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
+        saveAs(blob, fileName + '.xlsx');
     }
 
     useEffect(() => {
@@ -88,18 +124,15 @@ const Bill = () => {
             <Header />
             <div className='w-full p-[10px]'>
                 <HeaderTop />
-                <h2 className='text-[20px] text-left font-bold mt-[10px] mb-[10px]'>Quản lý vé</h2>
-                <div className='w-full flex flex-row justify-between'>
-                <div className='flex flex-row'>
-                    <Search placeholder='Tìm trong danh sách tuyến' />
-                    <Filter type='ticket' />
-                </div>
-                <div className='flex flex-row'>
-                    <button className='p-[10px] flex flex-row items-center mr-[10px] rounded-[10px] cursor-pointer' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}>
-                    <img src={downloadicon} className='size-[20px] mr-[5px]' />
-                    <p>Xuất Excel</p>
+                <div className='w-full flex flex-row justify-between items-center mt-[10px]'>
+                    <h2 className='text-[20px] text-left font-bold mt-[10px] mb-[10px]'>Quản lý hóa đơn</h2>
+                    {/* <FilterBill /> */}
+                    <button className='h-[30%] p-[10px] flex flex-row items-center mr-[10px] mb-[20px] rounded-[10px] cursor-pointer' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}
+                        onClick={() => handleExportExcel(bills, 'test')}
+                    >
+                        <img src={downloadicon} className='size-[20px] mr-[5px]' />
+                        <p>Xuất Excel</p>
                     </button>
-                </div>
                 </div>
                 <div className='mt-[20px]'>
                     <table className="w-full border border-gray-200 text-left">

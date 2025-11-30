@@ -91,11 +91,10 @@ const Header = () => {
                     </div>
                 </div>
                 <div className='w-full flex flex-row justify-between items-center p-[10px] cursor-pointer'>
-                    <div className='flex flex-row'>
+                    <div className='flex flex-row' onClick={() => navigate('/customer')}>
                         <img src={customericon} className='mr-[10px]' />
                         <p>Khách hàng</p>
                     </div>
-                    <img src={downcollapseicon} />
                 </div>
                 <div className='w-full flex flex-row justify-between items-center p-[10px] cursor-pointer' onClick={() => count === 4 ? setCount(0) : setCount(4)}>
                     <div className='flex flex-row'>

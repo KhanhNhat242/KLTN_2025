@@ -15,6 +15,7 @@ import {
   Legend,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
+import FilterBill from "../components/FilterBill"
 
 ChartJS.register(
   CategoryScale,
@@ -121,17 +122,18 @@ const Home = () => {
             <Header />
             <div className='w-full p-[10px]  '>
                 <HeaderTop />
-                <h2 className='text-[20px] text-left font-bold mt-[10px] mb-[10px]'>Tổng quan</h2>
+                <h2 className='text-[20px] text-left font-bold mt-[10px] mb-[10px]'>Dashboard</h2>
                 <div className='w-full flex flex-col justify-between'>
                     <div className="w-full flex flex-row mb-[20px]">
-                        <div className="p-[20px] rounded-[10px] shadow-lg shadow-[#ccc]-500/50">
+                        {/* <div className="p-[20px] rounded-[10px] shadow-lg shadow-[#ccc]-500/50">
                             <p>Doanh thu hôm nay</p>
                             <h2 className="text-[20px] text-[green] font-bold">{(currentRevenue*1000).toLocaleString('it-IT', {style : 'currency', currency : 'VND'})}</h2>
                         </div>
                         <div className="p-[20px] rounded-[10px] mx-[20px] shadow-lg shadow-[#ccc]-500/50">
                             <p>Số vé đã bán</p>
                             <h2 className="text-[20px] text-[blue] font-bold">{quantity} vé</h2>
-                        </div>
+                        </div> */}
+                        <FilterBill />
                     </div>
                     {/* <h2>Dashboard</h2> */}
                     {data && <Bar options={options} data={data} />}
