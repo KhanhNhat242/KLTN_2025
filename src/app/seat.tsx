@@ -4,12 +4,14 @@ import {
   TouchableOpacity,
   ScrollView,
   StyleSheet,
+  Modal,
 } from "react-native";
 import { useEffect, useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MaterialIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Picker } from "@react-native-picker/picker";
 type Seat = {
   id: string;
   status: "empty" | "selected" | "sold";
@@ -17,8 +19,49 @@ type Seat = {
 
 type SeatGroup = "lowerLeft" | "lowerRight" | "upperLeft" | "upperRight";
 
+export interface Promotion {
+  id: number;
+  code: string;
+  description: string;
+  startDate: [];
+  endDate: [];
+  buyNGetMS: BuyNGetM[];
+  percentOffs: PercentOff[];
+  usageLimit: number;
+  usedCount: number;
+  isDeleted: boolean;
+}
+
+export interface PercentOff {
+  id: number;
+  percent: number;
+  maxOff: number;
+  minPrice: number;
+  isDeleted: boolean;
+}
+
+export interface BuyNGetM {
+  id: number;
+  buyN: number;
+  getM: number;
+  isDeleted: boolean;
+}
+
 export default function SeatPage() {
   const params = useLocalSearchParams();
+  const [showSeatModal, setShowSeatModal] = useState(false);
+  const [promo, setPromo] = useState<string>("");
+
+  const [promotions, setPromotions] = useState<Promotion[]>([]);
+  const [cPromotions, setCPromotions] = useState<Promotion[]>([]);
+  const [applyPromotion, setApplyPromotion] = useState<string[]>([]);
+  const [promoCode, setPromoCode] = useState<string>("");
+
+  const [price, setPrice] = useState<number>(1);
+  const [finalPrice, setFinalPrice] = useState<number>(1);
+
+  
+
   const [lowerLeft, setLowerLeft] = useState<Seat[]>([
     { id: "1A01", status: "empty" },
     { id: "1A02", status: "empty" },
@@ -98,18 +141,6 @@ export default function SeatPage() {
   const [token, setToken] = useState("");
   const [customerId, setCustomerId] = useState("");
 
-  useEffect(() => {
-    const loadUser = async () => {
-      const storedToken = await AsyncStorage.getItem("token");
-      const storedProfileId = await AsyncStorage.getItem("profileId");
-
-      if (storedToken) setToken(storedToken);
-      if (storedProfileId) setCustomerId(storedProfileId);
-    };
-
-    loadUser();
-  }, []);
-
   const randomKey = () => Math.random().toString(36).slice(2, 12);
 
   const getSelectedSeats = () => {
@@ -125,9 +156,15 @@ export default function SeatPage() {
     const selectedSeats = getSelectedSeats();
 
     if (selectedSeats.length === 0) {
-      alert("Bạn chưa chọn ghế nào");
+      alert("Vui lòng chọn ghế trước!");
+      setShowSeatModal(true);
       return;
     }
+
+    // if (!promo) {
+    //   alert("Vui lòng chọn khuyến mãi!");
+    //   return;
+    // }
 
     if (!customerId) {
       alert("Bạn chưa đăng nhập!");
@@ -137,7 +174,7 @@ export default function SeatPage() {
     const body = {
       tripId: trip?.id, // lấy từ props hoặc route params
       seats: selectedSeats, // list ghế
-      promoCode: "DEMO123", // cho đại
+      promoCode: promo, // cho đại
       customerId: 1500, // lấy từ login
       idemKey: randomKey(), // random mỗi lần click
       holdTtlSec: 300000,
@@ -210,6 +247,53 @@ export default function SeatPage() {
     }
   };
 
+  const extractCode = (str: string) => {
+    const match = str.match(/\((.*?)\)/);
+    return match ? match[1] : null;
+  };
+
+  const getPromotion = async () => {
+    try {
+      const date = new Date();
+      const cd = date.toISOString().split("T")[0];
+
+      const response = await fetch(
+        `https://apigateway.microservices.appf4s.io.vn/services/mspromotion/api/promotions?startDate.lessThan=${cd}&endDate.greaterThan=${cd}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "*/*",
+            "Content-Type": "application/json",
+            "X-XSRF-TOKEN": "41866a2d-cdc1-4547-9eef-f6d3464f7b6b",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      setPromotions(data);
+    } catch (error) {
+      console.log("Filter fail!", error);
+    }
+  };
+
+
+  useEffect(() => {
+    const loadUser = async () => {
+      const storedToken = await AsyncStorage.getItem("token");
+      const storedProfileId = await AsyncStorage.getItem("profileId");
+
+      if (storedToken) setToken(storedToken);
+      if (storedProfileId) setCustomerId(storedProfileId);
+    };
+
+    loadUser();
+  }, []);
+
   // Gọi lại API sau khi có token và trip.id
   useEffect(() => {
     if (token && trip?.id) {
@@ -217,6 +301,12 @@ export default function SeatPage() {
     }
   }, [token, trip?.id]);
 
+
+   useEffect(() => {
+    //  getVehicle();
+    //  getTrip();
+     getPromotion();
+   }, []);
 
   const InfoRow = ({
     icon,
@@ -241,7 +331,6 @@ export default function SeatPage() {
       </View>
     );
   };
-
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -331,48 +420,92 @@ export default function SeatPage() {
             />
           )}
 
-          <View style={styles.seatInfo}>
-            <MaterialIcons name="event-seat" size={18} color="#007AFF" />
-            <Text style={styles.seatText}>
-              {getSelectedSeats().length > 0
-                ? getSelectedSeats().join(", ")
-                : "Chưa chọn ghế nào"}
-            </Text>
+          <TouchableOpacity
+            onPress={() => {
+              if (getSelectedSeats().length === 0) {
+                setShowSeatModal(true);
+              }
+            }}>
+            <View style={styles.seatInfo}>
+              <MaterialIcons name="event-seat" size={18} color="#007AFF" />
+              <Text style={styles.seatText}>
+                {getSelectedSeats().length > 0
+                  ? getSelectedSeats().join(", ")
+                  : "Bấm để chọn ghế"}
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+
+        <Modal visible={showSeatModal} animationType="slide" transparent>
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContent}>
+              <Text style={styles.modalTitle}>Chọn ghế ngồi</Text>
+
+              <ScrollView>
+                {/* Dán nguyên khối sơ đồ ghế của bạn vào đây */}
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}>
+                  {/* Tầng dưới */}
+                  <View style={{ marginTop: 20 }}>
+                    <Text style={styles.levelTitle}>Tầng dưới</Text>
+                    <View style={styles.seatRow}>
+                      <View style={styles.column}>
+                        {lowerLeft.map((s) => renderSeat(s, "lowerLeft"))}
+                      </View>
+                      <View style={styles.column}>
+                        {lowerRight.map((s) => renderSeat(s, "lowerRight"))}
+                      </View>
+                    </View>
+                  </View>
+
+                  {/* Tầng trên */}
+                  <View style={{ marginTop: 20 }}>
+                    <Text style={styles.levelTitle}>Tầng trên</Text>
+                    <View style={styles.seatRow}>
+                      <View style={styles.column}>
+                        {upperLeft.map((s) => renderSeat(s, "upperLeft"))}
+                      </View>
+                      <View style={styles.column}>
+                        {upperRight.map((s) => renderSeat(s, "upperRight"))}
+                      </View>
+                    </View>
+                  </View>
+                </View>
+              </ScrollView>
+
+              <TouchableOpacity
+                onPress={() => setShowSeatModal(false)}
+                style={styles.closeButton}>
+                <Text style={{ color: "#fff", fontWeight: "bold" }}>Xong</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+
+        <View style={{ marginVertical: 15 }}>
+          <Text style={{ marginBottom: 6, fontWeight: "600" }}>
+            Chọn khuyến mãi
+          </Text>
+
+          <View style={styles.pickerBox}>
+            <Picker
+              selectedValue={promo}
+              onValueChange={(value) => setPromo(value)}>
+              {applyPromotion.map((a) => (
+                <Picker.Item
+                  key={extractCode(a)}
+                  label={a} 
+                  value={extractCode(a)} 
+                />
+              ))}
+            </Picker>
           </View>
         </View>
 
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          {/* Tầng dưới */}
-          <View style={{ marginTop: 20 }}>
-            <View
-              style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
-              <MaterialIcons name="event-seat" size={24} color="#111" />
-              <Text style={{ fontSize: 16 }}>Ghế tài xế</Text>
-            </View>
-            <Text style={styles.levelTitle}>Tầng dưới</Text>
-            <View style={styles.seatRow}>
-              <View style={styles.column}>
-                {lowerLeft.map((s) => renderSeat(s, "lowerLeft"))}
-              </View>
-              <View style={styles.column}>
-                {lowerRight.map((s) => renderSeat(s, "lowerRight"))}
-              </View>
-            </View>
-          </View>
-
-          {/* Tầng trên */}
-          <View style={{ marginTop: 30 }}>
-            <Text style={styles.levelTitle}>Tầng trên</Text>
-            <View style={styles.seatRow}>
-              <View style={styles.column}>
-                {upperLeft.map((s) => renderSeat(s, "upperLeft"))}
-              </View>
-              <View style={styles.column}>
-                {upperRight.map((s) => renderSeat(s, "upperRight"))}
-              </View>
-            </View>
-          </View>
-        </View>
         <TouchableOpacity
           onPress={handleBooking}
           style={{
@@ -390,8 +523,6 @@ export default function SeatPage() {
     </SafeAreaView>
   );
 }
-
-
 
 const styles = StyleSheet.create({
   seat: {
@@ -499,5 +630,42 @@ const styles = StyleSheet.create({
     marginLeft: 6,
     color: "#007AFF",
     fontWeight: "600",
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  modalContent: {
+    width: "95%",
+    backgroundColor: "#fff",
+    borderRadius: 15,
+    padding: 15,
+    maxHeight: "85%",
+  },
+
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+    textAlign: "center",
+  },
+
+  closeButton: {
+    marginTop: 10,
+    backgroundColor: "#007AFF",
+    paddingVertical: 10,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+
+  pickerBox: {
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 8,
+    overflow: "hidden",
+    backgroundColor: "#fff",
   },
 });
