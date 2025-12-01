@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MaterialIcons } from "@expo/vector-icons";
+import { SafeAreaView } from "react-native-safe-area-context";
 type Seat = {
   id: string;
   status: "empty" | "selected" | "sold";
@@ -216,90 +217,181 @@ export default function SeatPage() {
     }
   }, [token, trip?.id]);
 
+
+  const InfoRow = ({
+    icon,
+    label,
+    value,
+  }: {
+    icon: React.ReactNode;
+    label: string;
+    value?: string;
+  }) => {
+    if (!value) return null;
+
+    return (
+      <View style={styles.infoRow}>
+        <View style={{ marginRight: 6 }}>{icon}</View>
+
+        <Text style={styles.infoLabel}>{label}:</Text>
+
+        <Text style={styles.infoValue} numberOfLines={2} ellipsizeMode="tail">
+          {value}
+        </Text>
+      </View>
+    );
+  };
+
+
   return (
-    <ScrollView style={{ flex: 1, padding: 15, backgroundColor: "#f9f9f9" }}>
-      {/* Thông tin tuyến */}
-      <View style={styles.infoBox}>
-        <Text style={{ fontWeight: "bold", fontSize: 16 }}>
-          Thông tin tuyến
-        </Text>
-        <Text style={{ fontWeight: "bold", marginTop: 10 }}>Tuyến</Text>
-        <Text style={{ marginBottom: 10 }}>
-          {trip.route?.origin?.name} → {trip.route?.destination?.name}
-        </Text>
-        <Text>Mã: {trip.id}</Text>
-        <Text>Mã chuyến: {trip.tripCode}</Text>
-        <Text>Loại xe: {trip.vehicle?.type}</Text>
-        <Text>Biển số: {trip.vehicle?.plateNumber}</Text>
-        <Text>Điểm đón {trip.route?.origin?.name}</Text>
-        <Text> Địa chỉ {tripAdress.tripDTO.route?.origin?.address?.streetAddress}</Text>
-        <Text>Điểm đón {trip.route?.destination?.name}</Text>
-        {/* <Text>
-          Địa chỉ{tripAdress.route?.destination?.address?.streetAddress}
-        </Text> */}
+    <SafeAreaView style={{ flex: 1 }}>
+      <ScrollView
+        contentContainerStyle={{ paddingBottom: 120 }}
+        showsVerticalScrollIndicator={false}>
+        <View style={styles.infoCard}>
+          <Text style={styles.cardTitle}>🚌 Thông tin chuyến xe</Text>
 
-        <Text>
-          Giờ đi:{" "}
-          {new Date(trip.departureTime * 1000).toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
-        </Text>
-        <Text style={{ marginBottom: 10 }}>
-          Ghế chọn:
-          {getSelectedSeats().length > 0
-            ? getSelectedSeats().join(", ")
-            : "Chưa chọn ghế nào"}
-        </Text>
-      </View>
+          <InfoRow
+            icon={<MaterialIcons name="route" size={18} color="#333" />}
+            label="Tuyến"
+            value={`${trip.route?.origin?.name} → ${trip.route?.destination?.name}`}
+          />
 
-      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-        {/* Tầng dưới */}
-        <View style={{ marginTop: 20 }}>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
-            <MaterialIcons name="event-seat" size={24} color="#111" />
-            <Text style={{ fontSize: 16 }}>Ghế tài xế</Text>
+          <View style={styles.twoCol}>
+            <View style={styles.col}>
+              <InfoRow
+                icon={<MaterialIcons name="schedule" size={10} color="#333" />}
+                label="Giờ đi"
+                value={new Date(trip.departureTime * 1000).toLocaleTimeString(
+                  [],
+                  {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  }
+                )}
+              />
+
+              <InfoRow
+                icon={
+                  <MaterialIcons
+                    name="airport-shuttle"
+                    size={10}
+                    color="#333"
+                  />
+                }
+                label="Loại xe"
+                value={trip.vehicle?.type}
+              />
+
+              <InfoRow
+                icon={
+                  <MaterialIcons
+                    name="confirmation-number"
+                    size={10}
+                    color="#333"
+                  />
+                }
+                label="Biển số"
+                value={trip.vehicle?.plateNumber}
+              />
+            </View>
           </View>
-          <Text style={styles.levelTitle}>Tầng dưới</Text>
-          <View style={styles.seatRow}>
-            <View style={styles.column}>
-              {lowerLeft.map((s) => renderSeat(s, "lowerLeft"))}
-            </View>
-            <View style={styles.column}>
-              {lowerRight.map((s) => renderSeat(s, "lowerRight"))}
-            </View>
+
+          <InfoRow
+            icon={
+              <MaterialIcons name="location-pin" size={18} color="#e74c3c" />
+            }
+            label="Điểm đón"
+            value={trip.route?.origin?.name}
+          />
+
+          {tripAdress && (
+            <InfoRow
+              icon={
+                <MaterialIcons name="my-location" size={18} color="#e67e22" />
+              }
+              label="Địa chỉ đón"
+              value={tripAdress.route.origin.address.streetAddress}
+            />
+          )}
+
+          <InfoRow
+            icon={<MaterialIcons name="flag" size={18} color="#27ae60" />}
+            label="Điểm đến"
+            value={trip.route?.destination?.name}
+          />
+
+          {tripAdress && (
+            <InfoRow
+              icon={
+                <MaterialIcons name="location-on" size={18} color="#27ae60" />
+              }
+              label="Địa chỉ đến"
+              value={tripAdress.route.destination.address.streetAddress}
+            />
+          )}
+
+          <View style={styles.seatInfo}>
+            <MaterialIcons name="event-seat" size={18} color="#007AFF" />
+            <Text style={styles.seatText}>
+              {getSelectedSeats().length > 0
+                ? getSelectedSeats().join(", ")
+                : "Chưa chọn ghế nào"}
+            </Text>
           </View>
         </View>
 
-        {/* Tầng trên */}
-        <View style={{ marginTop: 30 }}>
-          <Text style={styles.levelTitle}>Tầng trên</Text>
-          <View style={styles.seatRow}>
-            <View style={styles.column}>
-              {upperLeft.map((s) => renderSeat(s, "upperLeft"))}
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          {/* Tầng dưới */}
+          <View style={{ marginTop: 20 }}>
+            <View
+              style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
+              <MaterialIcons name="event-seat" size={24} color="#111" />
+              <Text style={{ fontSize: 16 }}>Ghế tài xế</Text>
             </View>
-            <View style={styles.column}>
-              {upperRight.map((s) => renderSeat(s, "upperRight"))}
+            <Text style={styles.levelTitle}>Tầng dưới</Text>
+            <View style={styles.seatRow}>
+              <View style={styles.column}>
+                {lowerLeft.map((s) => renderSeat(s, "lowerLeft"))}
+              </View>
+              <View style={styles.column}>
+                {lowerRight.map((s) => renderSeat(s, "lowerRight"))}
+              </View>
+            </View>
+          </View>
+
+          {/* Tầng trên */}
+          <View style={{ marginTop: 30 }}>
+            <Text style={styles.levelTitle}>Tầng trên</Text>
+            <View style={styles.seatRow}>
+              <View style={styles.column}>
+                {upperLeft.map((s) => renderSeat(s, "upperLeft"))}
+              </View>
+              <View style={styles.column}>
+                {upperRight.map((s) => renderSeat(s, "upperRight"))}
+              </View>
             </View>
           </View>
         </View>
-      </View>
-      <TouchableOpacity
-        onPress={handleBooking}
-        style={{
-          marginTop: 10,
-          backgroundColor: "#007AFF",
-          paddingVertical: 10,
-          borderRadius: 8,
-        }}>
-        <Text
-          style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}>
-          Đặt xe
-        </Text>
-      </TouchableOpacity>
-    </ScrollView>
+        <TouchableOpacity
+          onPress={handleBooking}
+          style={{
+            marginTop: 10,
+            backgroundColor: "#007AFF",
+            paddingVertical: 10,
+            borderRadius: 8,
+          }}>
+          <Text
+            style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}>
+            Đặt xe
+          </Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
+
+
 
 const styles = StyleSheet.create({
   seat: {
@@ -347,5 +439,65 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "flex-start",
     marginHorizontal: 10,
+  },
+  infoCard: {
+    backgroundColor: "#fff",
+    borderRadius: 15,
+    padding: 16,
+    marginBottom: 20,
+    shadowColor: "#000",
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
+    elevation: 3,
+  },
+
+  cardTitle: {
+    fontSize: 17,
+    fontWeight: "bold",
+    marginBottom: 12,
+  },
+
+  infoRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+
+  infoLabel: {
+    width: 90,
+    fontWeight: "600",
+    color: "#555",
+    fontSize: 13,
+  },
+
+  infoValue: {
+    flex: 1,
+    color: "#111",
+    fontSize: 13,
+  },
+
+  twoCol: {
+    flexDirection: "row",
+    gap: 10,
+    marginBottom: 10,
+  },
+
+  col: {
+    flex: 1,
+  },
+
+  seatInfo: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 10,
+    padding: 10,
+    borderRadius: 8,
+    backgroundColor: "#F1F7FF",
+  },
+
+  seatText: {
+    marginLeft: 6,
+    color: "#007AFF",
+    fontWeight: "600",
   },
 });
