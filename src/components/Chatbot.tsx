@@ -21,6 +21,14 @@ const Chatbot = () => {
     const messages = useSelector((state: RootState) => state.message)
     const token = useSelector((state: RootState) => state.auth.accessToken)
 
+    const handleEnterPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === "Enter") {
+            dispatch(add({ content: message, isBot: false }))
+            handleSendMessage()
+            setMessage('')
+        }
+    };
+
     const handleSendMessage = async () => {
         await axios.post('https://apigateway.microservices.appf4s.io.vn/services/msuser/api/chatbot/chat', {
             "message": message,
@@ -69,7 +77,7 @@ const Chatbot = () => {
                             </div>
                         </div>
                         <div className='w-full p-[10px] relative'>
-                            <input value={message} onChange={(e) => setMessage(e.target.value)} className='w-full p-[10px] rounded-[10px]' type="text" placeholder='Nhập nội dung tin nhắn' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}/>
+                            <input value={message} onChange={(e) => setMessage(e.target.value)} onKeyDown={handleEnterPress} className='w-full py-[10px] pl-[10px] pr-[40px] rounded-[10px]' type="text" placeholder='Nhập nội dung tin nhắn' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}/>
                             <img src={sendicon} className='size-[30px] absolute bottom-[16px] right-[20px] cursor-pointer'
                                 onClick={() => {
                                     dispatch(add({ content: message, isBot: false }))

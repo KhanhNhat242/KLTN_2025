@@ -5,7 +5,13 @@ import type { RootState } from '../redux/store'
 import trashicon from '../assets/trashicon.png'
 import { setBills } from '../redux/billSlice'
 
-const FilterBill = () => {
+interface Props {
+    setCount: React.Dispatch<React.SetStateAction<number>>,
+    setSD: React.Dispatch<React.SetStateAction<string>>,
+    setED: React.Dispatch<React.SetStateAction<string>>,
+}
+
+const FilterBill = ({ setCount, setSD, setED }: Props) => {
     const [startDate, setStartDate] = useState<string>('')
     const [endDate, setEndDate] = useState<string>('')
 
@@ -15,6 +21,9 @@ const FilterBill = () => {
     const handleFilter = async () => {
         const st = `${startDate}T00:00:00.000Z`
         const et = `${endDate}T23:59:59.000Z`
+
+        setSD(startDate)
+        setED(endDate)
         console.log(st, et)
         await axios.get(`https://apigateway.microservices.appf4s.io.vn/services/msbooking/api/bookings?bookedAt.greaterThan=${st}&bookedAt.lessThan=${et}`, {
             headers: {
@@ -26,6 +35,7 @@ const FilterBill = () => {
         .then((res) => {
             console.log(res.data)
             dispatch(setBills(res.data))
+            setCount(1)
         })
         .catch((error) => {
             alert('Error when filter booking!')
@@ -45,6 +55,7 @@ const FilterBill = () => {
         .then((res) => {
             // console.log(res.data)
             dispatch(setBills(res.data))
+            setCount(0)
         })
         .catch(() => {
             console.log('Get payment-transactions fail!')

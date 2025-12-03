@@ -22,7 +22,7 @@ const Station = () => {
     const stations = useSelector((state: RootState) => state.stations)
 
     const getData = async () => {
-        await axios.get('https://apigateway.microservices.appf4s.io.vn/services/msroute/api/stations', {
+        await axios.get('https://apigateway.microservices.appf4s.io.vn/services/msroute/api/stations?isDeleted.equals=false', {
             params: {
                 'page': '0',
                 'size': '50',
@@ -116,11 +116,10 @@ const Station = () => {
             'Authorization': `Bearer ${token}`,
             'accept': '*/*',
             'Content-Type': 'application/json',
-        }})
+            }
+        })
         .then((res) => {
             console.log(res.data)
-            // dispatch(remove(res.data.id))
-            // alert('delete success')
         })
         .catch((error) => {
             alert('Error when deleting!')

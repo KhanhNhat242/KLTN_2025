@@ -1,7 +1,5 @@
-import Filter from '../components/Filter';
 import Header from '../components/Header'
 import HeaderTop from '../components/HeaderTop';
-import Search from '../components/Search';
 import downloadicon from '../assets/downloadicon.png'
 import DeleteModal from '../components/DeleteModal';
 import BusModal from '../components/BusModal';
@@ -25,7 +23,7 @@ const Bus = () => {
   const navigate = useNavigate()
 
   const getData = async () => {
-    await axios.get('https://apigateway.microservices.appf4s.io.vn/services/msroute/api/vehicles', {
+    await axios.get('https://apigateway.microservices.appf4s.io.vn/services/msroute/api/vehicles?isDeleted.equals=false', {
         params: {
             'page': '0',
             'size': '50',
@@ -47,6 +45,82 @@ const Bus = () => {
     // console.log('data: ',res.data)
     // setPromotions(res.data)
         
+    }
+
+    const handleDelete = async (bus: Bus) => {
+      const now = new Date().toISOString()
+      const res = await axios.get(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/vehicles/${bus?.id}`,
+            {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'accept': '*/*',
+                    'Content-Type': 'application/json',
+                }  
+            }
+        )
+      const seatmapid = res.data.seatMap.id
+
+      await axios.put(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/vehicles/${bus.id}`, {
+          "id": bus?.id,
+          "type": bus.type,
+          "typeFactor": 0,
+          "plateNumber": bus.plateNumber,
+          "brand": bus.brand,
+          "description": bus.description,
+          "status": "ACTIVE",
+          "createdAt": "2025-10-08T07:59:05.392Z",
+          "updatedAt": now,
+          "isDeleted": true,
+          "deletedAt": now,
+          "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "seatMap": {
+              "id": seatmapid,
+              "name": "string",
+              "createdAt": "2025-10-08T07:59:05.392Z",
+              "updatedAt": "2025-10-08T07:59:05.392Z",
+              "isDeleted": true,
+              "deletedAt": "2025-10-08T07:59:05.392Z",
+              "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+              "seatMapImg": {
+              "id": 0,
+              "bucket": "string",
+              "objectKey": "string",
+              "contentType": "string",
+              "size": 0,
+              "createdAt": "2025-10-08T07:59:05.392Z",
+              "updatedAt": "2025-10-08T07:59:05.392Z",
+              "isDeleted": true,
+              "deletedAt": "2025-10-08T07:59:05.392Z",
+              "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+              }
+          },
+          "vehicleImg": {
+              "id": 1,
+              "bucket": "string",
+              "objectKey": "string",
+              "contentType": "string",
+              "size": 0,
+              "createdAt": "2025-10-08T07:59:05.392Z",
+              "updatedAt": "2025-10-08T07:59:05.392Z",
+              "isDeleted": true,
+              "deletedAt": "2025-10-08T07:59:05.392Z",
+              "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          }
+      }, {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'accept': '*/*',
+            'Content-Type': 'application/json',
+            'X-XSRF-TOKEN': '41866a2d-cdc1-4547-9eef-f6d3464f7b6b',
+        },
+      })
+      .then((res) => {
+          console.log(res.data)
+      })
+      .catch((error) => {
+          alert('Error when deleting!')
+          console.log(error)
+      })
     }
 
     useEffect(() => {
@@ -107,6 +181,7 @@ const Bus = () => {
                             <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
                                 onClick={() => {
                                   setSelectedBus(bus)
+                                  handleDelete(bus)
                                   setIsDelete(true)
                                 }
                                 }>Xóa</button>

@@ -64,7 +64,7 @@ const Login = () => {
                     <div className=' flex flex-row items-center relative'>
                         <img src={pwdicon} className='size-[20px] left-2 absolute' />
                         <img src={eyeicon} className='size-[20px] absolute right-2 cursor-pointer' onClick={() => setHide(!hide)} />
-                        <input type={`${hide ? 'password' : 'text'}`} className='w-full py-[5px] px-[30px] rounded-[10px]' style={{borderStyle: 'solid', borderWidth: 2, borderColor: '#ccc'}} value={pwd} onChange={(e) => setPwd(e.target.value)}/>
+                        <input type={`${hide ? 'password' : 'text'}`}  className='w-full py-[5px] px-[30px] rounded-[10px]' style={{borderStyle: 'solid', borderWidth: 2, borderColor: '#ccc'}} value={pwd} onChange={(e) => setPwd(e.target.value)}/>
                     </div>
                 </div>
                 <div className='w-full flex flex-row justify-between items-center my-[10px]'>

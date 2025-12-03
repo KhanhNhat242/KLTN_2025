@@ -125,7 +125,7 @@ const PromotionModal = ({ setIsOpen, isEdit, promo }: Props) => {
                     'usedCount': count,
                     'createdAt': ca.toISOString(),
                     'updatedAt': ua.toISOString(),
-                    'isDeleted': true,
+                    'isDeleted': false,
                     'deletedAt': '2025-10-02T13:59:26.338Z',
                     'deletedBy': '3fa85f64-5717-4562-b3fc-2c963f66afa6'
                 }, 

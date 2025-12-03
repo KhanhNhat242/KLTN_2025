@@ -7,12 +7,12 @@ import axios from 'axios'
 import PromotionLine from '../components/PromotionLine'
 import { type RootState } from '../redux/store'
 import { useDispatch, useSelector } from 'react-redux'
-import DeleteMocal from '../components/DeleteModal'
 import { setPromotions } from '../redux/promotionsSlice'
 import type {Promotion, Promotion as PromotionInterface} from '../interface/Interface'
 import { setCurrentID } from '../redux/currentSelectedSlice'
 import { setBuyNGetMs } from '../redux/buyNGetMSlice'
 import { setPercentOffs } from '../redux/percentOffSlice'
+import DeleteModal from '../components/DeleteModal'
 // import type { PromotionLine as PromotionLineInterface } from '../interface/Interface'
 
 const Promotion = () => {
@@ -30,7 +30,7 @@ const Promotion = () => {
     const [selectedPromo, setSelectedPromo] = useState<PromotionInterface>()
 
     const getData = async () => {
-            await axios.get('https://apigateway.microservices.appf4s.io.vn/services/mspromotion/api/promotions', {
+            await axios.get('https://apigateway.microservices.appf4s.io.vn/services/mspromotion/api/promotions?isDeleted.equals=false', {
                 params: {
                     'page': '0',
                     'size': '40',
@@ -44,7 +44,7 @@ const Promotion = () => {
             })
             .then((res) => {
                 dispatch(setPromotions(res.data))
-                console.log(promotions)
+                // console.log(promotions)
             })
             .catch(() => {
                 console.log('Get data fail!')
@@ -135,11 +135,42 @@ const Promotion = () => {
         }    
     }
 
+    const handleDelete = async (promo: Promotion) => {
+        const now = new Date().toISOString()
+        console.log('dlt', promo)
+
+        await axios.put(`https://apigateway.microservices.appf4s.io.vn/services/mspromotion/api/promotions/${promo.id}`, {
+            'id': promo.id,
+            'code': promo.code,
+            'description': promo.description,
+            'startDate': promo.startDate,
+            'endDate': promo.endDate,
+            'usageLimit': promo.usageLimit,
+            'usedCount': promo.usedCount,
+            'createdAt': '2025-10-02T13:59:26.338Z',
+            'updatedAt': now,
+            'isDeleted': true,
+            'deletedAt': now,
+            'deletedBy': '3fa85f64-5717-4562-b3fc-2c963f66afa6'
+        }, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'accept': '*/*',
+                'Content-Type': 'application/json',
+            }
+        })
+        .then((res) => {
+            console.log(res.data)
+        })
+        .catch((error) => {
+            alert('Error when deleting!')
+            console.log(error)
+        })
+    }
+
     useEffect(() => {
         // console.log('token:', accesstoken)
-        if (token) {
-            getData()
-        }
+        getData()
         // console.log(temp)
     }, [token])
 
@@ -259,7 +290,13 @@ const Promotion = () => {
                                                     setIsOpen(true)
                                                     setIsEdit(true)
                                                 }}>Sửa</button>
-                                                <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" onClick={() => setIsDelete(true)}>Xóa</button>
+                                                <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
+                                                    onClick={() => {
+                                                        setSelectedPromo(promo)
+                                                        handleDelete(promo)
+                                                        setIsDelete(true)
+                                                    }
+                                                    }>Xóa</button>
                                             </td>
                                         </tr>
                                         <tr className='border-b'>
@@ -275,7 +312,7 @@ const Promotion = () => {
                 </div>
             </div>
             { isOpen && (isEdit ? <PromotionModal isEdit={true} setIsOpen={setIsOpen} promo={selectedPromo} /> : <PromotionModal isEdit={false} setIsOpen={setIsOpen} /> ) }
-            { isDelete && <DeleteMocal setIsDelete={setIsDelete} /> }
+            { isDelete && <DeleteModal setIsDelete={setIsDelete} promotion={selectedPromo}  /> }
         </div>
     )
 }
