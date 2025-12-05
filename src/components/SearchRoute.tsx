@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { Province } from '../interface/Interface'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'

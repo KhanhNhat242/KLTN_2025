@@ -89,7 +89,7 @@ const ScheduleModal = ({ setIsOpen, isEdit, schedule }: Props) => {
             "startDate": startDate,
             "endDate": endDate,
             "daysOfWeek": dow,
-            "active": true,
+            "active": false,
             "createdAt": now,
             "updatedAt": now,
             "isDeleted": true,
@@ -416,11 +416,11 @@ const ScheduleModal = ({ setIsOpen, isEdit, schedule }: Props) => {
             setRoute(schedule.route)
             if(schedule.occasionRule.id === 1) {
                 setOccasion('normal')
-                setOcc({ id: 1, occasion: 'NORMAL', occasionFactor: 29305.67 })
+                setOcc({ id: 1, occasion: 'NORMAL', occasionFactor: 29305.67, isDeleted: false })
             }
             else if (schedule.occasionRule.id === 4) {
                 setOccasion('peak')
-                setOcc({ id: 4, occasion: 'PEAK`', occasionFactor: 19348.9 })
+                setOcc({ id: 4, occasion: 'PEAK`', occasionFactor: 19348.9, isDeleted: false })
             }
         }
     }, [])
@@ -432,10 +432,10 @@ const ScheduleModal = ({ setIsOpen, isEdit, schedule }: Props) => {
 
     useEffect(() => {
         if (occasion === 'normal') {
-            setOcc({ id: 1, occasion: 'NORMAL', occasionFactor: 29305.67 })
+            setOcc({ id: 1, occasion: 'NORMAL', occasionFactor: 29305.67, isDeleted: false })
         }
         else if (occasion === 'peak') {
-            setOcc({ id: 4, occasion: 'PEAK`', occasionFactor: 19348.9 })
+            setOcc({ id: 4, occasion: 'PEAK`', occasionFactor: 19348.9, isDeleted: false })
         }
     }, [occasion])
     // useEffect(() => {

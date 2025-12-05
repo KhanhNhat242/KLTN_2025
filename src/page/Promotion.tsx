@@ -8,7 +8,7 @@ import PromotionLine from '../components/PromotionLine'
 import { type RootState } from '../redux/store'
 import { useDispatch, useSelector } from 'react-redux'
 import { setPromotions } from '../redux/promotionsSlice'
-import type {Promotion, Promotion as PromotionInterface} from '../interface/Interface'
+import type {Promotion as PromotionType} from '../interface/Interface'
 import { setCurrentID } from '../redux/currentSelectedSlice'
 import { setBuyNGetMs } from '../redux/buyNGetMSlice'
 import { setPercentOffs } from '../redux/percentOffSlice'
@@ -21,13 +21,12 @@ const Promotion = () => {
     const [isEdit, setIsEdit] = useState<boolean>(false)
     const [currentnav, setCurrentnav] = useState<number | undefined>(0)
     const [currentFilter, setCurrentFilter] = useState<string>('all')
-    const [promotionsFilter, setPromotionsFilter] = useState<Promotion[]>([])
-    const [type, setType] = useState<number>()
+    const [promotionsFilter, setPromotionsFilter] = useState<PromotionType[]>([])
 
     const token = useSelector((state: RootState) => state.auth.accessToken)
     const dispatch = useDispatch()
     const promotions = useSelector((state: RootState) => state.promotions)
-    const [selectedPromo, setSelectedPromo] = useState<PromotionInterface>()
+    const [selectedPromo, setSelectedPromo] = useState<PromotionType>()
 
     const getData = async () => {
             await axios.get('https://apigateway.microservices.appf4s.io.vn/services/mspromotion/api/promotions?isDeleted.equals=false', {
@@ -135,7 +134,7 @@ const Promotion = () => {
         }    
     }
 
-    const handleDelete = async (promo: Promotion) => {
+    const handleDelete = async (promo: PromotionType) => {
         const now = new Date().toISOString()
         console.log('dlt', promo)
 

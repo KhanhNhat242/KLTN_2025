@@ -8,14 +8,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '../redux/store';
 import { setBuses } from '../redux/busSlice';
 import axios from 'axios';
-import type { Bus } from '../interface/Interface';
+import type { Bus as BusType } from '../interface/Interface';
 import { useNavigate } from 'react-router-dom';
 
 const Bus = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [isEdit, setIsEdit] = useState<boolean>(false)
   const [isDelete, setIsDelete] = useState<boolean>(false)
-  const [selectedBus, setSelectedBus] = useState<Bus>()
+  const [selectedBus, setSelectedBus] = useState<BusType>()
 
   const token = useSelector((state: RootState) => state.auth.accessToken)
   const dispatch = useDispatch()
@@ -47,7 +47,7 @@ const Bus = () => {
         
     }
 
-    const handleDelete = async (bus: Bus) => {
+    const handleDelete = async (bus: BusType) => {
       const now = new Date().toISOString()
       const res = await axios.get(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/vehicles/${bus?.id}`,
             {

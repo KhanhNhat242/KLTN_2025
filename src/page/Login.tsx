@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import adminicon from '../assets/adminicon.png'
 import emailicon from '../assets/emailicon.png'
 import pwdicon from '../assets/pwdicon.png'

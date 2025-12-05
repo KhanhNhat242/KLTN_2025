@@ -8,14 +8,14 @@ import { setRoutes } from '../redux/routeSlice'
 import type { RootState } from '../redux/store'
 import DeleteModal from '../components/DeleteModal'
 import RouteModal from '../components/RouteModal'
-import type { Route } from '../interface/Interface'
+import type { Route as RouteType } from '../interface/Interface'
 import SearchRoute from '../components/SearchRoute'
 
 const Route = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [isEdit, setIsEdit] = useState<boolean>(false)
     const [isDelete, setIsDelete] = useState<boolean>(false)
-    const [selectedRoute, setSelectedRoute] = useState<Route>()
+    const [selectedRoute, setSelectedRoute] = useState<RouteType>()
 
     const token = useSelector((state: RootState) => state.auth.accessToken)
     const dispatch = useDispatch()
@@ -39,7 +39,7 @@ const Route = () => {
         })
     }
 
-    const handleDelete = async (route: Route) => {
+    const handleDelete = async (route: RouteType) => {
         const now = new Date().toISOString()
 
         await axios.put(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/routes/${route.id}`, {

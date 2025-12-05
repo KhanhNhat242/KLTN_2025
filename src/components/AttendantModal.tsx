@@ -69,7 +69,7 @@ const AttendantModal = ({ setIsOpen, isEdit, attendant }: Props) => {
         await axios.post('https://apigateway.microservices.appf4s.io.vn/services/msroute/api/attendants', {
             "createdAt": now,
             "updatedAt": now,
-            "isDeleted": true,
+            "isDeleted": false,
             "deletedAt": "2025-11-14T15:52:37.141Z",
             "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
             "staff": {

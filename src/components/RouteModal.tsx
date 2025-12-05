@@ -94,7 +94,7 @@ const RouteModal = ({ setIsOpen, isEdit, route }: Props) => {
                 "baseFare": basefare,
                 "createdAt": now,
                 "updatedAt": now,
-                "isDeleted": true,
+                "isDeleted": false,
                 "deletedAt": "2025-10-18T10:26:17.325Z",
                 "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
                 "origin": {

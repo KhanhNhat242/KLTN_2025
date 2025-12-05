@@ -245,7 +245,7 @@ const StationModal = ({ setIsOpen, isEdit, station }: Props) => {
                 "active": active,
                 "createdAt": now,
                 "updatedAt": now,
-                "isDeleted": true,
+                "isDeleted": false,
                 "deletedAt": "2025-10-15T09:21:57.774Z",
                 "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
                 "address": {

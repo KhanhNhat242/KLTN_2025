@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
 import { add, remove } from "../redux/seatListSlice"
-import type { Seat } from "../interface/Interface"
-import type { RootState } from "../redux/store"
 
 interface Props {
     value: string,
@@ -18,7 +16,6 @@ const Seat = ({ value, isLock }: Props) => {
     // const currentTxt = 'text-white border-b-[#fff]'
     // const redBg = 'bg-[red]'
     const dispatch = useDispatch()
-    const seatmap = useSelector((state: RootState) => state.seatmap)
 
     // useEffect(() => {
     //     console.log('lock', isLock)

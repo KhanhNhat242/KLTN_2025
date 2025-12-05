@@ -1,5 +1,5 @@
 import './App.css'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route as Routee } from 'react-router-dom'
 import Home from './page/Home'
 import Trip from './page/Trip'
 import Bus from './page/Bus'
@@ -8,7 +8,7 @@ import Promotion from './page/Promotion'
 import BusDetail from './page/BusDetail'
 import Login from './page/Login'
 import Station from './page/Station'
-import Routee from './page/Route'
+import Route from './page/Route'
 import Payment from './page/Payment'
 import { useDispatch } from 'react-redux'
 import { setAccessToken, setRefreshToken } from './redux/authSlice'
@@ -35,23 +35,23 @@ function App() {
     <>
       <Router>
         <Routes>
-          <Route path='/log-in' element={<Login />}/>
-          <Route path='/home' element={<Home />}/>
-          <Route path='/trip' element={<Trip />}/>
-          <Route path='/bus' element={<Bus />}/>
-          <Route path='/ticket' element={<Ticket />}/>
-          <Route path='/promotion' element={<Promotion />} />
-          <Route path='/bus-detail' element={<BusDetail />} />
-          <Route path='/station' element={<Station />} />
-          <Route path='/route' element={<Routee />} />
-          <Route path='/payment' element={<Payment />} />
-          <Route path='/schedule' element={<Schedule />} />
-          <Route path='/ticket-price' element={<TicketPrice />} />
-          <Route path='/driver' element={<Driver />} />
-          <Route path='/attendant' element={<Attendant />} />
-          <Route path='/bill' element={<Bill />} />
-          <Route path='/booking' element={<Booking />} />
-          <Route path='/customer' element={<Customer />} />
+          <Routee path='/log-in' element={<Login />}/>
+          <Routee path='/home' element={<Home />}/>
+          <Routee path='/trip' element={<Trip />}/>
+          <Routee path='/bus' element={<Bus />}/>
+          <Routee path='/ticket' element={<Ticket />}/>
+          <Routee path='/promotion' element={<Promotion />} />
+          <Routee path='/bus-detail' element={<BusDetail />} />
+          <Routee path='/station' element={<Station />} />
+          <Routee path='/route' element={<Route />} />
+          <Routee path='/payment' element={<Payment />} />
+          <Routee path='/schedule' element={<Schedule />} />
+          <Routee path='/ticket-price' element={<TicketPrice />} />
+          <Routee path='/driver' element={<Driver />} />
+          <Routee path='/attendant' element={<Attendant />} />
+          <Routee path='/bill' element={<Bill />} />
+          <Routee path='/booking' element={<Booking />} />
+          <Routee path='/customer' element={<Customer />} />
         </Routes>
       </Router>
     </>

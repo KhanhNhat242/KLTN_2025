@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Header from '../components/Header'
 import HeaderTop from '../components/HeaderTop'
 import downloadicon from '../assets/downloadicon.png'
@@ -8,14 +8,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import type { RootState } from '../redux/store'
 import axios from 'axios'
 import { setStations, update } from '../redux/stationSlice'
-import type { Address, Station } from '../interface/Interface'
+import type { Address, Station as StationType } from '../interface/Interface'
 
 const Station = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [isEdit, setIsEdit] = useState<boolean>(false)
     const [isDelete, setIsDelete] = useState<boolean>(false)
     const [addresses, setAddresses] = useState<Address[]>([])
-    const [selectedStation, setSelectedStation] = useState<Station>()
+    const [selectedStation, setSelectedStation] = useState<StationType>()
 
     const token = useSelector((state: RootState) => state.auth.accessToken)
     const dispatch = useDispatch()
@@ -82,7 +82,7 @@ const Station = () => {
         }
     }
 
-    const handleDelete = async (station: Station) => {
+    const handleDelete = async (station: StationType) => {
         const now = new Date().toISOString()
 
         await axios.put(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/stations/${station?.id}`, {

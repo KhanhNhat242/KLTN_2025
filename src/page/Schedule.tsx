@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import type { RootState } from '../redux/store'
 import axios from 'axios'
@@ -9,13 +9,13 @@ import HeaderTop from '../components/HeaderTop'
 import { setSchedules } from '../redux/scheduleSlice'
 import ScheduleModal from '../components/ScheduleModal'
 import DeleteModal from '../components/DeleteModal'
-import type { Schedule } from '../interface/Interface'
+import type { Schedule as ScheduleType } from '../interface/Interface'
 
 const Schedule = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [isEdit, setIsEdit] = useState<boolean>(false)
     const [isDelete, setIsDelete] = useState<boolean>(false)
-    const [selectedSchedule, setSelectedSchedule] = useState<Schedule>()
+    const [selectedSchedule, setSelectedSchedule] = useState<ScheduleType>()
 
     const token = useSelector((state: RootState) => state.auth.accessToken)
     const dispatch = useDispatch()

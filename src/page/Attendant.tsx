@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Header from '../components/Header'
 import HeaderTop from '../components/HeaderTop'
 import downloadicon from '../assets/downloadicon.png'
-import type { Attendant } from '../interface/Interface'
+import type { Attendant as AttendantType } from '../interface/Interface'
 import { useDispatch, useSelector } from 'react-redux'
 import type { RootState } from '../redux/store'
 import axios from 'axios'
@@ -14,14 +14,14 @@ const Attendant = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [isEdit, setIsEdit] = useState<boolean>(false)
     const [isDelete, setIsDelete] = useState<boolean>(false)
-    const [selectedAttendant, setSelectedAttendant] = useState<Attendant>()
+    const [selectedAttendant, setSelectedAttendant] = useState<AttendantType>()
 
     const token = useSelector((state: RootState) => state.auth.accessToken)
     const dispatch = useDispatch()
     const attendants = useSelector((state: RootState) =>state.attendant)
 
     const getAttendants = async () => {
-        await axios.get('https://apigateway.microservices.appf4s.io.vn/services/msroute/api/attendants', {
+        await axios.get('https://apigateway.microservices.appf4s.io.vn/services/msroute/api/attendants?isDeleted.equals=false', {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'accept': '*/*',
@@ -53,6 +53,45 @@ const Attendant = () => {
         })
         .catch(() => {
             console.log('Get staff fail!')
+        })
+    }
+
+    const handleDelete = async (attendant: AttendantType) => {
+        const now = new Date().toISOString()
+
+        await axios.put(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/attendants/${attendant.id}`, {
+            "id": attendant.id,
+            "createdAt": "2025-12-05T15:22:10.181Z",
+            "updatedAt": now,
+            "isDeleted": true,
+            "deletedAt": "2025-12-05T15:22:10.181Z",
+            "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            "staff": {
+                "id": attendant.staff.id,
+                "name": attendant.staff.name,
+                "age": attendant.staff.age,
+                "gender": attendant.staff.gender,
+                "phoneNumber": attendant.staff.phoneNumber,
+                "status": attendant.staff.status,
+                "createdAt": "2025-12-05T15:22:10.181Z",
+                "updatedAt": "2025-12-05T15:22:10.181Z",
+                "isDeleted": false,
+                "deletedAt": "2025-12-05T15:22:10.181Z",
+                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            }
+        }, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'accept': '*/*',
+                'Content-Type': 'application/json',
+                'X-XSRF-TOKEN': '41866a2d-cdc1-4547-9eef-f6d3464f7b6b',
+            },
+        })
+        .then((res) => {
+            console.log(res.data)
+        })
+        .catch(() => {
+            console.log('Delete fail!')
         })
     }
 
@@ -119,6 +158,7 @@ const Attendant = () => {
                                     <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
                                         onClick={() => {
                                             setSelectedAttendant(a)
+                                            handleDelete(a)
                                             setIsDelete(true)
                                         }
                                         }>Xóa</button>

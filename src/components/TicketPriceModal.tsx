@@ -137,7 +137,7 @@ const TicketPriceModal = ({ setIsOpen, isEdit, trip }: Props) => {
             "occasionFactor": of,
             "createdAt": now,
             "updatedAt": now,
-            "isDeleted": true,
+            "isDeleted": false,
             "deletedAt": "2025-10-19T07:13:00.993Z",
             "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
             "route": {
@@ -473,7 +473,7 @@ const TicketPriceModal = ({ setIsOpen, isEdit, trip }: Props) => {
             "occasionFactor": of,
             "createdAt": now,
             "updatedAt": now,
-            "isDeleted": true,
+            "isDeleted": false,
             "deletedAt": "2025-10-19T07:13:00.993Z",
             "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
             "route": {
