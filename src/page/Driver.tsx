@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import Header from '../components/Header'
 import HeaderTop from '../components/HeaderTop'
 import downloadicon from '../assets/downloadicon.png'
-import type { Driver, Driver as DriverType } from '../interface/Interface'
+import type { Driver as DriverType } from '../interface/Interface'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
 import type { RootState } from '../redux/store'
@@ -56,7 +56,7 @@ const Driver = () => {
         })
     }
 
-    const handleDelete = async (driver: Driver) => {
+    const handleDelete = async (driver: DriverType) => {
         const now = new Date().toISOString()
 
         await axios.put(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/drivers/${driver.id}`, {
