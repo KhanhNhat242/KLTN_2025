@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import type { RootState } from '../redux/store'
 import { setBills, updateTrip } from '../redux/billSlice'
 import { useNavigate } from 'react-router-dom'
-import type { Bill } from '../interface/Interface'
+import type { Bill as BillType } from '../interface/Interface'
 import Excel from 'exceljs'
 import { saveAs } from 'file-saver'
 import FilterBill from '../components/FilterBill'
@@ -74,7 +74,7 @@ const Bill = () => {
         })
     }
 
-    const handleExportExcel = async (data: Bill[], fileName: string) => {
+    const handleExportExcel = async (data: BillType[], fileName: string) => {
         console.log('date', startDate, endDate)
 
         const now = new Date().toISOString();

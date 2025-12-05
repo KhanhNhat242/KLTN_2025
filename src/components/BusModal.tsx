@@ -49,7 +49,7 @@ const BusModal = ({ setIsOpen, isEdit, bus }: Props) => {
                 "status": "ACTIVE",
                 "createdAt": "2025-10-08T06:57:47.531Z",
                 "updatedAt": "2025-10-08T06:57:47.531Z",
-                "isDeleted": true,
+                "isDeleted": false,
                 "deletedAt": "2025-10-08T06:57:47.531Z",
                 "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
                 "seatMap": {

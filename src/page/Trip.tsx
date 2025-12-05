@@ -7,14 +7,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import type { RootState } from '../redux/store';
 import { setTrips } from '../redux/tripSlice';
-import type { Trip } from '../interface/Interface';
+import type { Trip as TripType } from '../interface/Interface';
 import SearchTrip from '../components/SearchTrip';
 
 const Trip = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [isEdit, setIsEdit] = useState<boolean>(false)
     const [isDelete, setIsDelete] = useState<boolean>(false)
-    const [selectedTrip, setSelectedTrip] = useState<Trip>()
+    const [selectedTrip, setSelectedTrip] = useState<TripType>()
     const [currentFilter, setCurrentFilter] = useState<string>('all')
 
     const token = useSelector((state: RootState) => state.auth.accessToken)
@@ -57,7 +57,7 @@ const Trip = () => {
       })
     }
 
-    const handleDelete = async (trip: Trip) => {
+    const handleDelete = async (trip: TripType) => {
       const now = new Date().toISOString()
       const st = new Date(trip.departureTime).toISOString()
       const et = new Date(trip.arrivalTime).toISOString()
@@ -425,9 +425,7 @@ const Trip = () => {
     }
 
     useEffect(() => {
-      if (token) {
-          getData()
-      }
+      getData()
     }, [token])
 
     useEffect(() => {

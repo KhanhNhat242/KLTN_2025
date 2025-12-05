@@ -17,7 +17,7 @@ const TripModal = ({ setIsOpen, isEdit, trip }: Props) => {
     const [currentPStart, setCurrentPStart] = useState<number>(0)
     const [currentPEnd, setCurrentPEnd] = useState<number>(0)
     const [routes, setRoutes] = useState<Route[]>([])
-    const [currentRID, setCurrentRID] = useState<number>(0)
+    // const [currentRID, setCurrentRID] = useState<number>(0)
     const [code, setCode] = useState<string>('')
     const [sTime, setSTime] = useState<string>('')
     const [eTime, setETime] = useState<string>('')
@@ -155,7 +155,7 @@ const TripModal = ({ setIsOpen, isEdit, trip }: Props) => {
                 "occasionFactor": 1,
                 "createdAt": now.toISOString(),
                 "updatedAt": now.toISOString(),
-                "isDeleted": true,
+                "isDeleted": false,
                 "deletedAt": "2025-10-19T07:13:00.993Z",
                 "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
                 "route": {
@@ -869,7 +869,7 @@ const TripModal = ({ setIsOpen, isEdit, trip }: Props) => {
                                 onChange={(e) => {
                                     const selected = routes.find(o => o.id === Number(e.target.value))
                                     if (selected) setRoute(selected)
-                                    setCurrentRID(Number(e.target.value))
+                                    // setCurrentRID(Number(e.target.value))
                                 }
                                 }>
                                 <option value="">{isEdit ? `Từ ${pStart} đến ${pEnd}` : 'Chọn bến xe'}</option>

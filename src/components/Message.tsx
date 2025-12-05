@@ -1,4 +1,3 @@
-import React from 'react'
 import chatbotlogo from '../assets/chatbotlogo.png'
 
 interface Props {

@@ -3,14 +3,14 @@ import DeleteModal from './DeleteModal'
 import PromotionDetailModal from './PromotionDetailModal'
 import { useSelector } from 'react-redux'
 import type { RootState } from '../redux/store'
-import {type PromotionLine} from '../interface/Interface'
+import type {PromotionLine as PromotionLineType} from '../interface/Interface'
 
 const PromotionLine = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [isEdit, setIsEdit] = useState<boolean>(false)
     const [isDelete, setIsDelete] = useState<boolean>(false)
     const [type, setType] = useState<number>(0)
-    const [selectedLine, setSelectedLine] = useState<PromotionLine>()
+    const [selectedLine, setSelectedLine] = useState<PromotionLineType>()
 
     const buyngetms = useSelector((state: RootState) => state.buyNgetMs)
     const percentoffs = useSelector((state: RootState) => state.percentOffS)

@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Header from '../components/Header'
 import HeaderTop from '../components/HeaderTop'
 import downloadicon from '../assets/downloadicon.png'
-import type { Driver } from '../interface/Interface'
+import type { Driver, Driver as DriverType } from '../interface/Interface'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
 import type { RootState } from '../redux/store'
@@ -14,14 +14,14 @@ const Driver = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [isEdit, setIsEdit] = useState<boolean>(false)
     const [isDelete, setIsDelete] = useState<boolean>(false)
-    const [selectedDriver, setSelectedDriver] = useState<Driver>()
+    const [selectedDriver, setSelectedDriver] = useState<DriverType>()
 
     const token = useSelector((state: RootState) => state.auth.accessToken)
     const dispatch = useDispatch()
     const drivers = useSelector((state: RootState) => state.driver)
 
     const getDrivers = async () => {
-        await axios.get('https://apigateway.microservices.appf4s.io.vn/services/msroute/api/drivers', {
+        await axios.get('https://apigateway.microservices.appf4s.io.vn/services/msroute/api/drivers?isDeleted.equals=false', {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'accept': '*/*',
@@ -56,12 +56,53 @@ const Driver = () => {
         })
     }
 
+    const handleDelete = async (driver: Driver) => {
+        const now = new Date().toISOString()
+
+        await axios.put(`https://apigateway.microservices.appf4s.io.vn/services/msroute/api/drivers/${driver.id}`, {
+            "id": driver.id,
+            "licenseClass": driver.licenseClass,
+            "yearsExperience": driver.yearsExperience,
+            "createdAt": "2025-12-05T15:09:41.399Z",
+            "updatedAt": now,
+            "isDeleted": true,
+            "deletedAt": now,
+            "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            "staff": {
+                "id": driver.staff.id,
+                "name": driver.staff.name,
+                "age": driver.staff.age,
+                "gender": driver.staff.gender,
+                "phoneNumber": driver.staff.phoneNumber,
+                "status": driver.staff.status,
+                "createdAt": "2025-12-05T15:09:41.400Z",
+                "updatedAt": "2025-12-05T15:09:41.400Z",
+                "isDeleted": false,
+                "deletedAt": "2025-12-05T15:09:41.400Z",
+                "deletedBy": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            } 
+        }, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'accept': '*/*',
+                'Content-Type': 'application/json',
+                'X-XSRF-TOKEN': '41866a2d-cdc1-4547-9eef-f6d3464f7b6b',
+            },
+        })
+        .then((res) => {
+            console.log(res.data)
+        })
+        .catch(() => {
+            console.log('Delete fail!')
+        })
+    }
+
     useEffect(() => {
         getDrivers()
     }, [])
 
     useEffect(() => {
-        if (drivers.length >= 20) {
+        if (drivers.length >= 10) {
             drivers.forEach((d) => {
                 if (!d.staff.age) {
                     getStaffs(d.staff.id)
@@ -126,6 +167,7 @@ const Driver = () => {
                                     <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
                                         onClick={() => {
                                             setSelectedDriver(d)
+                                            handleDelete(d)
                                             setIsDelete(true)
                                         }
                                         }>Xóa</button>

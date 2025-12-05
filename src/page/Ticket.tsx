@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '../redux/store';
 import axios from 'axios';
 import { setTickets, updateTrip, updateVehicle } from '../redux/ticketSlice';
-import type { Bus, Ticket, Trip } from '../interface/Interface';
+import type { Bus, Ticket as TicketType, Trip } from '../interface/Interface';
 
 const Ticket = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -52,7 +52,7 @@ const Ticket = () => {
       // console.log(res.data)
       dispatch(setTickets(res.data))
       const ta = res.data
-      setCurrentTripID(ta.map((t: Ticket) => t.tripId))
+      setCurrentTripID(ta.map((t: TicketType) => t.tripId))
     })
     .catch(() => {
       console.log('Get tickets fail!')
