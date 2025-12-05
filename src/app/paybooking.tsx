@@ -81,35 +81,43 @@ export default function PayBooking() {
   };
 
   // Đã có paymentUrl => mở WebView thanh toán
-  if (paymentUrl) {
-    return (
-      <WebView
-        source={{ uri: paymentUrl }}
-        onNavigationStateChange={(navState) => {
-          const url = navState.url;
+ if (paymentUrl) {
+   return (
+     <WebView
+       source={{ uri: paymentUrl }}
+       onShouldStartLoadWithRequest={(request) => {
+         const url = request.url;
+         console.log("URL:", url);
 
-          // ✅ Bắt callback VNPAY
-          if (url.includes("vnpay/callback")) {
-            if (url.includes("vnp_ResponseCode=00")) {
-              Alert.alert("✅ Thành công", "Thanh toán thành công!");
+         if (url.includes("/payment/sepay/success")) {
+           Alert.alert("✅ Thành công", "Thanh toán thành công!");
 
-              router.replace({
-                pathname: "/success",
-                params: { code: booking.bookingCode },
-              });
-            } else {
-              Alert.alert("❌ Thất bại", "Thanh toán không thành công");
+         setTimeout(() => {
+           router.replace({
+             pathname: "/(tabs)/myticket",
+             params: { id: bookingId.toString() },
+           });
+         }, 300);
 
-              router.replace({
-                pathname: "/failed",
-                params: { code: booking.bookingCode },
-              });
-            }
-          }
-        }}
-      />
-    );
-  }
+           return false;
+         }
+
+         if (url.includes("/payment/sepay/error")) {
+           Alert.alert("❌ Thất bại", "Thanh toán thất bại!");
+
+           setTimeout(() => {
+             router.replace("/(tabs)/home");
+           }, 300);
+
+           return false;
+         }
+
+         return true;
+       }}
+     />
+   );
+ }
+
 
   return (
     <View style={styles.container}>
