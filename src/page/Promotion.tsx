@@ -1,0 +1,320 @@
+import Header from '../components/Header'
+import HeaderTop from '../components/HeaderTop'
+import downloadicon from '../assets/downloadicon.png'
+import { useEffect, useState } from 'react'
+import PromotionModal from '../components/PromotionModal'
+import axios from 'axios'
+import PromotionLine from '../components/PromotionLine'
+import { type RootState } from '../redux/store'
+import { useDispatch, useSelector } from 'react-redux'
+import { setPromotions } from '../redux/promotionsSlice'
+import type {Promotion, Promotion as PromotionInterface} from '../interface/Interface'
+import { setCurrentID } from '../redux/currentSelectedSlice'
+import { setBuyNGetMs } from '../redux/buyNGetMSlice'
+import { setPercentOffs } from '../redux/percentOffSlice'
+import DeleteModal from '../components/DeleteModal'
+// import type { PromotionLine as PromotionLineInterface } from '../interface/Interface'
+
+const Promotion = () => {
+    const [isOpen, setIsOpen] = useState<boolean>(false)
+    const [isDelete, setIsDelete] = useState<boolean>(false)
+    const [isEdit, setIsEdit] = useState<boolean>(false)
+    const [currentnav, setCurrentnav] = useState<number | undefined>(0)
+    const [currentFilter, setCurrentFilter] = useState<string>('all')
+    const [promotionsFilter, setPromotionsFilter] = useState<Promotion[]>([])
+    const [type, setType] = useState<number>()
+
+    const token = useSelector((state: RootState) => state.auth.accessToken)
+    const dispatch = useDispatch()
+    const promotions = useSelector((state: RootState) => state.promotions)
+    const [selectedPromo, setSelectedPromo] = useState<PromotionInterface>()
+
+    const getData = async () => {
+            await axios.get('https://apigateway.microservices.appf4s.io.vn/services/mspromotion/api/promotions?isDeleted.equals=false', {
+                params: {
+                    'page': '0',
+                    'size': '40',
+                },
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'accept': '*/*',
+                    'Content-Type': 'application/json',
+                    'X-XSRF-TOKEN': '41866a2d-cdc1-4547-9eef-f6d3464f7b6b',
+                },
+            })
+            .then((res) => {
+                dispatch(setPromotions(res.data))
+                // console.log(promotions)
+            })
+            .catch(() => {
+                console.log('Get data fail!')
+            })
+            // console.log('data: ',res.data)
+            // setPromotions(res.data)
+        
+    }
+    
+    const handleCollapse = async () => {
+        try {
+            const line = await axios.get(`https://apigateway.microservices.appf4s.io.vn/services/mspromotion/api/promotions/${currentnav}/detail`,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'accept': '*/*',
+                        'Content-Type': 'application/json',
+                        'X-XSRF-TOKEN': '41866a2d-cdc1-4547-9eef-f6d3464f7b6b',
+                    },
+                }
+            )
+            // console.log('line data', line.data.percentOffs)
+            // console.log('line data', line.data.buyNGetMS)
+            // setNum1(line.data.buyNGetMS.length)
+            // setNum2(line.data.percentOffs.length)
+            
+            dispatch(setBuyNGetMs(line.data.buyNGetMS))
+            dispatch(setPercentOffs(line.data.percentOffs))
+            // setBuyngetms(line.data.buyNGetMS)
+            // setPercentoffs(line.data.percentOffs)
+        }
+        catch (err) {
+            console.log(err)
+        }
+    }
+
+    const handleFilter = async () => {
+        const date = new Date()
+        const cd = date.toISOString().split("T")[0]
+        // console.log(cd)
+        if (currentFilter === 'happening') {
+            await axios.get(`https://apigateway.microservices.appf4s.io.vn/services/mspromotion/api/promotions?startDate.lessThan=${cd}&endDate.greaterThan=${cd}`,{
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'accept': '*/*',
+                    'Content-Type': 'application/json',
+                    'X-XSRF-TOKEN': '41866a2d-cdc1-4547-9eef-f6d3464f7b6b',
+                },
+            })
+            .then((res) => {
+                setPromotionsFilter(res.data)
+            })
+            .catch(() => {
+                console.log('Filter fail!')
+            })
+        }
+        else if (currentFilter === 'ended') {
+            await axios.get(`https://apigateway.microservices.appf4s.io.vn/services/mspromotion/api/promotions?endDate.lessThan=${cd}`,{
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'accept': '*/*',
+                    'Content-Type': 'application/json',
+                    'X-XSRF-TOKEN': '41866a2d-cdc1-4547-9eef-f6d3464f7b6b',
+                },
+            })
+            .then((res) => {
+                setPromotionsFilter(res.data)
+            })
+            .catch(() => {
+                console.log('Filter fail!')
+            })
+        }
+        else if (currentFilter === 'notStarted') {
+            await axios.get(`https://apigateway.microservices.appf4s.io.vn/services/mspromotion/api/promotions?startDate.greaterThan=${cd}`,{
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'accept': '*/*',
+                    'Content-Type': 'application/json',
+                    'X-XSRF-TOKEN': '41866a2d-cdc1-4547-9eef-f6d3464f7b6b',
+                },
+            })
+            .then((res) => {
+                setPromotionsFilter(res.data)
+            })
+            .catch(() => {
+                console.log('Filter fail!')
+            })
+        }    
+    }
+
+    const handleDelete = async (promo: Promotion) => {
+        const now = new Date().toISOString()
+        console.log('dlt', promo)
+
+        await axios.put(`https://apigateway.microservices.appf4s.io.vn/services/mspromotion/api/promotions/${promo.id}`, {
+            'id': promo.id,
+            'code': promo.code,
+            'description': promo.description,
+            'startDate': promo.startDate,
+            'endDate': promo.endDate,
+            'usageLimit': promo.usageLimit,
+            'usedCount': promo.usedCount,
+            'createdAt': '2025-10-02T13:59:26.338Z',
+            'updatedAt': now,
+            'isDeleted': true,
+            'deletedAt': now,
+            'deletedBy': '3fa85f64-5717-4562-b3fc-2c963f66afa6'
+        }, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'accept': '*/*',
+                'Content-Type': 'application/json',
+            }
+        })
+        .then((res) => {
+            console.log(res.data)
+        })
+        .catch((error) => {
+            alert('Error when deleting!')
+            console.log(error)
+        })
+    }
+
+    useEffect(() => {
+        // console.log('token:', accesstoken)
+        getData()
+        // console.log(temp)
+    }, [token])
+
+    
+    useEffect(() => {
+        if (token && currentnav !== 0) {
+            handleCollapse()
+        }
+        console.log(currentnav)
+
+    }, [currentnav, token])
+
+    useEffect(() => {
+        handleFilter()
+    }, [currentFilter])
+
+    return (
+        <div className='w-full flex flex-row'>
+            <Header />
+            <div className='w-full p-[10px]'>
+                <HeaderTop />
+                <div className='w-full flex flex-row justify-between my-[10px]'>
+                    <h2 className='text-[20px] text-left font-bold mt-[10px] mb-[10px]'>Quản lý khuyến mãi</h2>
+                    <div className='flex flex-row'>
+                        <select className='flex flex-row items-center rounded-[10px] p-[10px] ml-[10px]' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}
+                            onChange={(e) => setCurrentFilter(e.target.value)}>
+                            <option value="all">Tất cả</option>
+                            <option value="happening">Đang diễn ra</option>
+                            <option value="ended">Đã kết thúc</option>
+                            <option value="notStarted">Chưa diễn ra</option>
+                        </select>
+                        <button className='p-[10px] flex flex-row items-center mx-[10px] rounded-[10px] cursor-pointer' style={{borderStyle: 'solid', borderWidth: 1, borderColor: '#ccc'}}>
+                            <img src={downloadicon} className='size-[20px] mr-[5px]' />
+                            <p>Xuất Excel</p>
+                        </button>
+                        <button className='p-[10px] cursor-pointer text-white bg-[#1447E6] rounded-[10px]' 
+                            onClick={() => {
+                                setIsEdit(false)
+                                setIsOpen(true)
+                            }
+                            }>+ Tạo khuyến mãi mới</button>
+                    </div>
+                </div>
+                <div className='mt-[20px]'>
+                    <table className="w-full border border-gray-200 text-left">
+                        <thead className="bg-gray-100">
+                            <tr>
+                                <th className="p-3 border-b">Mã vé</th>
+                                <th className="p-3 border-b">Tên khuyến mãi</th>
+                                <th className="p-3 border-b">Mô tả</th>
+                                <th className="p-3 border-b">Ngày bắt đầu</th>
+                                <th className="p-3 border-b">Ngày kết thúc</th>
+                                <th className="border-b">Số lượng giới hạn</th>
+                                <th className="border-b">Số lượng đã sử dụng</th>
+                                <th className="p-3 border-b">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {currentFilter === 'all' ? promotions.map((promo) => {
+                                return (
+                                    <>
+                                        <tr key={promo.id} className="hover:bg-gray-50 border-b-[#ccc] cursor-pointer" 
+                                            onClick={() => {
+                                                if (currentnav === 0) {
+                                                    setCurrentnav(promo.id)
+                                                    dispatch(setCurrentID(promo.id))
+                                                }
+                                                else if (currentnav === promo.id) {
+                                                    setCurrentnav(0)       
+                                                }}}>
+                                            <td className="p-3">{promo.id}</td>
+                                            <td className="p-3">{promo.code}</td>
+                                            <td className="p-3">{promo.description}</td>
+                                            <td className="p-3">{`${promo.startDate[2]}/${promo.startDate[1]}/${promo.startDate[0]}`}</td>
+                                            <td className="p-3">{`${promo.endDate[2]}/${promo.endDate[1]}/${promo.endDate[0]}`}</td>
+                                            <td>{promo.usageLimit}</td>
+                                            <td>{promo.usedCount}</td>
+                                            <td className="p-3 space-x-2">
+                                                <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
+                                                    onClick={() => {
+                                                        setSelectedPromo(promo)
+                                                        setIsOpen(true)
+                                                        setIsEdit(true)
+                                                }}>Sửa</button>
+                                                <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" onClick={() => setIsDelete(true)}>Xóa</button>
+                                            </td>
+                                        </tr>
+                                        <tr className='border-b'>
+                                            <td colSpan={8}>
+                                                {currentnav === promo.id && <PromotionLine />}
+                                            </td>
+                                        </tr>
+                                    </>
+                            )}) : promotionsFilter.map((promo) => {
+                                return (
+                                    <>
+                                        <tr key={promo.id} className="hover:bg-gray-50 border-b-[#ccc] cursor-pointer" 
+                                            onClick={() => {
+                                                if (currentnav === 0) {
+                                                    setCurrentnav(promo.id)
+                                                    dispatch(setCurrentID(promo.id))
+                                                }
+                                                else if (currentnav === promo.id) {
+                                                    setCurrentnav(0)       
+                                                }}}>
+                                            <td className="p-3">{promo.id}</td>
+                                            <td className="p-3">{promo.code}</td>
+                                            <td className="p-3">{promo.description}</td>
+                                            <td className="p-3">{`${promo.startDate[2]}/${promo.startDate[1]}/${promo.startDate[0]}`}</td>
+                                            <td className="p-3">{`${promo.endDate[2]}/${promo.endDate[1]}/${promo.endDate[0]}`}</td>
+                                            <td>{promo.usageLimit}</td>
+                                            <td>{promo.usedCount}</td>
+                                            <td className="p-3 space-x-2">
+                                                <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
+                                                onClick={() => {
+                                                    setSelectedPromo(promo)
+                                                    setIsOpen(true)
+                                                    setIsEdit(true)
+                                                }}>Sửa</button>
+                                                <button className="p-[5px] cursor-pointer text-blue-600 hover:underline" 
+                                                    onClick={() => {
+                                                        setSelectedPromo(promo)
+                                                        handleDelete(promo)
+                                                        setIsDelete(true)
+                                                    }
+                                                    }>Xóa</button>
+                                            </td>
+                                        </tr>
+                                        <tr className='border-b'>
+                                            <td colSpan={8}>
+                                                {currentnav === promo.id && <PromotionLine />}
+                                            </td>
+                                        </tr>
+                                    </>
+                            )})
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            { isOpen && (isEdit ? <PromotionModal isEdit={true} setIsOpen={setIsOpen} promo={selectedPromo} /> : <PromotionModal isEdit={false} setIsOpen={setIsOpen} /> ) }
+            { isDelete && <DeleteModal setIsDelete={setIsDelete} promotion={selectedPromo}  /> }
+        </div>
+    )
+}
+
+export default Promotion

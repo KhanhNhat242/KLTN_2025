@@ -1,0 +1,39 @@
+    const getPercentOff = async (id: number) => {
+        await axios.get(`https://apigateway.microservices.appf4s.io.vn/services/mspromotion/api/promotions/${id}/percent-off-total`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'accept': '*/*',
+                'Content-Type': 'application/json',
+                'X-XSRF-TOKEN': '41866a2d-cdc1-4547-9eef-f6d3464f7b6b',
+            },
+        })
+        .then((res) => {
+            console.log('get p', res.data)
+            if (res.data.length > 0 && !percentOffs.includes(res.data)) {
+                setPercentOffs(prev => [...prev, res.data])
+            }
+        })
+        .catch(() => {
+            console.log('Get percentoffs fail!')
+        })
+    }
+
+    const getBuyngetms = async (id: number) => {
+        await axios.get(`https://apigateway.microservices.appf4s.io.vn/services/mspromotion/api/promotions/${id}/buy-n-get-m-free`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'accept': '*/*',
+                'Content-Type': 'application/json',
+                'X-XSRF-TOKEN': '41866a2d-cdc1-4547-9eef-f6d3464f7b6b',
+            },
+        })
+        .then((res) => {
+            // console.log('get b', res.data)
+            if (res.data.length > 0 && !buyngetms.includes(res.data)) {
+                setBuyngetms(prev => [...prev, res.data])
+            }
+        })
+        .catch(() => {
+            console.log('Get buyngetms fail!')
+        })
+    }
