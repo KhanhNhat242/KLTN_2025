@@ -19,6 +19,7 @@ import Attendant from './page/Attendant'
 import Bill from './page/Bill'
 import Booking from './page/Booking'
 import Customer from './page/Customer'
+import Welcome from './page/Welcome'
 
 function App() {
   const accessToken = localStorage.getItem('accessToken')
@@ -35,6 +36,7 @@ function App() {
     <>
       <Router>
         <Routes>
+          <Routee path='/' element={<Welcome />}/>
           <Routee path='/log-in' element={<Login />}/>
           <Routee path='/home' element={<Home />}/>
           <Routee path='/trip' element={<Trip />}/>
