@@ -29,7 +29,7 @@ const account = () => {
             <View className="pl-[10px]">
               <Text className="text-white">Xin chào</Text>
               <Text className="text-white text-[20px] font-bold">
-                Trần Văn Nguyên
+                Nguyễn Nhật Khanh
               </Text>
             </View>
             <TouchableOpacity

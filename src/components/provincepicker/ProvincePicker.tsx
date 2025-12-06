@@ -1,5 +1,5 @@
 import { Modal, View, Text, TouchableOpacity, FlatList } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type Province = {
   id: number;
@@ -24,6 +24,11 @@ const ProvincePicker = ({
   visible,
   onClose,
 }: Props) => {
+
+  useEffect(() => {
+    provinces.sort((a, b) => a.name.localeCompare(b.name))
+  }, [])
+
   return (
     <Modal visible={visible} animationType="slide" transparent>
       <View className="flex-1 bg-[rgba(0,0,0,0.3)] justify-center items-center">

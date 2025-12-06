@@ -29,26 +29,6 @@ const _layout = () => {
       />
 
       <Tabs.Screen
-        name="promotion"
-        options={{
-          tabBarLabel: "Khuyến mãi",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="pricetag-outline" size={size} color={color} />
-          ),
-        }}
-      />
-
-      <Tabs.Screen
-        name="notification"
-        options={{
-          tabBarLabel: "Thông báo",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="notifications-outline" size={size} color={color} />
-          ),
-        }}
-      />
-
-      <Tabs.Screen
         name="account"
         options={{
           tabBarLabel: "Tài khoản",

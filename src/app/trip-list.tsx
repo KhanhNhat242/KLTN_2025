@@ -35,61 +35,50 @@ export default function TripList() {
             justifyContent: "space-between",
             alignItems: "center",
           }}>
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Image
-              source={{
-                uri: item.vehicle.brandLogo || "https://via.placeholder.com/50",
-              }}
-              style={{
-                width: 50,
-                height: 30,
-                resizeMode: "contain",
-                marginRight: 10,
-              }}
-            />
+          <View className="w-full flex flex-row justify-between">
             <Text style={{ fontWeight: "600" }}>
               {item.vehicle.brand || "FUTA Bus Lines"}
             </Text>
+            <Text style={{ fontWeight: "bold", fontSize: 16, color: "#007AFF" }}>
+              {(item.route.baseFare*1000).toLocaleString('it-IT', {style : 'currency', currency : 'VND'})}
+            </Text>
           </View>
-          <Text style={{ fontWeight: "bold", fontSize: 16, color: "#007AFF" }}>
-            {item.price?.toLocaleString()}₫
-          </Text>
         </View>
 
         {/* Thông tin xe */}
-        <Text style={{ marginTop: 5 }}>
+        {/* <Text style={{ marginTop: 5 }}>
           {item.driver?.name || "Phương Trang"} - Ghế còn{" "}
           {item.availableSeats || 5}
-        </Text>
+        </Text> */}
+        <Text className="my-[5px]">{`Từ ${item.route.origin.name} đến ${item.route.destination.name}`}</Text>
         <Text>
-          Loại xe: {item.vehicle.type || "Limousine"} - Ghế ngồi 16 chỗ
+          Loại xe: {item.vehicle.type || "Limousine"}
         </Text>
 
         {/* Giờ đi - giờ đến */}
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            marginTop: 10,
-          }}>
-          <Text>
+        <View className="w-full flex flex-row justify-between items-center my-[5px]">
+          <Text className="w-[15%]">
             {new Date(item.departureTime * 1000).toLocaleTimeString([], {
               hour: "2-digit",
               minute: "2-digit",
             })}{" "}
-            →
           </Text>
-          <Text>
+          <View className="w-[65%] flex flex-row items-center">
+              <Image source={require('../../assets/starticon.png')} />
+              <Text className="w-[60%] h-[1px]" style={{borderColor: '#ccc', borderStyle: 'dotted', borderWidth: 1}}></Text>
+              <Image source={require('../../assets/endicon.png')} />
+          </View>
+          <Text className="w-[15%]">
             {new Date(item.arrivalTime * 1000).toLocaleTimeString([], {
               hour: "2-digit",
               minute: "2-digit",
             })}
           </Text>
         </View>
-        <Text style={{ textAlign: "center", color: "#999", marginTop: 2 }}>
+        {/* <Text style={{ textAlign: "center", color: "#999", marginTop: 2 }}>
           {item.route?.distanceKm ? `${item.route.distanceKm} km` : "120km"} •{" "}
           {item.duration || "3 giờ 25 phút"}
-        </Text>
+        </Text> */}
 
         {/* Nút chọn chỗ */}
         <TouchableOpacity

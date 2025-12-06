@@ -154,7 +154,7 @@ const Home = () => {
           style={styles.bg}
           imageStyle={styles.bgImage}
         >
-          <Text style={styles.headerText}>Bạn muốn đi đâu, Lộc</Text>
+          <Text style={styles.headerText}>Bạn muốn đi đâu, Khanh</Text>
         </ImageBackground>
 
         {/* Chọn điểm đi & điểm đến */}

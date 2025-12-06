@@ -15,7 +15,6 @@ export default function WelcomeScreen() {
     <SafeAreaView>
       <View className=" w-full h-full flex-column items-center justify-center">
         <Text>hello world</Text>
-       
       </View>
     </SafeAreaView>
   );
