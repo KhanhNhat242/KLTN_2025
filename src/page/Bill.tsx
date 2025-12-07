@@ -262,7 +262,7 @@ const Bill = () => {
                                     <td className="p-3 border-b">{b.bookingCode}</td>
                                     <td className="p-3 border-b">{`${b.trip?.route.origin.address.ward.district.province.name} - ${b.trip?.route.destination.address.ward.district.province.name}`}</td>
                                     <td className="p-3 border-b">{b.quantity}</td>
-                                    <td className="p-3 border-b">{b.totalAmount < 999.999 ? (1000*b.totalAmount).toLocaleString('it-IT', {style : 'currency', currency : 'VND'}) : b.totalAmount.toLocaleString('it-IT', {style : 'currency', currency : 'VND'})}</td>
+                                    <td className="p-3 border-b">{(1000*b.totalAmount).toLocaleString('it-IT', {style : 'currency', currency : 'VND'})}</td>
                                     <td className="p-3 border-b">{formatTimestamp(Number(b.bookedAt))}</td>
                                     <td className="p-3 border-b">{formatTimestamp(Number(b.expiresAt))}</td>
                                     <td className="p-3 border-b">{b.status}</td>
