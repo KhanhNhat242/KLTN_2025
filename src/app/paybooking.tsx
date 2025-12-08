@@ -12,17 +12,17 @@ import { WebView } from "react-native-webview";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function PayBooking() {
-  const params = useLocalSearchParams();
+  const { booking } = useLocalSearchParams();
+  const bookingData = JSON.parse(booking as string);
 
-  const booking = JSON.parse(
-    Array.isArray(params.booking) ? params.booking[0] : params.booking!
-  );
+  const bookingId = bookingData.bookingId;
+  const tripId = bookingData.tripId;
 
-  const [paymentUrl, setPaymentUrl] = useState<string | null>(null);
+  const [paymentUrl, setPaymentUrl] = useState(bookingData.paymentUrl);
   const [loading, setLoading] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(60); // 60s giữ ghế
+  const [timeLeft, setTimeLeft] = useState(60);
   const [expired, setExpired] = useState(false);
-  const bookingId = booking.bookingId;
+
   // Countdown giữ ghế
   useEffect(() => {
     if (timeLeft <= 0) {
@@ -30,10 +30,7 @@ export default function PayBooking() {
       return;
     }
 
-    const timer = setTimeout(() => {
-      setTimeLeft((prev) => prev - 1);
-    }, 1000);
-
+    const timer = setTimeout(() => setTimeLeft((prev) => prev - 1), 1000);
     return () => clearTimeout(timer);
   }, [timeLeft]);
 
@@ -57,15 +54,13 @@ export default function PayBooking() {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            bookingId: booking.bookingId,
+            bookingId: bookingId,
             method: "SEPAY",
           }),
         }
       );
 
       const data = await res.json();
-
-      console.log("PAYMENT DATA:", data);
 
       if (data.paymentUrl) {
         setPaymentUrl(data.paymentUrl);
@@ -80,64 +75,79 @@ export default function PayBooking() {
     }
   };
 
-  // Đã có paymentUrl => mở WebView thanh toán
- if (paymentUrl) {
-   return (
-     <WebView
-       source={{ uri: paymentUrl }}
-       onShouldStartLoadWithRequest={(request) => {
-         const url = request.url;
-         console.log("URL:", url);
+  // Khi đã có paymentUrl
+  if (paymentUrl) {
+    const handlePaymentSuccess = async () => {
+      try {
+        Alert.alert("✅ Thành công", "Thanh toán thành công!");
 
-         if (url.includes("/payment/sepay/success")) {
-           Alert.alert("✅ Thành công", "Thanh toán thành công!");
+        const token = await AsyncStorage.getItem("token");
 
-         setTimeout(() => {
-           router.replace({
-             pathname: "/(tabs)/myticket",
-             params: { id: bookingId.toString() },
-           });
-         }, 300);
+        const tripRes = await fetch(
+          `https://apigateway.microservices.appf4s.io.vn/services/msroute/api/trips/${tripId}/detail`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-           return false;
-         }
+        const tripData = await tripRes.json();
 
-         if (url.includes("/payment/sepay/error")) {
-           Alert.alert("❌ Thất bại", "Thanh toán thất bại!");
+        await AsyncStorage.setItem(
+          "last_trip_data",
+          JSON.stringify(tripData.tripDTO)
+        );
 
-           setTimeout(() => {
-             router.replace("/(tabs)/home");
-           }, 300);
+        router.replace({
+          pathname: "/(tabs)/myticket",
+          params: { id: bookingId },
+        });
+      } catch (err) {
+        console.log(err);
+        Alert.alert("Lỗi", "Có lỗi xảy ra khi xử lý thanh toán");
+      }
+    };
 
-           return false;
-         }
+    return (
+      <WebView
+        source={{ uri: paymentUrl }}
+        onShouldStartLoadWithRequest={(request) => {
+          const url = request.url;
 
-         return true;
-       }}
-     />
-   );
- }
+          if (url.includes("/payment/sepay/success")) {
+            handlePaymentSuccess();
+            return false;
+          }
 
+          if (url.includes("/payment/sepay/error")) {
+            Alert.alert("❌ Thất bại", "Thanh toán thất bại!");
+            router.replace("/(tabs)/home");
+            return false;
+          }
+
+          return true;
+        }}
+      />
+    );
+  }
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Thanh toán booking</Text>
-
-      {/* Countdown */}
       <Text style={styles.timer}>Thời gian giữ ghế: {timeLeft}s</Text>
 
       <View style={styles.card}>
-        <Text style={styles.label}>Mã booking: {booking.bookingCode}</Text>
-        <Text style={styles.label}>Số ghế: {booking.seats.join(", ")}</Text>
-        <Text style={styles.label}>Số lượng: {booking.quantity}</Text>
-        <Text style={styles.amount}>Tổng tiền: {booking.totalAmount} VND</Text>
-        <Text style={styles.label}>Trạng thái: {booking.status}</Text>
+        <Text style={styles.label}>Mã booking: {bookingData.bookingCode}</Text>
+        <Text style={styles.label}>Số ghế: {bookingData.seats.join(", ")}</Text>
+        <Text style={styles.label}>Số lượng: {bookingData.quantity}</Text>
+        <Text style={styles.amount}>{bookingData.totalAmount} VND</Text>
+        <Text style={styles.label}>Trạng thái: {bookingData.status}</Text>
       </View>
 
       {expired ? (
-        <Text style={styles.expiredText}>
-          ⛔ Booking đã hết hạn, vui lòng đặt lại
-        </Text>
+        <Text style={styles.expiredText}>⛔ Booking đã hết hạn</Text>
       ) : (
         <TouchableOpacity
           style={styles.btn}
@@ -146,7 +156,7 @@ export default function PayBooking() {
           {loading ? (
             <ActivityIndicator color="#fff" />
           ) : (
-            <Text style={styles.btnText}>Thanh toán bằng VNPAY</Text>
+            <Text style={styles.btnText}>Thanh toán bằng SEPAY</Text>
           )}
         </TouchableOpacity>
       )}
@@ -162,7 +172,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 15,
     color: "#FF3B30",
-    fontWeight: "600",
   },
   card: {
     borderWidth: 1,
@@ -171,21 +180,9 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginBottom: 30,
   },
-  label: {
-    marginBottom: 8,
-    fontSize: 15,
-  },
-  amount: {
-    marginTop: 10,
-    fontWeight: "bold",
-    fontSize: 18,
-    color: "#007AFF",
-  },
-  btn: {
-    backgroundColor: "#007AFF",
-    padding: 16,
-    borderRadius: 12,
-  },
+  label: { marginBottom: 8, fontSize: 15 },
+  amount: { marginTop: 10, fontWeight: "bold", fontSize: 18, color: "#007AFF" },
+  btn: { backgroundColor: "#007AFF", padding: 16, borderRadius: 12 },
   btnText: {
     color: "#fff",
     textAlign: "center",

@@ -5,40 +5,22 @@ import {
   ScrollView,
   StyleSheet,
   Modal,
+  Alert,
+  ActivityIndicator,
 } from "react-native";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MaterialIcons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Picker } from "@react-native-picker/picker";
+import { useFocusEffect } from "@react-navigation/native";
+
 type Seat = {
   id: string;
-  status: "empty" | "selected" | "sold";
+  status: "empty" | "selected" | "sold" | "locked";
 };
 
 type SeatGroup = "lowerLeft" | "lowerRight" | "upperLeft" | "upperRight";
-
-export interface Promotion {
-  id: number;
-  code: string;
-  description: string;
-  startDate: [];
-  endDate: [];
-  buyNGetMS: BuyNGetM[];
-  percentOffs: PercentOff[];
-  usageLimit: number;
-  usedCount: number;
-  isDeleted: boolean;
-}
-
-export interface PercentOff {
-  id: number;
-  percent: number;
-  maxOff: number;
-  minPrice: number;
-  isDeleted: boolean;
-}
 
 export interface BuyNGetM {
   id: number;
@@ -47,35 +29,35 @@ export interface BuyNGetM {
   isDeleted: boolean;
 }
 
-export interface SeatLockDTO {
+export interface PercentOff {
   id: number;
-  seatNo: string;
-  status: string; // COMMITTED | PENDING | BOOKED | PAID
-  userId: number;
-  bookingId: number;
-  createdAt: number;
-  updatedAt: number;
-  expiresAt: number;
-  isDelete?: boolean;
-  idempotencyKey?: string;
+  minPrice: number;
+  percent: number;
+  maxOff: number;
+  isDeleted: boolean;
 }
-
 
 
 export default function SeatPage() {
   const params = useLocalSearchParams();
   const [showSeatModal, setShowSeatModal] = useState(false);
-  // const [promo, setPromo] = useState<string>("");
-
-  const [promotions, setPromotions] = useState<Promotion[]>([]);
-  const [cPromotions, setCPromotions] = useState<Promotion[]>([]);
-  const [applyPromotion, setApplyPromotion] = useState<string[]>([]);
-  const [promoCode, setPromoCode] = useState<string>("");
-
   const [modalKey, setModalKey] = useState(0);
+  const [token, setToken] = useState<string | null>(null);
 
-  const [price, setPrice] = useState<number>(1);
-  const [finalPrice, setFinalPrice] = useState<number>(1);
+  const [promotions, setPromotions] = useState<any[]>([]);
+  const [cPromotions, setCPromotions] = useState<any[]>([]);
+  const [applyPromotion, setApplyPromotion] = useState<string[]>([]);
+  const [promoCode, setPromoCode] = useState("");
+
+  const [price, setPrice] = useState(0);
+  const [finalPrice, setFinalPrice] = useState(0);
+  const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
+  const [showPromoModal, setShowPromoModal] = useState(false);
+
+  const [tripAdress, setTripAdress] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
+  const [bookingId, setBookingId] = useState<string | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const [lowerLeft, setLowerLeft] = useState<Seat[]>([
     { id: "1A01", status: "empty" },
@@ -112,42 +94,33 @@ export default function SeatPage() {
     { id: "2E02", status: "empty" },
   ]);
 
-  
-
   const trip = JSON.parse(
     Array.isArray(params.trip) ? params.trip[0] : params.trip!
   );
-
-  const toggleSeat = (seat: Seat, group: SeatGroup) => {
-    if (seat.status === "sold") return;
-
-    const updatedSeat = {
-      ...seat,
-      status: seat.status === "selected" ? "empty" : "selected",
-    };
-
-    const setterMap: Record<SeatGroup, any> = {
-      lowerLeft: setLowerLeft,
-      lowerRight: setLowerRight,
-      upperLeft: setUpperLeft,
-      upperRight: setUpperRight,
-    };
-
-    setterMap[group]((prev: Seat[]) =>
-      prev.map((s) => (s.id === seat.id ? updatedSeat : s))
-    );
-  };
 
   const renderSeat = (seat: Seat, group: SeatGroup) => {
     let bgColor = "#fff";
     if (seat.status === "selected") bgColor = "#007AFF";
     if (seat.status === "sold") bgColor = "#FF3B30";
-
+    const isDisabled = seat.status === "sold" || seat.status === "locked";
     return (
       <TouchableOpacity
         key={seat.id}
         onPress={() => toggleSeat(seat, group)}
-        style={[styles.seat, { backgroundColor: bgColor }]}>
+        disabled={isDisabled}
+        style={[
+          styles.seat,
+          {
+            backgroundColor:
+              seat.status === "selected"
+                ? "#007AFF"
+                : seat.status === "sold"
+                ? "#FF3B30"
+                : seat.status === "locked"
+                ? "#8E8E93"
+                : "#fff",
+          },
+        ]}>
         <Text style={{ color: seat.status === "selected" ? "#fff" : "#000" }}>
           {seat.id}
         </Text>
@@ -155,83 +128,36 @@ export default function SeatPage() {
     );
   };
 
-  const [token, setToken] = useState("");
-  const [customerId, setCustomerId] = useState("");
+  const InfoRow = ({
+    icon,
+    label,
+    value,
+  }: {
+    icon: React.ReactNode;
+    label: string;
+    value?: string;
+  }) => {
+    if (!value) return null;
+    return (
+      <View style={styles.infoRow}>
+        <View style={{ marginRight: 6 }}>{icon}</View>
 
-  const randomKey = () => Math.random().toString(36).slice(2, 12);
+        <Text style={styles.infoLabel}>{label}:</Text>
 
-  const getSelectedSeats = () => {
-    return [
-      ...lowerLeft.filter((s) => s.status === "selected"),
-      ...lowerRight.filter((s) => s.status === "selected"),
-      ...upperLeft.filter((s) => s.status === "selected"),
-      ...upperRight.filter((s) => s.status === "selected"),
-    ].map((s) => s.id);
+        <Text style={styles.infoValue} numberOfLines={2} ellipsizeMode="tail">
+          {value}
+        </Text>
+      </View>
+    );
   };
 
-  const handleBooking = async () => {
-    const selectedSeats = getSelectedSeats();
+  useEffect(() => {
+    AsyncStorage.getItem("token").then((value) => {
+      console.log("TOKEN LẤY ĐƯỢC:", value);
+      if (value) setToken(value);
+    });
+  }, []);
 
-    if (selectedSeats.length === 0) {
-      alert("Vui lòng chọn ghế trước!");
-      setShowSeatModal(true);
-      return;
-    }
-
-    // if (!promo) {
-    //   alert("Vui lòng chọn khuyến mãi!");
-    //   return;
-    // }
-
-    if (!customerId) {
-      alert("Bạn chưa đăng nhập!");
-      return;
-    }
-
-    const body = {
-      tripId: trip?.id, // lấy từ props hoặc route params
-      seats: selectedSeats, // list ghế
-      promoCode: promoCode, // cho đại
-      customerId: 1500, // lấy từ login
-      idemKey: randomKey(), // random mỗi lần click
-      holdTtlSec: 300000,
-    };
-
-    try {
-      const response = await fetch(
-        "https://apigateway.microservices.appf4s.io.vn/services/msbooking/api/bookings/real-booking",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // TOKEN LOGIN
-          },
-          body: JSON.stringify(body),
-        }
-      );
-
-      const data = await response.json();
-      console.log("Booking result: ", data);
-
-      if (response.ok) {
-        alert("Đặt xe thành công!");
-      } else {
-        alert("Đặt xe thất bại: " + (data.message || "Unknown error"));
-      }
-      router.push({
-        pathname: "/paybooking",
-        params: { booking: JSON.stringify(data) },
-      });
-    } catch (err) {
-      console.log(err);
-      alert("Lỗi kết nối server!");
-    }
-  };
-
-  // Thêm state trip (nếu chưa có)
-  const [tripAdress, setTripAdress] = useState<any>(null);
-
-  // Hàm getTrip
   const getTrip = async (tripId: string) => {
     if (!token) {
       console.log("Token chưa có, chưa thể gọi API");
@@ -264,57 +190,15 @@ export default function SeatPage() {
     }
   };
 
-  const extractCode = (str: string) => {
-    const match = str.match(/\((.*?)\)/);
-    return match ? match[1] : null;
-  };
+  const getPromotion = async () => {
+    if (!token) return;
 
-  // Lấy promotion đang còn hiệu lực
- const convertDate = (arr: number[]) => {
-   return new Date(arr[0], arr[1] - 1, arr[2]);
- };
+    const today = new Date().toISOString().split("T")[0];
 
- const getPromotion = async () => {
-   try {
-     const response = await fetch(
-       `https://apigateway.microservices.appf4s.io.vn/services/mspromotion/api/promotions`,
-       {
-         method: "GET",
-         headers: {
-           Authorization: `Bearer ${token}`,
-           Accept: "*/*",
-           "Content-Type": "application/json",
-         },
-       }
-     );
-
-     const data = await response.json();
-
-     const today = new Date();
-
-     const validPromotions = data.filter((p: Promotion) => {
-       const start = convertDate(p.startDate);
-       const end = convertDate(p.endDate);
-
-       return start <= today && end >= today && !p.isDeleted;
-     });
-
-     console.log("VALID PROMOTIONS:", validPromotions);
-
-     setPromotions(validPromotions);
-   } catch (err) {
-     console.log("Promotion error:", err);
-   }
- };
-
-
-  // Lấy chi tiết từng promotion
-  const getCPromotion = async (id: number) => {
     try {
-      const response = await fetch(
-        `https://apigateway.microservices.appf4s.io.vn/services/mspromotion/api/promotions/${id}/detail`,
+      const res = await fetch(
+        `https://apigateway.microservices.appf4s.io.vn/services/mspromotion/api/promotions?startDate.lessThan=${today}&endDate.greaterThan=${today}`,
         {
-          method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
             Accept: "*/*",
@@ -323,154 +207,48 @@ export default function SeatPage() {
         }
       );
 
-      const data = await response.json();
-      setCPromotions((prev) => [...prev, data]);
-    } catch (err) {
-      console.log("Promotion detail error:", err);
+      const data = await res.json();
+      setPromotions(data);
+    } catch (e) {
+      console.log("Lỗi lấy promotions:", e);
     }
   };
 
-  useEffect(() => {
-    const loadUser = async () => {
-      const storedToken = await AsyncStorage.getItem("token");
-      const storedProfileId = await AsyncStorage.getItem("profileId");
-
-      if (storedToken) setToken(storedToken);
-      if (storedProfileId) setCustomerId(storedProfileId);
-    };
-
-    loadUser();
-  }, []);
-
-  // Gọi lại API sau khi có token và trip.id
-  useEffect(() => {
-    if (token && trip?.id) {
-      getTrip(trip.id);
-    }
-  }, [token, trip?.id]);
-
-  // Khi lấy được list promotions → lấy chi tiết từng cái
-
-  useEffect(() => {
-    const seatCount = getSelectedSeats().length;
-    const baseFare = trip.route.baseFare ?? 0;
-    const typeFactor = trip.vehicle?.typeFactor ?? 1;
-
-    // 1000 là đơn vị như web đã dùng
-    const total = seatCount * baseFare * typeFactor * 1000;
-
-    setPrice(total);
-  }, [lowerLeft, lowerRight, upperLeft, upperRight]);
-
-  useEffect(() => {
-    if (token) {
-      getPromotion();
-    }
-  }, [token]);
-
-  useEffect(() => {
-    promotions.forEach((p) => getCPromotion(p.id));
-  }, [promotions]);
-
-  // useEffect(() => {
-  //   const seatCount = getSelectedSeats().length;
-
-  //    console.log("SEAT COUNT:", seatCount);
-  //    console.log("PRICE:", price);
-
-  //   const list: string[] = [];
-
-  //   cPromotions.forEach((promo) => {
-  //     // BUY N GET M
-  //     console.log("BUY N GET M:", promo.buyNGetMS);
-  //     console.log("PERCENT:", promo.percentOffs);
-  //     promo.buyNGetMS.forEach((b) => {
-  //       if (seatCount === b.buyN) {
-  //         list.push(`Mua ${b.buyN} tặng ${b.getM} (${promo.code})`);
-  //       }
-  //     });
-
-  //     // % GIẢM THEO GIÁ
-  //     promo.percentOffs.forEach((p) => {
-  //       if (price >= p.minPrice) {
-  //         list.push(
-  //           `Giảm ${p.percent}% (tối đa ${p.maxOff.toLocaleString("vi-VN")}) (${
-  //             promo.code
-  //           })`
-  //         );
-  //       }
-  //     });
-  //   });
-
-  //   setApplyPromotion([...new Set(list)]);
-  // }, [cPromotions, price, lowerLeft, lowerRight, upperLeft, upperRight]);
-
-useEffect(() => {
-  const seatCount = getSelectedSeats().length;
-  console.log("SEAT COUNT:", seatCount);
-  console.log("PRICE:", price);
-
-  let list: string[] = [];
-
-  // BUY N GET M
-  cPromotions.forEach((promo) => {
-    if (promo.buyNGetMS && promo.buyNGetMS.length > 0) {
-      promo.buyNGetMS.forEach((b) => {
-        if (seatCount >= b.buyN) {
-          list.push(`Mua ${b.buyN} tặng ${b.getM} (${promo.code})`);
+  const getCPromotion = async (id: number) => {
+    try {
+      const res = await fetch(
+        `https://apigateway.microservices.appf4s.io.vn/services/mspromotion/api/promotions/${id}/detail`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "*/*",
+            "Content-Type": "application/json",
+          },
         }
-      });
+      );
+
+      const data = await res.json();
+      setCPromotions((prev) => [...prev, data]);
+    } catch (e) {
+      console.log("Lỗi lấy chi tiết KM:", e);
     }
-  });
+  };
 
-  // PERCENT
-  cPromotions.forEach((promo) => {
-    if (promo.percentOffs && promo.percentOffs.length > 0) {
-      promo.percentOffs.forEach((p) => {
-        if (price >= p.minPrice) {
-          list.push(`Giảm ${p.percent}% (tối đa ${p.maxOff}) (${promo.code})`);
-        }
-      });
-    }
-  });
+  const calcPrice = () => {
+    if (!trip) return;
+    const base = trip.route.baseFare;
+    const typeFactor = trip.vehicle.typeFactor;
 
-  let discount = 0;
+    const result = base * typeFactor * selectedSeats.length * 1000;
+    setPrice(result);
+    setFinalPrice(result);
+  };
 
-  // PERCENT
-  cPromotions.forEach((promo) => {
-    if (promo.percentOffs && promo.percentOffs.length > 0) {
-      promo.percentOffs.forEach((p) => {
-        if (price >= p.minPrice) {
-          const percentValue = (price * p.percent) / 100;
-          const maxDiscount = Math.min(percentValue, p.maxOff);
-
-          if (maxDiscount > discount) {
-            discount = maxDiscount;
-          }
-        }
-      });
-    }
-  });
-
-  console.log("DISCOUNT:", discount);
-  console.log("FINAL PRICE:", price - discount);
-
-  setFinalPrice(price - discount);
-
-
-  list = [...new Set(list)];
-
-  console.log("✅ APPLY LIST:", list);
-  setApplyPromotion(list);
-}, [cPromotions, price]);
-
-  
-  const handleDraftPromotion = async (code: string) => {
-    const seats = getSelectedSeats();
-    if (seats.length === 0) return;
+  const applyPromo = async () => {
+    if (!promoCode) return setFinalPrice(price);
 
     try {
-      const response = await fetch(
+      const res = await fetch(
         "https://apigateway.microservices.appf4s.io.vn/services/msbooking/api/bookings/draft",
         {
           method: "POST",
@@ -481,74 +259,246 @@ useEffect(() => {
           },
           body: JSON.stringify({
             tripId: trip.id,
-            seats: seats,
-            promoCode: code,
-            customerId: Number(customerId),
-            idemKey: randomKey(),
+            seats: selectedSeats,
+            promoCode,
+            customerId: 6,
+            idemKey: "ABC123456",
             holdTtlSec: 300000,
           }),
         }
       );
 
-      const data = await response.json();
-      console.log("Draft result:", data);
-
-      if (response.ok) {
-        setFinalPrice(data.totalAmount); // API trả về VND
-      }
-    } catch (error) {
-      console.log("Draft error:", error);
+      const data = await res.json();
+      setFinalPrice(data.totalAmount * 1000);
+    } catch (err) {
+      console.log("Lỗi apply promo:", err);
     }
   };
 
-  const InfoRow = ({
-    icon,
-    label,
-    value,
-  }: {
-    icon: React.ReactNode;
-    label: string;
-    value?: string;
-  }) => {
-    if (!value) return null;
+  const toggleSeat = (seat: Seat, group: SeatGroup) => {
+    if (seat.status === "sold" || seat.status === "locked") return;
 
-// useEffect(() => {
-//   if (!tripAdress?.seatLockDTOs) return;
+    const updateGroup = (setter: any, list: Seat[]) => {
+      setter(
+        list.map((s) =>
+          s.id === seat.id
+            ? {
+                ...s,
+                status: s.status === "selected" ? "empty" : "selected",
+              }
+            : s
+        )
+      );
+    };
 
-//   const soldSeatNos = tripAdress.seatLockDTOs
-//     .filter((s: SeatLockDTO) =>
-//       ["COMMITTED", "PENDING", "BOOKED", "PAID"].includes(s.status)
-//     )
-//     .map((s: SeatLockDTO) => s.seatNo);
+    if (group === "lowerLeft") updateGroup(setLowerLeft, lowerLeft);
+    if (group === "lowerRight") updateGroup(setLowerRight, lowerRight);
+    if (group === "upperLeft") updateGroup(setUpperLeft, upperLeft);
+    if (group === "upperRight") updateGroup(setUpperRight, upperRight);
 
-//   console.log("🔥 GHẾ CÓ NGƯỜI:", soldSeatNos);
-
-//   const updateSeats = (arr: Seat[]): Seat[] =>
-//     arr.map((seat) =>
-//       soldSeatNos.includes(seat.id)
-//         ? { ...seat, status: "sold" as "sold" }
-//         : seat
-//     );
-
-//   setLowerLeft((prev) => updateSeats(prev));
-//   setLowerRight((prev) => updateSeats(prev));
-//   setUpperLeft((prev) => updateSeats(prev));
-//   setUpperRight((prev) => updateSeats(prev));
-// }, [tripAdress]);
-
-
-    return (
-      <View style={styles.infoRow}>
-        <View style={{ marginRight: 6 }}>{icon}</View>
-
-        <Text style={styles.infoLabel}>{label}:</Text>
-
-        <Text style={styles.infoValue} numberOfLines={2} ellipsizeMode="tail">
-          {value}
-        </Text>
-      </View>
+    setSelectedSeats((prev) =>
+      prev.includes(seat.id)
+        ? prev.filter((id) => id !== seat.id)
+        : [...prev, seat.id]
     );
   };
+
+  const generateIdemKey = () => {
+    return `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+  };
+
+  // Cập nhật trạng thái local ghế: những ghế nằm trong array -> set 'sold'
+  const markSeatsSoldLocal = (seatIds: string[]) => {
+    const mark = (list: Seat[], setter: any) =>
+      setter(
+        list.map((s) => (seatIds.includes(s.id) ? { ...s, status: "sold" } : s))
+      );
+
+    mark(lowerLeft, setLowerLeft);
+    mark(lowerRight, setLowerRight);
+    mark(upperLeft, setUpperLeft);
+    mark(upperRight, setUpperRight);
+
+    // clear selected nếu cần
+    setSelectedSeats((prev) => prev.filter((id) => !seatIds.includes(id)));
+  };
+
+  // Lấy chi tiết booking và khoá ghế tương ứng (gọi khi quay về sau payment)
+  const fetchBookingAndLockSeats = async (id: string) => {
+    if (!token) return;
+    try {
+      const res = await fetch(
+        `https://apigateway.microservices.appf4s.io.vn/services/msbooking/api/bookings/${id}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "*/*",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await res.json();
+      if (res.ok) {
+        // giả sử response có field seats: string[]
+        const seatsFromBooking: string[] =
+          data?.seats || data?.seatNumbers || [];
+        if (seatsFromBooking.length > 0) {
+          markSeatsSoldLocal(seatsFromBooking);
+        }
+      } else {
+        console.log("Lấy booking thất bại:", data);
+      }
+    } catch (e) {
+      console.log("Lỗi fetchBookingAndLockSeats:", e);
+    }
+  };
+
+  const handleBook = async () => {
+    setErrorMsg(null);
+
+    if (!token) {
+      Alert.alert("Lỗi", "Bạn chưa đăng nhập");
+      return;
+    }
+    if (!selectedSeats || selectedSeats.length === 0) {
+      Alert.alert("Chọn ghế", "Vui lòng chọn ít nhất 1 ghế để đặt.");
+      return;
+    }
+
+    setLoading(true);
+    const idemKey = generateIdemKey();
+    // cố gắng lấy userId từ AsyncStorage (nếu bạn lưu), fallback 6
+    const userIdStr = (await AsyncStorage.getItem("userId")) || "6";
+    const customerId = Number(userIdStr) || 6;
+
+    const body = {
+      tripId: trip.id,
+      seats: selectedSeats,
+      promoCode: promoCode || undefined,
+      customerId,
+      idemKey,
+      holdTtlSec: 300, // seconds - bạn có thể đổi theo yêu cầu; trong code cũ bạn dùng 300000 (ms) -> kiểm tra API yêu cầu đơn vị
+    };
+
+    try {
+      const res = await fetch(
+        "https://apigateway.microservices.appf4s.io.vn/services/msbooking/api/bookings/real-booking",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "*/*",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(body),
+        }
+      );
+
+      const data = await res.json();
+      console.log("real-booking response:", data);
+
+      if (res.ok) {
+        // giả sử API trả về bookingId và payment link, tuỳ API thật sự có thể khác tên trường
+        const id = data?.id || data?.bookingId || data?.booking?.id;
+        const paymentUrl =
+          data?.paymentLink?.checkoutUrl ||
+          data?.paymentUrl ||
+          data?.payment?.url ||
+          data?.paymentUrlCheckout;
+
+        setBookingId(id?.toString() || null);
+
+        // Sau khi tạo booking thành công, điều hướng sang màn thanh toán
+        // Mình gửi bookingId và paymentUrl trong params để màn PayBooking biết
+        // Nếu màn PayBooking của bạn nhận param khác, sửa lại
+        const booking = {
+          bookingId: id,
+          seats: selectedSeats,
+          totalAmount: finalPrice,
+          quantity: selectedSeats.length,
+          tripId: trip.id,
+          status: "PENDING",
+          paymentUrl: paymentUrl || null,
+        };
+
+        router.push(
+          `/paybooking?booking=${encodeURIComponent(JSON.stringify(booking))}`
+        );
+      } else {
+        // lỗi từ server
+        const msg = data?.message || "Đặt xe thất bại";
+        setErrorMsg(msg);
+        Alert.alert("Đặt xe thất bại", msg);
+      }
+    } catch (err) {
+      console.log("Lỗi gọi real-booking:", err);
+      setErrorMsg("Lỗi mạng, thử lại sau");
+      Alert.alert("Lỗi", "Lỗi mạng, vui lòng thử lại");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    calcPrice();
+  }, [selectedSeats]);
+
+  useEffect(() => {
+    if (token) getPromotion();
+  }, [token]);
+
+  useEffect(() => {
+    promotions.forEach((p) => getCPromotion(p.id));
+  }, [promotions]);
+
+  useEffect(() => {
+    const list: string[] = [];
+
+    cPromotions.forEach((c) => {
+      // Buy N get M
+      c.buyNGetMS?.forEach((b: BuyNGetM) => {
+        if (selectedSeats.length === b.buyN) {
+          list.push(`Mua ${b.buyN} tặng ${b.getM} (${c.code})`);
+        }
+      });
+
+      // Percent off
+      c.percentOffs?.forEach((p: PercentOff) => {
+        if (price >= p.minPrice) {
+          list.push(`Giảm ${p.percent}% tối thiểu ${p.minPrice} (${c.code})`);
+        }
+      });
+    });
+
+    setApplyPromotion([...new Set(list)]);
+  }, [selectedSeats, price]);
+
+  useEffect(() => {
+    applyPromo();
+  }, [promoCode]);
+
+  useEffect(() => {
+    if (promoCode) applyPromo();
+  }, [selectedSeats]);
+
+  useEffect(() => {
+    if (token) {
+      console.log("ĐÃ CÓ TOKEN → GỌI API getTrip");
+      console.log("TripID:", trip.id);
+      getTrip(trip.id);
+    }
+  }, [token]);
+
+  // Khi quay trở lại SeatPage → khóa ghế đã mua
+  useFocusEffect(
+    useCallback(() => {
+      if (bookingId) {
+        console.log("Quay lại SeatPage → khóa ghế");
+        fetchBookingAndLockSeats(bookingId);
+      }
+    }, [bookingId])
+  );
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -557,7 +507,6 @@ useEffect(() => {
         showsVerticalScrollIndicator={false}>
         <View style={styles.infoCard}>
           <Text style={styles.cardTitle}>🚌 Thông tin chuyến xe</Text>
-
           <InfoRow
             icon={<MaterialIcons name="route" size={18} color="#333" />}
             label="Tuyến"
@@ -646,11 +595,7 @@ useEffect(() => {
             }}>
             <View style={styles.seatInfo}>
               <MaterialIcons name="event-seat" size={18} color="#007AFF" />
-              <Text style={styles.seatText}>
-                {getSelectedSeats().length > 0
-                  ? getSelectedSeats().join(", ")
-                  : "Bấm để chọn ghế"}
-              </Text>
+              <Text style={styles.seatText}>Chọn ghế ngồi</Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -666,7 +611,6 @@ useEffect(() => {
               <Text style={styles.modalTitle}>Chọn ghế ngồi</Text>
 
               <ScrollView>
-                {/* Dán nguyên khối sơ đồ ghế của bạn vào đây */}
                 <View
                   style={{
                     flexDirection: "row",
@@ -714,23 +658,97 @@ useEffect(() => {
             Chọn khuyến mãi
           </Text>
 
-          <View style={styles.pickerBox}>
-            <Picker
-              selectedValue={promoCode}
-              onValueChange={(value) => {
-                setPromoCode(value);
-                if (value) handleDraftPromotion(value);
-                // Xóa KM quay về giá gốc
-              }}>
-              <Picker.Item label="Không áp dụng" value="" />
+          {/* ==== DROPDOWN KHUYẾN MÃI ==== */}
+          <View
+            style={{ backgroundColor: "#fff", padding: 14, borderRadius: 12 }}>
+            <TouchableOpacity
+              onPress={() => setShowPromoModal(true)}
+              style={{ paddingVertical: 10 }}>
+              <Text style={{ fontWeight: "600", color: "#007AFF" }}>
+                {promoCode ? `Mã: ${promoCode}` : "Chọn khuyến mãi "}
+              </Text>
+            </TouchableOpacity>
 
-              {applyPromotion.map((text, index) => {
-                const code = extractCode(text);
-
-                return <Picker.Item key={index} label={text} value={code} />;
-              })}
-            </Picker>
+            {/* Danh sách gợi ý KM */}
+            {/* {applyPromotion.length > 0 && (
+              <View style={{ marginTop: 10 }}>
+                {applyPromotion.map((p, i) => (
+                  <Text key={i} style={{ fontSize: 13, color: "#555" }}>
+                    • {p}
+                  </Text>
+                ))}
+              </View>
+            )} */}
           </View>
+
+          <Modal
+            visible={showPromoModal}
+            transparent
+            animationType="slide"
+            onRequestClose={() => setShowPromoModal(false)}>
+            <View
+              style={{
+                flex: 1,
+                backgroundColor: "rgba(0,0,0,0.5)",
+                justifyContent: "center",
+                alignItems: "center",
+              }}>
+              <View
+                style={{
+                  width: "90%",
+                  backgroundColor: "#fff",
+                  borderRadius: 12,
+                  padding: 16,
+                  maxHeight: "70%",
+                }}>
+                <Text
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: 16,
+                    marginBottom: 10,
+                  }}>
+                  Danh sách khuyến mãi
+                </Text>
+
+                <ScrollView style={{ maxHeight: 300 }}>
+                  {applyPromotion.map((p, i) => (
+                    <TouchableOpacity
+                      key={i}
+                      onPress={() => {
+                        setPromoCode(p); // Lưu nguyên description
+                        setShowPromoModal(false);
+                      }}
+                      style={{
+                        paddingVertical: 12,
+                        borderBottomWidth: 1,
+                        borderBottomColor: "#eee",
+                      }}>
+                      <Text style={{ fontWeight: "600" }}>{p}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+
+                <TouchableOpacity
+                  onPress={() => setShowPromoModal(false)}
+                  style={{
+                    marginTop: 15,
+                    backgroundColor: "#007AFF",
+                    paddingVertical: 10,
+                    borderRadius: 8,
+                  }}>
+                  <Text
+                    style={{
+                      color: "#fff",
+                      textAlign: "center",
+                      fontWeight: "600",
+                    }}>
+                    Đóng
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+
           {/* ====== TÍNH TIỀN ====== */}
           <View
             style={{
@@ -756,13 +774,8 @@ useEffect(() => {
                 marginBottom: 8,
               }}>
               <Text style={{ fontSize: 14, color: "#555" }}>Tạm tính</Text>
-              <Text style={{ fontWeight: "600" }}>
-                {price === 1
-                  ? "0 ₫"
-                  : price.toLocaleString("vi-VN", {
-                      style: "currency",
-                      currency: "VND",
-                    })}
+              <Text style={{ fontSize: 14, fontWeight: "600" }}>
+                {price.toLocaleString()} đ
               </Text>
             </View>
 
@@ -775,17 +788,8 @@ useEffect(() => {
               }}>
               <Text style={{ fontSize: 14, color: "#555" }}>Khuyến mãi</Text>
               <Text
-                style={{
-                  fontWeight: "600",
-                  color: promoCode ? "#d63031" : "#555",
-                }}>
-                {promoCode ? `-` : ""}
-                {promoCode && finalPrice !== price
-                  ? (price - finalPrice).toLocaleString("vi-VN", {
-                      style: "currency",
-                      currency: "VND",
-                    })
-                  : "0 ₫"}
+                style={{ fontSize: 14, fontWeight: "600", color: "#e74c3c" }}>
+                - {(price - finalPrice).toLocaleString()} đ
               </Text>
             </View>
 
@@ -802,29 +806,37 @@ useEffect(() => {
             <View
               style={{ flexDirection: "row", justifyContent: "space-between" }}>
               <Text style={{ fontSize: 18, fontWeight: "bold", marginTop: 10 }}>
-                Tổng tiền: {finalPrice.toLocaleString("vi-VN")} đ
+                Tổng tiền:
               </Text>
               <Text
-                style={{ fontSize: 16, fontWeight: "bold", color: "#007AFF" }}>
-                {finalPrice === 1
-                  ? "0 ₫"
-                  : finalPrice.toLocaleString("vi-VN", {
-                      style: "currency",
-                      currency: "VND",
-                    })}
+                style={{ fontSize: 18, fontWeight: "bold", color: "#007AFF" }}>
+                {finalPrice.toLocaleString("vi-VN")} đ
               </Text>
             </View>
           </View>
         </View>
 
+        {errorMsg ? (
+          <Text style={{ color: "red", textAlign: "center", marginTop: 8 }}>
+            {errorMsg}
+          </Text>
+        ) : null}
+
         <TouchableOpacity
-          onPress={handleBooking}
+          onPress={handleBook}
+          disabled={loading || selectedSeats.length === 0}
           style={{
             marginTop: 10,
-            backgroundColor: "#007AFF",
+            backgroundColor: selectedSeats.length === 0 ? "#9ec9ff" : "#007AFF",
             paddingVertical: 10,
             borderRadius: 8,
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
           }}>
+          {loading ? (
+            <ActivityIndicator color="#fff" style={{ marginRight: 8 }} />
+          ) : null}
           <Text
             style={{ textAlign: "center", color: "#fff", fontWeight: "bold" }}>
             Đặt xe

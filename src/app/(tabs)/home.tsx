@@ -125,7 +125,7 @@ const Home = () => {
 
       const trips = res.data;
 
-      console.log("🔍 API TRẢ VỀ TRIPS:", trips);
+      // console.log("🔍 API TRẢ VỀ TRIPS:", trips);
 
       if (!trips || trips.length === 0) {
         Alert.alert("Không có chuyến", "Không tìm thấy chuyến xe nào.");
