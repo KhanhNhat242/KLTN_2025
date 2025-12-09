@@ -37,7 +37,6 @@ export interface PercentOff {
   isDeleted: boolean;
 }
 
-
 export default function SeatPage() {
   const params = useLocalSearchParams();
   const [showSeatModal, setShowSeatModal] = useState(false);
@@ -117,7 +116,7 @@ export default function SeatPage() {
                 : seat.status === "sold"
                 ? "#FF3B30"
                 : seat.status === "locked"
-                ? "#8E8E93"
+                ? "#FF3B30"
                 : "#fff",
           },
         ]}>
@@ -182,6 +181,14 @@ export default function SeatPage() {
 
       if (response.ok) {
         setTripAdress(data.tripDTO); // set dữ liệu về state
+        // LẤY DANH SÁCH GHẾ BỊ LOCK
+        const lockedSeats =
+          data.seatLockDTOs
+            ?.filter((s: any) => s.status !== "RELEASED")
+            .map((s: any) => s.seatNo) || [];
+
+        // UPDATE GHẾ TRONG UI
+        updateLockedSeats(lockedSeats);
       } else {
         console.log("Lấy trip thất bại:", data.message || "Unknown error");
       }
@@ -189,6 +196,22 @@ export default function SeatPage() {
       console.log("Lỗi khi gọi API getTrip:", err);
     }
   };
+
+  const updateLockedSeats = (locked: string[]) => {
+    const applyLock = (setter: any) => {
+      setter((prev: Seat[]) =>
+        prev.map((s) =>
+          locked.includes(s.id) ? { ...s, status: "locked" } : s
+        )
+      );
+    };
+
+    applyLock(setLowerLeft);
+    applyLock(setLowerRight);
+    applyLock(setUpperLeft);
+    applyLock(setUpperRight);
+  };
+
 
   const getPromotion = async () => {
     if (!token) return;
