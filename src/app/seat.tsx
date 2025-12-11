@@ -22,6 +22,8 @@ type Seat = {
 
 type SeatGroup = "lowerLeft" | "lowerRight" | "upperLeft" | "upperRight";
 
+type SeatLetter = "A" | "B" | "C";
+
 export interface BuyNGetM {
   id: number;
   buyN: number;
@@ -36,6 +38,12 @@ export interface PercentOff {
   maxOff: number;
   isDeleted: boolean;
 }
+
+const seatConfig: Record<string, number> = {
+  standard_bus_normal: 3,
+  standard_bus_vip: 3,
+  limousine: 2,
+};
 
 export default function SeatPage() {
   const params = useLocalSearchParams();
@@ -64,6 +72,7 @@ export default function SeatPage() {
     { id: "1A03", status: "empty" },
     { id: "1A04", status: "empty" },
     { id: "1D01", status: "empty" },
+    { id: "1E01", status: "empty" },
   ]);
 
   const [lowerRight, setLowerRight] = useState<Seat[]>([
@@ -71,8 +80,17 @@ export default function SeatPage() {
     { id: "1B02", status: "empty" },
     { id: "1B03", status: "empty" },
     { id: "1B04", status: "empty" },
+
+    { id: "1C01", status: "empty" },
+    { id: "1C02", status: "empty" },
+    { id: "1C03", status: "empty" },
+    { id: "1C04", status: "empty" },
+
     { id: "1D02", status: "empty" },
-    { id: "1E04", status: "empty" },
+    { id: "1D03", status: "empty" },
+
+    { id: "1E02", status: "empty" },
+    { id: "1E03", status: "empty" },
   ]);
 
   const [upperLeft, setUpperLeft] = useState<Seat[]>([
@@ -89,43 +107,151 @@ export default function SeatPage() {
     { id: "2B02", status: "empty" },
     { id: "2B03", status: "empty" },
     { id: "2B04", status: "empty" },
+
+    { id: "2C01", status: "empty" },
+    { id: "2C02", status: "empty" },
+    { id: "2C03", status: "empty" },
+    { id: "2C04", status: "empty" },
+
     { id: "2D02", status: "empty" },
+    { id: "2D03", status: "empty" },
+
     { id: "2E02", status: "empty" },
+    { id: "2E03", status: "empty" },
   ]);
+
+  // const upperA = upperLeft.filter((s) => s.id.includes("2A"));
+  // const upperB = upperRight.filter((s) => s.id.includes("2B"));
+  // const upperC = upperRight.filter((s) => s.id.includes("2C"));
+
+  // const lowerA = lowerLeft.filter((s) => s.id.includes("1A"));
+  // const lowerB = lowerRight.filter((s) => s.id.includes("1B"));
+  // const lowerC = lowerRight.filter((s) => s.id.includes("1C"));
 
   const trip = JSON.parse(
     Array.isArray(params.trip) ? params.trip[0] : params.trip!
   );
 
+  const vehicleType = trip.vehicle?.type; // NORMAL / VIP / LIMOUSINE
+
+  const isLimo = vehicleType === "LIMOUSINE";
+  const is3Column = vehicleType !== "LIMOUSINE"; // STANDARD_BUS_NORMAL hoặc STANDARD_BUS_VIP
+  // const lowerSeats = [...lowerLeft, ...lowerRight]; // tầng dưới
+  // const upperSeats = [...upperLeft, ...upperRight]; // tầng trên (nếu có)
+
+ 
+
+  const typeMap: Record<string, string> = {
+    STANDARD_BUS_NORMAL: "standard_bus_normal",
+    STANDARD_BUS_VIP: "standard_bus_vip",
+    LIMOUSINE: "limousine",
+  };
+
+  const vehicleKey = typeMap[trip.vehicle?.type] || "limousine";
+  const seatColumns = seatConfig[vehicleKey];
+
+ const groupSeats = (seats: Seat[]) => ({
+  A: seats.filter(s => /(A|D|E)/.test(s.id)),
+  B: seats.filter(s => /B/.test(s.id)),
+  C: seats.filter(s => /C/.test(s.id)),
+});
+
+ const lower = {
+   A: groupSeats(lowerLeft).A,
+   B: groupSeats(lowerRight).B,
+   C: groupSeats(lowerRight).C,
+ };
+
+ const upper = {
+   A: groupSeats(upperLeft).A,
+   B: groupSeats(upperRight).B,
+   C: groupSeats(upperRight).C,
+ };
+
+  const renderSeatColumns = (
+    grouped: Record<SeatLetter, Seat[]>,
+    level: "lower" | "upper"
+  ) => {
+    const letters: SeatLetter[] =
+      seatColumns === 3 ? ["A", "B", "C"] : ["A", "B"];
+
+    return (
+      <View style={styles.seatRow}>
+        {letters.map((L) => (
+          <View key={L} style={styles.column}>
+            {grouped[L].map((s) =>
+              renderSeat(
+                s,
+                level === "lower"
+                  ? s.id.includes("A") ||
+                    s.id.includes("D") ||
+                    s.id.includes("E")
+                    ? "lowerLeft"
+                    : "lowerRight"
+                  : s.id.includes("A") ||
+                    s.id.includes("D") ||
+                    s.id.includes("E")
+                  ? "upperLeft"
+                  : "upperRight"
+              )
+            )}
+          </View>
+        ))}
+      </View>
+    );
+  };
+
   const renderSeat = (seat: Seat, group: SeatGroup) => {
-    let bgColor = "#fff";
-    if (seat.status === "selected") bgColor = "#007AFF";
-    if (seat.status === "sold") bgColor = "#FF3B30";
-    const isDisabled = seat.status === "sold" || seat.status === "locked";
+    const isSelected = seat.status === "selected";
+    const isSold = seat.status === "sold";
+    const isLocked = seat.status === "locked";
+
+    // Màu nền
+    const bgColor = isSelected
+      ? "#007AFF"
+      : isSold || isLocked
+      ? "#FF3B30"
+      : "#fff";
+
+    // Màu chữ
+    const textColor = isSelected || isSold || isLocked ? "#fff" : "#000";
+
     return (
       <TouchableOpacity
         key={seat.id}
+        disabled={isSold || isLocked}
         onPress={() => toggleSeat(seat, group)}
-        disabled={isDisabled}
-        style={[
-          styles.seat,
-          {
-            backgroundColor:
-              seat.status === "selected"
-                ? "#007AFF"
-                : seat.status === "sold"
-                ? "#FF3B30"
-                : seat.status === "locked"
-                ? "#FF3B30"
-                : "#fff",
-          },
-        ]}>
-        <Text style={{ color: seat.status === "selected" ? "#fff" : "#000" }}>
-          {seat.id}
-        </Text>
+        style={[styles.seat, { backgroundColor: bgColor }]}>
+        <Text style={{ color: textColor }}>{seat.id}</Text>
       </TouchableOpacity>
     );
   };
+
+  const renderRow = (row: any, level: "lower" | "upper") => {
+    const letters = isLimo ? ["A", "B"] : ["A", "B", "C"];
+
+    return (
+      <View style={styles.seatRow}>
+        {letters.map((letter) => (
+          <View key={letter} style={styles.column}>
+            {row[letter].map((seat: Seat) =>
+              renderSeat(
+                seat,
+                level === "lower"
+                  ? letter === "A"
+                    ? "lowerLeft"
+                    : "lowerRight"
+                  : letter === "A"
+                  ? "upperLeft"
+                  : "upperRight"
+              )
+            )}
+          </View>
+        ))}
+      </View>
+    );
+  };
+
 
   const InfoRow = ({
     icon,
@@ -211,7 +337,6 @@ export default function SeatPage() {
     applyLock(setUpperLeft);
     applyLock(setUpperRight);
   };
-
 
   const getPromotion = async () => {
     if (!token) return;
@@ -324,6 +449,16 @@ export default function SeatPage() {
         ? prev.filter((id) => id !== seat.id)
         : [...prev, seat.id]
     );
+  };
+
+  const splitIntoColumns = (seats: Seat[], columns: number) => {
+    const perColumn = Math.ceil(seats.length / columns);
+    const arr: Seat[][] = [];
+
+    for (let i = 0; i < columns; i++) {
+      arr.push(seats.slice(i * perColumn, (i + 1) * perColumn));
+    }
+    return arr;
   };
 
   const generateIdemKey = () => {
@@ -635,33 +770,20 @@ export default function SeatPage() {
 
               <ScrollView>
                 <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                  }}>
+                >
                   {/* Tầng dưới */}
                   <View style={{ marginTop: 20 }}>
-                    <Text style={styles.levelTitle}>Tầng dưới</Text>
+                    <Text style={styles.levelTitle}>Tầng trên</Text>
                     <View style={styles.seatRow}>
-                      <View style={styles.column}>
-                        {lowerLeft.map((s) => renderSeat(s, "lowerLeft"))}
-                      </View>
-                      <View style={styles.column}>
-                        {lowerRight.map((s) => renderSeat(s, "lowerRight"))}
-                      </View>
+                      {renderRow(lower, "lower")}
                     </View>
                   </View>
 
                   {/* Tầng trên */}
                   <View style={{ marginTop: 20 }}>
-                    <Text style={styles.levelTitle}>Tầng trên</Text>
+                    <Text style={styles.levelTitle}>Tầng dưới</Text>
                     <View style={styles.seatRow}>
-                      <View style={styles.column}>
-                        {upperLeft.map((s) => renderSeat(s, "upperLeft"))}
-                      </View>
-                      <View style={styles.column}>
-                        {upperRight.map((s) => renderSeat(s, "upperRight"))}
-                      </View>
+                      {renderRow(upper, "upper")}
                     </View>
                   </View>
                 </View>
@@ -990,6 +1112,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     padding: 15,
     maxHeight: "85%",
+    flexDirection: "column",
   },
 
   modalTitle: {
