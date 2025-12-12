@@ -139,8 +139,6 @@ export default function SeatPage() {
   // const lowerSeats = [...lowerLeft, ...lowerRight]; // tầng dưới
   // const upperSeats = [...upperLeft, ...upperRight]; // tầng trên (nếu có)
 
- 
-
   const typeMap: Record<string, string> = {
     STANDARD_BUS_NORMAL: "standard_bus_normal",
     STANDARD_BUS_VIP: "standard_bus_vip",
@@ -150,23 +148,23 @@ export default function SeatPage() {
   const vehicleKey = typeMap[trip.vehicle?.type] || "limousine";
   const seatColumns = seatConfig[vehicleKey];
 
- const groupSeats = (seats: Seat[]) => ({
-  A: seats.filter(s => /(A|D|E)/.test(s.id)),
-  B: seats.filter(s => /B/.test(s.id)),
-  C: seats.filter(s => /C/.test(s.id)),
-});
+  const groupSeats = (seats: Seat[]) => ({
+    A: seats.filter((s) => /(A|D|E)/.test(s.id)),
+    B: seats.filter((s) => /B/.test(s.id)),
+    C: seats.filter((s) => /C/.test(s.id)),
+  });
 
- const lower = {
-   A: groupSeats(lowerLeft).A,
-   B: groupSeats(lowerRight).B,
-   C: groupSeats(lowerRight).C,
- };
+  const lower = {
+    A: groupSeats(lowerLeft).A,
+    B: groupSeats(lowerRight).B,
+    C: groupSeats(lowerRight).C,
+  };
 
- const upper = {
-   A: groupSeats(upperLeft).A,
-   B: groupSeats(upperRight).B,
-   C: groupSeats(upperRight).C,
- };
+  const upper = {
+    A: groupSeats(upperLeft).A,
+    B: groupSeats(upperRight).B,
+    C: groupSeats(upperRight).C,
+  };
 
   const renderSeatColumns = (
     grouped: Record<SeatLetter, Seat[]>,
@@ -251,7 +249,6 @@ export default function SeatPage() {
       </View>
     );
   };
-
 
   const InfoRow = ({
     icon,
@@ -393,6 +390,12 @@ export default function SeatPage() {
   };
 
   const applyPromo = async () => {
+    console.log("=== APPLY PROMO START ===");
+
+    console.log("PromoCode đang apply:", promoCode);
+    console.log("Danh sách ghế:", selectedSeats);
+    console.log("Trip ID:", trip.id);
+    console.log("Giá trước giảm:", price);
     if (!promoCode) return setFinalPrice(price);
 
     try {
@@ -417,6 +420,7 @@ export default function SeatPage() {
       );
 
       const data = await res.json();
+      console.log("📌 RESPONSE từ API:", data);
       setFinalPrice(data.totalAmount * 1000);
     } catch (err) {
       console.log("Lỗi apply promo:", err);
@@ -769,8 +773,7 @@ export default function SeatPage() {
               <Text style={styles.modalTitle}>Chọn ghế ngồi</Text>
 
               <ScrollView>
-                <View
-                >
+                <View>
                   {/* Tầng dưới */}
                   <View style={{ marginTop: 20 }}>
                     <Text style={styles.levelTitle}>Tầng trên</Text>
@@ -860,7 +863,9 @@ export default function SeatPage() {
                     <TouchableOpacity
                       key={i}
                       onPress={() => {
-                        setPromoCode(p); // Lưu nguyên description
+                        const codeMatch = p.match(/\((.*?)\)/);
+                        const code = codeMatch ? codeMatch[1] : "";
+                        setPromoCode(code); // chỉ set "KM123444"
                         setShowPromoModal(false);
                       }}
                       style={{
