@@ -37,7 +37,7 @@ const Bill = () => {
     }
 
     const getData = async () => {
-        await axios.get('https://apigateway.microservices.appf4s.io.vn/services/msbooking/api/bookings?page=0&size=20&sort=bookedAt%2Cdesc', {
+        await axios.get('https://apigateway.microservices.appf4s.io.vn/services/msbooking/api/bookings?page=0&size=15&sort=bookedAt%2Cdesc', {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'accept': '*/*',
